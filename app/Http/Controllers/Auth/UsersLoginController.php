@@ -42,6 +42,7 @@ class UsersLoginController extends Controller
 
     public function login(Request $request)
     {
+
         // $user = Users::where('email',$request->email)->where('role','business')->where('status',0)->count();
         // if($user > 0){
         //     return redirect()->back()->withErrors('Your account is blocked, please check your email for details.');

@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\VerificationController;
+use App\Http\Controllers\AgoraVideoController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\FrontController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Lawyer\ServiceController;
 use App\Http\Controllers\PayMobController;
 use App\Http\Controllers\Lawyer\BookingController;
 use App\Http\Controllers\Lawyer\LawyerPaymentController;
+use App\Http\Controllers\MeetingController;
 // ==============> Lawyers Controller Ends
 
 use App\Http\Controllers\PusherController;
@@ -170,7 +172,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payment', [StripePaymentController::class, 'payment'])->name('payment');
     Route::post('/', [StripePaymentController::class, 'call']);
 
-// Pay MOB
+    // Pay MOB
     // Route::post('/checkout', [CheckOutController::class, 'index'])->name('checkout');
     // Route::post('/pay', [CheckOutController::class, 'pay'])->name('pay');
     // Route::get('checkout/response', function (Request $request) {
@@ -181,7 +183,52 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [CheckOutController::class, 'selectPaymentType'])->name('checkout');
 });
 
-Route::get('payTest/page',[PayMobController::class,'paymobtestpage'])->name('paymob.test.page');
+Route::get('payTest/page', [PayMobController::class, 'paymobtestpage'])->name('paymob.test.page');
+
+// Video Calling with Agora
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/agora-chat', [AgoraVideoController::class, 'index'])->name('agora.index');
+    Route::post('/agora/token', [AgoraVideoController::class, 'token']);
+    Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
+
+    Route::get('/create-meeting/{lawyerId}', [AgoraVideoController::class, 'createMeeting'])->name('create.meeting');
+    Route::post('/store-meeting',  [AgoraVideoController::class, 'storeMeeting'])->name('store.meeting');
+
+    Route::post('/agora-chat-new', [AgoraVideoController::class, 'indexNew'])->name('agora.index.new');
+
+    // Metered Meeting
+    // Route::get('/start/metered/video', function () {
+    //     return view('videoCall.startMeteredVideo');
+    // });
+    // Route::post("/createMeeting", [AgoraVideoController::class, 'createMeetingMetered'])->name("createMeeting");
+    // Route::post("/validateMeeting", [AgoraVideoController::class, 'validateMeeting'])->name("validateMeeting");
+    // Route::get("/meeting/{meetingId}", function ($meetingId) {
+
+    //     $METERED_DOMAIN = env('METERED_DOMAIN');
+    //     return view('videoCall.meeting', [
+    //         'METERED_DOMAIN' => $METERED_DOMAIN,
+    //         'MEETING_ID' => $meetingId
+    //     ]);
+    // });
+});
+
+
+Route::get('/metered/meeting/start', function () {
+    return view('videoCall.startMeteredVideo');
+});
+
+Route::post("/createMeeting", [MeetingController::class, 'createMeeting'])->name("createMeeting");
+
+Route::post("/validateMeeting", [MeetingController::class, 'validateMeeting'])->name("validateMeeting");
+
+Route::get("/meeting/{meetingId}", function($meetingId) {
+
+    $METERED_DOMAIN = env('METERED_DOMAIN');
+    return view('videoCall.startMeteredVideo', [
+        'METERED_DOMAIN' => $METERED_DOMAIN,
+        'MEETING_ID' => $meetingId
+    ]);
+});
 
 // Route::group(['middleware' => 'lawyer'], function () {
 //     Route::group(['prefix' => 'lawyer'], function () {
