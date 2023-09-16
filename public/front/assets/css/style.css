@@ -1784,6 +1784,7 @@ html.menu-opened body {
     overflow: hidden;
     border-radius: 15px;
     margin-bottom: 30px;
+    height: 20rem;
 }
 .cate-widget img {
     -webkit-transform: translateZ(0);
@@ -3750,6 +3751,7 @@ html.menu-opened body {
 .filter-title {
     margin-bottom: 15px;
     font-size: 1rem;
+    color: white;
 }
 .view-icons {
     display: inline-flex;

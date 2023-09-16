@@ -31,8 +31,6 @@
                     <div class="col-lg-7 col-md-8 col-sm-12">
                         <h5 class="card-title">{{$lawyerDetail->name}}</h5>
                         <p class="card-text mb-1">{{$lawyerDetail->degree}}</p>
-                        {{-- <p class="card-text mb-1">Some Degress and Description</p>
-                        <p class="card-text mb-1">Some Degress and Description</p> --}}
 
                         <div class="card" style="display: inline-block; border:none; border-right: 2px solid black; border-radius: 0;">
                             <div class="card-body p-2">

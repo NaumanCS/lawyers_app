@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-namespace App\Http\Controllers\Auth;
-
 
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -14,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerRegisterController extends Controller
 {
@@ -60,7 +59,7 @@ class CustomerRegisterController extends Controller
      */
     public function create(Request $request)
     {
-       
+
         $user =  User::create([
             'name' => $request['name'],
             'phone' => $request['phone'],
@@ -68,9 +67,12 @@ class CustomerRegisterController extends Controller
             'password' => Hash::make($request['password']),
             'role' => 'user',
         ]);
-        // $user->assignRole('lawyer');
-
-        // return $user;
-        return back();
+        if($user){
+            Auth::login($user);
+            return redirect()->route('customer.dashboard');
+        }
+        else{
+            return redirect()->back()->with('error', 'You do not have access to this page');
+        }
     }
 }

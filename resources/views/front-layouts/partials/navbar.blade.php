@@ -35,7 +35,7 @@
                             class="fas fa-chevron-down"></i></a>
                     <ul class="submenu">
                         @foreach ($categories as $category)
-                            <li><a href="{{ route('lawyers.online', $category->id) }}">{{ $category->title }}</a></li>
+                            <li><a href="{{ route('lawyers.services', $category->id) }}">{{ $category->title }}</a></li>
                         @endforeach
 
                         {{-- <li><a href="my-services.html">Real estate lawyer</a></li>
@@ -63,11 +63,11 @@
                     </ul>
                 </li>
                 <li class="has-submenu {{ request()->is('lawyers/online*') ? 'active' : '' }}">
-                    <a href="{{ route('lawyers.online', ['filter' => 'all']) }}">Consult Online<i
+                    <a href="{{ route('lawyers.services', ['filter' => 'all']) }}">Consult Online<i
                             class="fas fa-chevron-down"></i></a>
                     <ul class="submenu">
                         <li><a href="{{route('chat')}}">Chat</a></li>
-                        <li><a href="{{ route('lawyers.online', ['filter' => 'online']) }}">Find Online Lawyers</a>
+                        <li><a href="{{ route('lawyers.services', ['filter' => 'online']) }}">Find Online Lawyers</a>
                         </li>
                     </ul>
                 </li>
@@ -124,7 +124,7 @@
                     <a class="nav-link header-login" href="{{ route('lawyer.dashboard') }}">Dashboard</a>
                 </li>
             </ul>
-        @elseif (auth()->check() && auth()->user()->role == 'customer')
+        @elseif (auth()->check() && auth()->user()->role == 'user')
             <ul class="nav header-navbar-rht">
                 <li class="nav-item">
                     <a class="nav-link header-login" href="{{ route('customer.dashboard') }}">Dashboard</a>

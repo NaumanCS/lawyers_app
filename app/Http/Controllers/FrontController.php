@@ -23,8 +23,14 @@ class FrontController extends Controller
 
     public function categories()
     {
-        $categories = Category::get();
+        $categories = Category::paginate(9);
         return view('front-layouts.pages.categories', get_defined_vars());
+    }
+
+    public function search(Request $request)
+    {
+        $categories = Service::where('categories_id', $request->select_category)->orWhere('location', $request->select_location)->get();
+        dd($categories);
     }
 
     public function lawyers_with_category($id)
@@ -33,13 +39,24 @@ class FrontController extends Controller
         return view('front-layouts.pages.lawyers', get_defined_vars());
     }
 
-    public function lawyers_online($filter)
+    public function lawyers_services(Request $request, $filter)
     {
-        $lawyersByCategories = User::where('role', 'lawyer')->with('category')->get();
+        if ($filter) {
+            $services = Service::where('categories_id', $filter)->with('user', 'category')->paginate(9);
+        } else {
+            $services = Service::where('categories_id', $request->category_id)->orWhere('location', $request->location)->orderBy('amount', $request->price_order)->paginate(9);
+        }
         $categories = Category::get();
         return view('front-layouts.pages.online_lawyers', get_defined_vars());
     }
 
+    public function advanceSearch(Request $request)
+    {
+
+        $categories = Category::get();
+        dd($services);
+        return view('front-layouts.pages.online_lawyers', get_defined_vars());
+    }
     public function contact_us()
     {
         return view('front-layouts.pages.contactUs');

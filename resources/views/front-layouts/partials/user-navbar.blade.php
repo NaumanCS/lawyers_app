@@ -76,7 +76,7 @@
 
             <!-- chat -->
             <li class="nav-item logged-item">
-                <a href="chat.html" class="nav-link">
+                <a href="{{route('chat')}}" class="nav-link">
                     <i class="fa fa-comments" aria-hidden="true"></i>
                 </a>
             </li>

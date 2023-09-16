@@ -24,7 +24,11 @@ class Service extends Model
         return asset('uploads/lawyer/service') . '/' . $this->attributes['cover_image'];
     }
 
-    public function categories(){
-        return $this->belongsToMany(Category::class, 'services', 'categories_id', 'id');
+    public function category(){
+        return $this->hasOne(Category::class, 'id', 'categories_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

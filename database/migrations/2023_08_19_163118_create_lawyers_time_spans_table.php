@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('service_id')->nullable();
             $table->string('time_spans')->nullable();
+            $table->boolean('booked')->nullable();
             $table->string('extra_day_time_spans')->nullable();
             $table->timestamps();
         });

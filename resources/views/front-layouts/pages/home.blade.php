@@ -75,10 +75,8 @@
                                     <div class="search-input line">
                                         <i class="fas fa-tv bficon"></i>
                                         <div class="form-group mb-0">
-                                            {{-- <input type="text" class="form-control"
-                                                placeholder="What are you looking for?"> --}}
-                                            <select name="select_category" id=""
-                                                class="form-control mt-2 text-center" style="border: #f6f6f6">
+                                            <select name="select_category" class="form-control mt-2 text-center"
+                                                style="border: #f6f6f6">
                                                 <option value="">Select Category</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}">{{ $category->title }}</option>
@@ -90,19 +88,19 @@
                                         <i class="fas fa-location-arrow bficon">
                                         </i>
                                         <div class="form-group mb-0">
-                                            {{-- <input type="text" class="form-control" placeholder="Your Location"> --}}
-                                            <select name="select_location " id=""
-                                                class="form-control mt-2 text-center" style="border: #f6f6f6">
+                                            <select name="select_location" class="form-control mt-2 text-center"
+                                                style="border: #f6f6f6">
                                                 <option value="">Select Location</option>
                                                 @foreach ($cities->unique('city') as $city)
-                                                    <option value="{{ $city->city }}">{{ $city->city }}</option>
+                                                    @if ($city->city != null)
+                                                        <option value="{{ $city->city }}">{{ $city->city }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                             <a class="current-loc-icon current_location" href="javascript:void(0);">
                                                 <i class="fas fa-crosshairs"></i>
                                             </a>
                                         </div>
-
                                     </div>
                                     <div class="search-btn">
                                         <button class="btn search_service" type="submit">Search</button>
@@ -141,7 +139,7 @@
                         <div class="row">
                             @foreach ($categories as $category)
                                 <div class="col-lg-4 col-md-6">
-                                    <a href="{{ route('lawyers.online', $category->id) }}">
+                                    <a href="{{ route('lawyers.services', $category->id) }}">
                                         <div class="cate-widget aos">
                                             <img src="{{ $category->image }}" alt="">
                                             <div class="cate-title">
@@ -215,12 +213,6 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                    </div>
                 </div>
             </div>
         </div>
@@ -243,11 +235,13 @@
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12 pb-4 cities_button">
                     @foreach ($cities->unique('city') as $city)
-                        <a href="#">
-                            <button class="btn btn-primary my-2 w-100">
-                                {{ $city->city ?? 'No City Available Yet' }}
-                            </button>
-                        </a>
+                        @if ($city->city !== null)
+                            <a href="#">
+                                <button class="btn btn-primary my-2 w-100">
+                                    {{ $city->city ?? 'No City Available Yet' }}
+                                </button>
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -299,14 +293,6 @@
     </section>
     <!-- /How It Works -->
     <script>
-        /* When the user clicks on the button,
-    <<<<<<< Updated upstream
-                                        toggle between hiding and showing the dropdown content */
-        ===
-        === =
-        toggle between hiding and showing the dropdown content * / >>>
-            >>> > Stashed changes
-
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }

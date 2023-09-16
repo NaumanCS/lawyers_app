@@ -7110,6 +7110,7 @@ textarea.form-control-lg {
   border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
 }
 
+
 .border-bottom-0 {
   border-bottom: 0 !important;
 }
@@ -8241,6 +8242,13 @@ textarea.form-control-lg {
 
 .invisible {
   visibility: hidden !important;
+}
+
+.chat-list-box{
+    background: #eee !important;
+}
+.chat-list-box.active{
+    background: #000 !important;
 }
 
 @media (min-width: 576px) {

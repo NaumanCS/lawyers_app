@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -62,9 +63,12 @@ class LawyerRegisterController extends Controller
             'password' => Hash::make($request['password']),
             'role' => 'lawyer',
         ]);
-        // $user->assignRole('lawyer');
-
-        // return $user;
-        return back();
+        if($user){
+            Auth::login($user);
+            return redirect()->route('lawyer.dashboard');
+        }
+        else{
+            return redirect()->back()->with('error', 'You do not have access to this page');
+        }
     }
 }

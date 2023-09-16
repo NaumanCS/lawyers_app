@@ -57,7 +57,7 @@ Route::post('user/login', [UsersLoginController::class, 'login'])->name('users.l
 
 Route::get('/categories/{filter}', [FrontController::class, 'categories'])->name('categories');
 Route::get('/lawyers/{category}', [FrontController::class, 'lawyers_with_category'])->name('lawyers.with.category');
-Route::get('/lawyers/online/{filter}', [FrontController::class, 'lawyers_online'])->name('lawyers.online');
+Route::get('/lawyers/services/{filter}', [FrontController::class, 'lawyers_services'])->name('lawyers.services');
 
 Route::get('/contact-us', [FrontController::class, 'contact_us'])->name('contact.us');
 Route::post('/contact-us/submit', [FrontController::class, 'support_msg'])->name('contact.us.submit');
@@ -70,10 +70,12 @@ Route::get('image/update', function () {
 });
 
 Route::get('/search', [FrontController::class, 'search'])->name('search');
-Route::get('/advance/search', [FrontController::class, 'advanceSearch'])->name('advance.search');
 
 Auth::routes();
 Route::get('chat', [HomeController::class, 'chat'])->name('chat');
+Route::get('display-single-chat/{roomId}', [HomeController::class, 'single_chat'])->name('display.single.chat');
+Route::post('/send/new/message', [HomeController::class, 'send_message']);
+Route::get('/fetch-new-messages', [HomeController::class, 'fetch_new_messages']);
 // ADMIN PART
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');

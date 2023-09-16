@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('extra_day_start_time')->nullable();
             $table->string('extra_day_end_time')->nullable();
             $table->string('cover_image')->nullable();
+            $table->string('ratings')->nullable();
             $table->timestamps();
         });
     }
