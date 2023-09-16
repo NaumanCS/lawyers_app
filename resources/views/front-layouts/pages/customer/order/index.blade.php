@@ -15,9 +15,6 @@
                             <h3 class="page-title">Orders</h3>
                         </div>
                         <div class="col-auto text-end">
-                            <a class="btn btn-white filter-btn" href="javascript:void(0);" id="filter_search">
-                                <i class="fas fa-filter"></i>
-                            </a>
                             <a href="{{ route('category.form', $update_id = 0) }}" class="btn btn-primary add-button ms-3">
                                 <i class="fas fa-plus"></i>
                             </a>

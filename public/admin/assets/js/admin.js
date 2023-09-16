@@ -2,17 +2,17 @@
   "use strict";
 
 	// Variables declarations
-	
+
 	var $wrapper = $('.main-wrapper');
 	var $pageWrapper = $('.page-wrapper');
 	var $slimScrolls = $('.slimscroll');
-	
+
 	// Sidebar
-	
+
 	var Sidemenu = function() {
 		this.$menuItem = $('#sidebar-menu a');
 	};
-	
+
 	function init() {
 		var $this = Sidemenu;
 		$('#sidebar-menu a').on('click', function(e) {
@@ -31,12 +31,12 @@
 		});
 		$('#sidebar-menu ul li.submenu a.active').parents('li:last').children('a:first').addClass('active').trigger('click');
 	}
-	
+
 	// Sidebar Initiate
 	init();
-	
+
 	// Mobile menu sidebar overlay
-	
+
 	$('body').append('<div class="sidebar-overlay"></div>');
 	$(document).on('click', '#mobile_btn', function() {
 		$wrapper.toggleClass('slide-nav');
@@ -44,13 +44,13 @@
 		$('html').addClass('menu-opened');
 		return false;
 	});
-	
+
 	// Sidebar overlay
 	$(".sidebar-overlay").on("click", function () {
 		$wrapper.removeClass('slide-nav');
 		$(".sidebar-overlay").removeClass("opened");
 		$('html').removeClass('menu-opened');
-	});	
+	});
 
 	// radio btn hide show
 	  $(function() {
@@ -62,12 +62,12 @@
 		  }
 		});
 	  });
-	 
+
 	// editor
 	if ($('#editor').length > 0) {
 		ClassicEditor
 		.create( document.querySelector( '#editor' ), {
-		
+
 			 toolbar: [  'bold', 'italic', 'link' ]
 		} )
 		.then( editor => {
@@ -76,7 +76,7 @@
 		.catch( err => {
 			console.error( err.stack );
 		} );
-	}	
+	}
 	if ($('.select').length > 0) {
 		$('.select').select2({
 			minimumResultsForSearch: -1,
@@ -89,7 +89,7 @@
 	});
 
 	// Datetimepicker
-	
+
 	if($('.datetimepicker').length > 0 ){
 		$('.datetimepicker').datetimepicker({
 			format: 'DD-MM-YYYY',
@@ -103,11 +103,11 @@
 	}
 
 	// Tooltip
-	
+
 	if($('[data-toggle="tooltip"]').length > 0 ){
 		$('[data-toggle="tooltip"]').tooltip();
 	}
-	
+
 	// Datatable
 
     if ($('.datatable').length > 0) {
@@ -139,7 +139,7 @@
 			}
 		});
     }
-	
+
 	// Sidebar Slimscroll
 
 	if($slimScrolls.length > 0) {
@@ -162,7 +162,7 @@
 			$('.sidebar .slimScrollDiv').height(rHeight);
 		});
 	}
-	
+
 	// Small Sidebar
 
 	$(document).on('click', '#toggle_btn', function() {
@@ -173,13 +173,13 @@
 			$('body').addClass('mini-sidebar');
 			$('.subdrop + ul').slideUp();
 		}
-		setTimeout(function(){ 
+		setTimeout(function(){
 			mA.redraw();
 			mL.redraw();
 		}, 300);
 		return false;
 	});
-	
+
 	$(document).on('mouseover', function(e) {
 		e.stopPropagation();
 		if($('body').hasClass('mini-sidebar') && $('#toggle_btn').is(':visible')) {
@@ -193,7 +193,7 @@
 			}
 			return false;
 		}
-		
+
 		$(window).scroll(function() {
 			if ($(window).scrollTop() >= 30) {
 				$('.header').addClass('fixed-header');
@@ -201,11 +201,11 @@
 				$('.header').removeClass('fixed-header');
 			}
 		});
-		
+
 		$(document).on('click', '#loginSubmit', function() {
 			$("#adminSignIn").submit();
 		});
-		
+
 	});
 
 	// Range slider
@@ -213,7 +213,7 @@
 		var slider = document.getElementById("myRange");
 		var output = document.getElementById("currencys");
 		output.innerHTML = slider.value;
-	  
+
 		slider.oninput = function() {
 		  output.innerHTML = this.value;
 		}
@@ -224,7 +224,7 @@
 			this.style.background = 'linear-gradient(to right, #FF0080 0%, #FF0080 ' + value + '%, #c4c4c4 ' + value + '%, #c4c4c4 100%)'
 		  };
 		}
-		
+
 	// Logo Hide Btn
 
 	$(document).on("click",".logo-hide-btn",function () {
@@ -232,7 +232,7 @@
 	});
 
 // Summernote
-	
+
 if($('.summernote').length > 0) {
 	$('.summernote').summernote({
 		height: 200,                 // set editor height
@@ -269,7 +269,7 @@ $(document).on("click",".addlinks",function () {
 	'</div>' +
 	'</div>' +
 	'</div>' ;
-	
+
 	$(".settings-form").append(experiencecontent);
 	return false;
 });
@@ -281,7 +281,7 @@ $(".settings-form").on('click','.delete_review_comment', function () {
 
 
 // add Formset
-												
+
 $(document).on("click",".addnew",function () {
 	var experiencecontent = '<div class="form-group links-conts">' +
 	'<div class="row align-items-center">' +
@@ -298,7 +298,7 @@ $(document).on("click",".addnew",function () {
 	'</div>' +
 	'</div>' +
 	'</div>' ;
-	
+
 	$(".settingset").append(experiencecontent);
 	return false;
 });
@@ -324,7 +324,7 @@ $(document).on("click",".addlinknew",function () {
 	'</div>' +
 	'</div>' +
 	'</div>' ;
-	
+
 	$(".settings-forms").append(experiencecontent);
 	return false;
 });
@@ -334,7 +334,7 @@ $(".settings-forms").on('click','.delete_review_comment', function () {
 	return false;
 });
 
-										
+
 // add social links Formset
 $(document).on("click",".addsocail",function () {
 	var experiencecontent = '<div class="form-group countset">' +
@@ -367,7 +367,7 @@ $(document).on("click",".addsocail",function () {
 	'</div>' +
 	'</div> ' +
 	'</div> ';
-	
+
 	$(".setings").append(experiencecontent);
 	return false;
 });
@@ -379,7 +379,7 @@ $(".setings").on('click','.delete_review_comment', function () {
 
 
 // add Faq
-												
+
 $(document).on("click",".addfaq",function () {
 	var experiencecontent = '<div class="row counts-list">' +
 	'<div class="col-md-11">' +
@@ -400,7 +400,7 @@ $(document).on("click",".addfaq",function () {
 	'</a>' +
 	'</div>' +
 	'</div> ';
-	
+
 	$(".faq").append(experiencecontent);
 	return false;
 });
@@ -423,12 +423,12 @@ $(document).on("click",".add-links",function () {
 			'<div><a href="#" class="btn trash"><i class="feather-trash-2"></i></a></div>' +
 		'</div>' +
 	'</div>';
-	
+
 	$(".settings-form").append(experiencecontent);
 	return false;
 });
 // Checkbox Select
-	
+
 $('.app-listing .selectBox').on("click", function() {
 	$(this).parent().find('#checkBoxes').fadeToggle();
 	$(this).parent().parent().siblings().find('#checkBoxes').fadeOut();
@@ -445,7 +445,7 @@ if($('.SortBy').length > 0) {
 	var show = true;
 	var checkbox1 = document.getElementById("checkBox");
 	$('.selectBoxes').on("click", function() {
-		
+
 		if (show) {
 			checkbox1.style.display = "block";
 			show = false;
@@ -453,7 +453,7 @@ if($('.SortBy').length > 0) {
 			checkbox1.style.display = "none";
 			show = true;
 		}
-	});		
+	});
 }
 
 // Invoices Checkbox Show
@@ -470,7 +470,7 @@ $(function() {
 
 
 	// Invoices Add More
-	
+
     $(".links-info-one").on('click','.service-trash', function () {
 		$(this).closest('.links-cont').remove();
 		return false;
@@ -482,7 +482,7 @@ $(function() {
 				'<a href="#" class="service-trash"><i class="fe fe-minus-circle me-1"></i>Service Charge</a> <span>$ 4</span' +
 			'</div>' +
 		'</div>';
-		
+
         $(".links-info-one").append(experiencecontent);
         return false;
     });
@@ -498,13 +498,13 @@ $(function() {
 				'<a href="#" class="service-trash-one"><i class="fe fe-minus-circle me-1"></i>Offer new</a> <span>$ 4 %</span' +
 			'</div>' +
 		'</div>';
-		
+
         $(".links-info-discount").append(experiencecontent);
         return false;
     });
 
     // Invoices Table Add More
-	
+
     $(".add-table-items").on('click','.remove-btn', function () {
 		$(this).closest('.add-row').remove();
 		return false;
@@ -536,7 +536,7 @@ $(function() {
 				'<a href="javascript:void(0);" class="remove-btn"><i class="fe fe-trash-2"></i></a>' +
 			'</td>' +
 		'</tr>';
-		
+
         $(".add-table-items").append(experiencecontent);
         return false;
     });
