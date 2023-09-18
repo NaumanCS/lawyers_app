@@ -67,9 +67,8 @@
                                             <input type="hidden" name="amount" value="1000" id="">
                                             <button type="submit" class="btn btn-primary text-white"> Book Service
                                             </button>
-
-                                            <button class="btn btn-primary text-white"> <a class="text-white"
-                                                    href="{{ route('create.meeting', $lawyer->id) }}"> Video Call </a>
+                                        
+                                            <button  class="btn btn-primary text-white"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
                                             </button>
 
                                         </form>

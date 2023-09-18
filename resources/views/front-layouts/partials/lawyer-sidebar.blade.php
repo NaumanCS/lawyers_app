@@ -38,6 +38,11 @@
                     <i class="far fa-money-bill-alt"></i> <span>Wallet</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('lawyer_meeting_list') }}" class="nav-link">
+                    <i class="far fa-calendar-check"></i> <span>Meetings</span>
+                </a>
+            </li>
             {{-- <li class="nav-item">
                 <a href="provider-subscription.html" class="nav-link">
                     <i class="far fa-calendar-alt"></i> <span>Subscription</span>

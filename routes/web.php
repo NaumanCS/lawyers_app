@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\CustomerRegisterController;
 
 // ==============> Lawyers Controller Starts
 use App\Http\Controllers\Auth\LawyerRegisterController;
+use App\Http\Controllers\JitsiVideoCallController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ServiceController;
 use App\Http\Controllers\PayMobController;
@@ -197,41 +198,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/store-meeting',  [AgoraVideoController::class, 'storeMeeting'])->name('store.meeting');
 
     Route::post('/agora-chat-new', [AgoraVideoController::class, 'indexNew'])->name('agora.index.new');
-
-    // Metered Meeting
-    // Route::get('/start/metered/video', function () {
-    //     return view('videoCall.startMeteredVideo');
-    // });
-    // Route::post("/createMeeting", [AgoraVideoController::class, 'createMeetingMetered'])->name("createMeeting");
-    // Route::post("/validateMeeting", [AgoraVideoController::class, 'validateMeeting'])->name("validateMeeting");
-    // Route::get("/meeting/{meetingId}", function ($meetingId) {
-
-    //     $METERED_DOMAIN = env('METERED_DOMAIN');
-    //     return view('videoCall.meeting', [
-    //         'METERED_DOMAIN' => $METERED_DOMAIN,
-    //         'MEETING_ID' => $meetingId
-    //     ]);
-    // });
 });
+ // Jitsi Vieeo call
+ Route::get('jitsi/video/call/{lawyerId?}', [JitsiVideoCallController::class, 'jitsi_video_call'])->name('jitsi.video.call');
+ Route::get('/video/call/lawyer', [JitsiVideoCallController::class, 'video_call_lawyer'])->name('video.call.lawyer');
+ Route::post('/store-meeting-link', [JitsiVideoCallController::class, 'storeMeetingLink'])->name('store-meeting-link');
+ Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');
 
-
-Route::get('/metered/meeting/start', function () {
-    return view('videoCall.startMeteredVideo');
-});
-
-Route::post("/createMeeting", [MeetingController::class, 'createMeeting'])->name("createMeeting");
-
-Route::post("/validateMeeting", [MeetingController::class, 'validateMeeting'])->name("validateMeeting");
-
-Route::get("/meeting/{meetingId}", function($meetingId) {
-
-    $METERED_DOMAIN = env('METERED_DOMAIN');
-    return view('videoCall.startMeteredVideo', [
-        'METERED_DOMAIN' => $METERED_DOMAIN,
-        'MEETING_ID' => $meetingId
-    ]);
-});
-
+ 
 // Route::group(['middleware' => 'lawyer'], function () {
 //     Route::group(['prefix' => 'lawyer'], function () {
 //         Route::get('/dashboard', [LawyerController::class, 'index'])->name('lawyer.dashboard');
