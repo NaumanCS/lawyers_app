@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Chat;
 use App\Models\Service;
 use App\Models\Support;
 use App\Models\User;
@@ -30,12 +31,11 @@ class FrontController extends Controller
     public function search(Request $request)
     {
         $categories = Service::where('categories_id', $request->select_category)->orWhere('location', $request->select_location)->get();
-        dd($categories);
     }
 
     public function lawyers_with_category($id)
     {
-        $lawyerDetail = User::where('id', $id)->first();
+        $lawyerDetail = User::where('id', $id)->with('time_spans')->first();
         return view('front-layouts.pages.lawyers', get_defined_vars());
     }
 
@@ -52,9 +52,7 @@ class FrontController extends Controller
 
     public function advanceSearch(Request $request)
     {
-
         $categories = Category::get();
-        dd($services);
         return view('front-layouts.pages.online_lawyers', get_defined_vars());
     }
     public function contact_us()

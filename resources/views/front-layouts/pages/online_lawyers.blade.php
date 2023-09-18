@@ -32,7 +32,7 @@
                     <div class="card filter-card" style="border: none !important;">
                         <div class="card-body" style="background: dimgrey; border-radius: 20px;">
                             <h4 class="text-light mb-4">Search Filter</h4>
-                            <form action="{{ route('lawyers.services', ['filter'=>0]) }}" method="GET">
+                            <form action="{{ route('lawyers.services', ['filter' => 0]) }}" method="GET">
                                 @csrf
                                 <div class="filter-widget">
                                     <div class="filter-list">
@@ -77,6 +77,7 @@
                 <div class="col-lg-9">
                     <div>
                         <div class="row">
+                            @if (!$services->isEmpty())
                             @foreach ($services as $service)
                                 <div class="col-lg-4 col-md-6">
                                     <a href="{{ route('lawyers.with.category', $service->user->id) }}">
@@ -113,6 +114,13 @@
                                     </a>
                                 </div>
                             @endforeach
+                            @else
+                            <div class="col-md-12">
+                                <div class="w-100 d-flex justify-content-center align-items-center" style="height: 70vh">
+                                    <h1>No Services Available</h1>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                         <div class="d-flex justify-content-center">
                             {{ $services->links('pagination::bootstrap-4') }}

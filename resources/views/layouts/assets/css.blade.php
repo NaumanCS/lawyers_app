@@ -1,9 +1,6 @@
 <!-- Favicons -->
 {{-- <link rel="shortcut icon" href="{{asset('admin')}}/assets/img/favicon.png"> --}}
 
-<!-- jQuery -->
-<script src="{{ asset('admin') }}/assets/js/jquery-3.6.0.min.js"></script>
-
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="{{ asset('admin') }}/assets/plugins/bootstrap/css/bootstrap.min.css">
 

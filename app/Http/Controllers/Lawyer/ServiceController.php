@@ -15,7 +15,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $data = Service::where('user_id', Auth::id())->get();
+        $data = Service::where('user_id', Auth::id())->with('category')->get();
         return view('front-layouts.pages.lawyer.service.list', get_defined_vars());
     }
 
@@ -55,7 +55,7 @@ class ServiceController extends Controller
             $service->title = $request->title;
             $service->location = $request->location;
             $service->amount = $request->amount;
-            $service->categories_id = implode(',', $request->categories_id);
+            $service->categories_id = $request->categories_id;
             $service->start_day = $request->start_day;
             $service->end_day = $request->end_day;
             $service->start_time = $request->start_time;

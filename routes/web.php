@@ -67,6 +67,7 @@ Route::post('/contact-us/submit', [FrontController::class, 'support_msg'])->name
 // Route::post('/broadcast', [PusherController::class, 'broadcast'])->name('broadcast');
 // Route::post('/receive', [PusherController::class, 'receive'])->name('receive');
 
+
 Route::get('image/update', function () {
     return view('front-layouts.pages.lawyer.image-update');
 });
@@ -74,6 +75,7 @@ Route::get('image/update', function () {
 Route::get('/search', [FrontController::class, 'search'])->name('search');
 
 Auth::routes();
+Route::get('/create/chat/room/{lawyerId}', [HomeController::class, 'create_chat_room'])->name('create.chat.room');
 Route::get('chat', [HomeController::class, 'chat'])->name('chat');
 Route::get('display-single-chat/{roomId}', [HomeController::class, 'single_chat'])->name('display.single.chat');
 Route::post('/send/new/message', [HomeController::class, 'send_message']);

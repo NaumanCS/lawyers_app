@@ -56,7 +56,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="me-sm-2 black_label">Select a Category for this service</label>
-                                    <select class="form-control form-select black_input" name="categories_id[]"
+                                    <select class="form-control form-select black_input" name="categories_id"
                                         id="categories" required>
                                         <option selected disabled>Select a Category</option>
                                         @foreach ($categories as $category)

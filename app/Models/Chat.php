@@ -11,18 +11,28 @@ class Chat extends Model
 
     protected $fillable = ['sender_id', 'receiver_id'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function sender(){
+    public function sender()
+    {
         return $this->hasOne(User::class, 'id', 'sender_id');
     }
-    public function receiver() {
+    public function receiver()
+    {
         return $this->hasOne(User::class, 'id', 'receiver_id');
     }
 
-    public function messages(){
+    public function messages()
+    {
         return $this->hasMany(Message::class, 'chat_id', 'id');
+    }
+    public function scopeUserChats($query, $userId)
+    {
+        return $query->whereHas('participants', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        });
     }
 }

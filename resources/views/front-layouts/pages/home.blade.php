@@ -234,11 +234,11 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12 pb-4 cities_button">
-                    @foreach ($cities->unique('city') as $city)
-                        @if ($city->city !== null)
+                    @foreach ($services->unique('location') as $location)
+                        @if ($location->location !== null)
                             <a href="#">
                                 <button class="btn btn-primary my-2 w-100">
-                                    {{ $city->city ?? 'No City Available Yet' }}
+                                    {{ $location->location ?? 'No City Available Yet' }}
                                 </button>
                             </a>
                         @endif

@@ -23,17 +23,13 @@
                         <div class="service-img">
                             <a href="{{ route('lawyer.profile', $lawyer->id) }}">
                                 <img class="img-fluid serv-img" alt="Service Image"
-                                    src="{{ asset('front') }}/assets/img/services/service-01.jpg">
+                                    src="{{ asset('front') }}/assets/img/category/Category1.jpg">
                             </a>
                             <div class="item-info">
                                 <div class="service-user">
                                     <a href="javascript:void(0);">
-                                        <img src="{{ asset('front') }}/assets/img/provider/provider-01.jpg" alt="">
+                                        <img src="{{ $lawyer->image }}" alt="">
                                     </a>
-                                    <span class="service-price">Rs.2500</span>
-                                </div>
-                                <div class="cate-list">
-                                    <a class="bg-yellow" href="">Glass</a>
                                 </div>
                             </div>
                         </div>
@@ -42,12 +38,8 @@
                                 <a href="">{{ $lawyer->name }}</a>
                             </h3>
                             <div class="rating">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <span class="d-inline-block average-rating">(4.3)</span>
+                                <a href="{{url('/')}}/create/chat/room/{{$lawyer->id}}" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
+                                    class="fa-solid fa-calendar-check"></i>Start Chat</a>
                             </div>
                             <div class="user-info">
                                 <div class="service-action">
@@ -60,25 +52,26 @@
 
                                         <?php
                                         $update_id = 0;
-                                        
+
                                         if (isset($obj->id) && !empty($obj->id)) {
                                             $update_id = $obj->id;
                                         }
                                         ?>
 
                                         {{-- <form action="{{ route('order.store', $update_id) }}" method="POST"> --}}
-                                            {{-- <form action="{{ route('payment', $update_id) }}" method="POST"> --}}
-                                                <form action="{{ route('checkout') }}" method="POST">
+                                        {{-- <form action="{{ route('payment', $update_id) }}" method="POST"> --}}
+                                        <form action="{{ route('checkout') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="lawyer_id" value="{{ $lawyer->id }}"
                                                 id="">
                                             <input type="hidden" name="amount" value="1000" id="">
                                             <button type="submit" class="btn btn-primary text-white"> Book Service
                                             </button>
-                                        
-                                            <button  class="btn btn-primary text-white"> <a class="text-white" href="{{ route('create.meeting',$lawyer->id) }}" > Video Call </a>
+
+                                            <button class="btn btn-primary text-white"> <a class="text-white"
+                                                    href="{{ route('create.meeting', $lawyer->id) }}"> Video Call </a>
                                             </button>
-                                        
+
                                         </form>
 
                                     </div>

@@ -43,7 +43,12 @@
                                                 <td class="text-end">
                                                     <a href="{{ route('category.form', $val->id) }}"
                                                         class="btn btn-sm bg-success-light me-2"> <i
-                                                            class="far fa-edit me-1"></i> Edit</a>
+                                                            class="far fa-edit me-1"></i> Edit
+                                                    </a>
+                                                    <span onclick="handleDelete({{ $val->id }})"
+                                                        class="btn btn-sm bg-danger-light me-2">
+                                                        <i class="far fa-edit me-1"></i> Delete
+                                                    </span>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -56,4 +61,43 @@
             </div>
         </div>
     </div>
+@endsection
+@section('injected-scripts')
+    <script>
+        function handleDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    $.ajax({
+                        url: '/category/delete/' + id,
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            );
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    })
+                }
+            })
+        }
+    </script>
 @endsection

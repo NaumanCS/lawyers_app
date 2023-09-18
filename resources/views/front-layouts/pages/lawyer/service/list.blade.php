@@ -44,11 +44,7 @@
                                         <td style="width: 10%;"><img src="{{ $row->cover_image }}" class="w-100"
                                                 alt="Service Image"></td>
                                         <td>{{ $row->title }}</td>
-                                        <td>
-                                            @foreach ($row->categories as $category)
-                                                <p>{{ $category->title }}</p>
-                                            @endforeach
-                                        </td>
+                                        <td>{{ $row->category->title ?? "" }}</td>
                                         <td>{{ $row->amount }}</td>
                                         <td>{{ $row->location }}</td>
                                         <td>{{ $row->start_day }}</td>

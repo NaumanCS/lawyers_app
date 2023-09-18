@@ -33,14 +33,14 @@
                             {{-- <a href="{{route('lawyers.with.category', ['category'=>'all'])}}"> --}}
                             <a href="{{ route('lawyers.services', $category->id) }}">
                                 <div class="cate-widget">
-                                    <img src="{{ asset('front') }}/assets/img/category/Category1.jpg" alt="">
+                                    <img src="{{$category->image}}" alt="">
                                     <div class="cate-title category">
                                         <h3>{{ $category->title ?? '' }}</h3>
                                         <p>{{ $category->description ?? 'There is no description Provided about this category.' }}
                                         </p>
                                     </div>
                                     <div class="cate-count">
-                                        <p class="mb-0">View Lawyers</p>
+                                        <p class="text-light mb-0">View Lawyers -></p>
                                     </div>
                                 </div>
                             </a>

@@ -85,8 +85,6 @@ class DashboardController extends Controller
     {
 
         $delete = Category::destroy($req->id);
-
-
         if ($delete == 1) {
             $success = true;
             $message = "Category deleted successfully";
@@ -103,7 +101,7 @@ class DashboardController extends Controller
     //  Services
     public function service_index()
     {
-        $obj = Service::get();
+        $obj = Service::with('user', 'category')->get();
         return view('layouts.pages.service.index', get_defined_vars());
     }
     public function service_form($id)
