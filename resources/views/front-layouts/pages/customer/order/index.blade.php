@@ -24,50 +24,7 @@
                 <!-- /Page Header -->
 
                 <!-- Search Filter -->
-                <div class="card filter-card" id="filter_inputs">
-                    <div class="card-body pb-0">
-                        <form action="#" method="post">
-                            <div class="row filter-row">
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group">
-                                        <label>Category</label>
-                                        <select class="form-control select">
-                                            <option>Select category</option>
-                                            <option>Automobile</option>
-                                            <option>Construction</option>
-                                            <option>Interior</option>
-                                            <option>Cleaning</option>
-                                            <option>Electrical</option>
-                                            <option>Carpentry</option>
-                                            <option>Computer</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group">
-                                        <label>From Date</label>
-                                        <div class="cal-icon">
-                                            <input class="form-control datetimepicker" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group">
-                                        <label>To Date</label>
-                                        <div class="cal-icon">
-                                            <input class="form-control datetimepicker" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3 d-flex align-items-end">
-                                    <div class="form-group w-100">
-                                        <button class="btn btn-primary btn-block w-100" type="submit">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+              
                 <!-- /Search Filter -->
 
                 <div class="row">

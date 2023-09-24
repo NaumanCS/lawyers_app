@@ -32,12 +32,8 @@ class OrderController extends Controller
     public function order_store(Request $req, $id)
     {
         $orderDetail = session()->get('orderDetail');
-
-
         $auth = auth()->user();
-
         $customerWallet = Wallet::where('user_id', $auth->id)->first();
-
         if ($customerWallet != null && $customerWallet->amount >= $req->amount) {
 
             // Sufficient balance, process the order
@@ -90,7 +86,7 @@ class OrderController extends Controller
             }
             session()->forget('orderDetail');
             return redirect()->route('lawyer.list')->with('message', 'Order placed successfully');
-
+            
             // return response()->json(['message' => 'Order placed successfully']);
         } else {
             session()->forget('orderDetail');

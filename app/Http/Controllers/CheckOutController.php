@@ -12,11 +12,18 @@ use PayMob\Facades\PayMob;
 class CheckOutController extends Controller
 {
 
+    public function book_service($id){
+
+        $lawyerDetail = User::where('id', $id)->with('time_spans')->first();
+       return view('front-layouts.pages.customer.checkout.bookService',get_defined_vars());
+    }
+
     public function selectPaymentType(Request $request){
 
         $orderDetail = [
             'lawyer_id' => $request->lawyer_id,
             'amount' => $request->amount,
+            'select_time_span' => $request->select_time_span,
             // ... (other fields you need)
         ];
         session()->put('orderDetail',$orderDetail);

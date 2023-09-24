@@ -60,7 +60,7 @@
 
                                         {{-- <form action="{{ route('order.store', $update_id) }}" method="POST"> --}}
                                         {{-- <form action="{{ route('payment', $update_id) }}" method="POST"> --}}
-                                        <form action="{{ route('checkout') }}" method="POST">
+                                        {{-- <form action="{{ route('checkout') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="lawyer_id" value="{{ $lawyer->id }}"
                                                 id="">
@@ -71,8 +71,12 @@
                                             <button  class="btn btn-primary text-white"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
                                             </button>
 
-                                        </form>
-
+                                        </form> --}}
+                                        <button  class="btn btn-primary text-white"><a class="text-white" href="{{ route('book.service',$lawyer->id) }}" > Book Service </a> 
+                                        </button>
+                                    
+                                        <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

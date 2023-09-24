@@ -162,6 +162,9 @@ Route::middleware(['auth', 'customer', 'blockedUser'])->group(function () {
     Route::get('customer/profile', [CustomerController::class, 'customerProfile'])->name('customer.profile');
     Route::post('customer/profile/update/{user}', [CustomerController::class, 'customerProfileUpdate'])->name('customer.profile.update');
 
+    Route::get('book/service/{id}', [CheckOutController::class, 'book_service'])->name('book.service');
+ 
+
     Route::get('/order/index', [OrderController::class, 'order_index'])->name('order.index');
     Route::get('/order/form/{id}', [OrderController::class, 'order_form'])->name('order.form');
     Route::post('/order/store/{id}', [OrderController::class, 'order_store'])->name('order.store');
