@@ -104,9 +104,9 @@
                         @enderror
                     </div>
                     <div class="form-group form-focus">
-                        <label class="focus-label">Email</label>
+                        <label class="focus-label">Email (Optional)</label>
                         <input type="text" class="form-control @error('email') is-invalid @enderror" name="email"
-                            value="{{ old('email') }}" required autocomplete="email" placeholder="abc@exapmle.com">
+                            value="{{ old('email') }}"  autocomplete="email" placeholder="abc@exapmle.com">
                         @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -118,6 +118,16 @@
                         <input type="number" class="form-control @error('phone') is-invalid @enderror"
                             name="phone" value="{{ old('phone') }}" required placeholder="986 452 1236">
                         @error('phone')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group form-focus">
+                        <label class="focus-label">City</label>
+                        <input type="text" class="form-control @error('city') is-invalid @enderror"
+                            name="city" value="{{ old('city') }}" required placeholder="city">
+                        @error('city')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -171,11 +181,11 @@
                 <form method="POST" action="{{ route('users.login') }}">
                     @csrf
                     <div class="form-group form-focus">
-                        <label class="focus-label">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" autocomplete="email" required
-                            placeholder="lawyers@example.com">
-                        @error('email')
+                        <label class="focus-label">Phone</label>
+                        <input type="number" class="form-control @error('phone') is-invalid @enderror"
+                            name="phone" value="{{ old('phone') }}" autocomplete="phone" required
+                            placeholder="phone">
+                        @error('phone')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

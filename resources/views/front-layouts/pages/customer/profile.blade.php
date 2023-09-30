@@ -178,77 +178,11 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="form-group col-xl-6">
-                            <label class="me-sm-2 black_label">Date of birth</label>
-                            <input type="date" class="form-control black_input white-date-input provider_datepicker"
-                                autocomplete="off" onchange="validateBirthdate(event)" name="date_of_birth"
-                                value="{!! $customerProfile->date_of_birth !!}">
-                            <small id="birthdateError" class="form-text text-danger"></small>
-                            @error('date')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-xl-6">
-                            <label class="me-sm-2 black_label">Gender</label>
-                            <select class="form-control form-select black_input" name="gender">
-                                <option>Select Gender</option>
-                                <option value="male" {{ $customerProfile->gender === 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ $customerProfile->gender === 'female' ? 'selected' : '' }}>Female</option>
-                                <option value="other" {{ $customerProfile->gender === 'other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                            @error('gender')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-            
-                        <div class="col-xl-12">
-                            <h5 class="form-title">Address Information</h5>
-                        </div>
-                        <div class="form-group col-xl-12">
-                            <label class="me-sm-2 black_label">Address</label>
-                            <input type="text" name="address" class="form-control black_input" value="{{ $customerProfile->address ?? '' }}">
-                            @error('address')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-xl-6">
-                            <label class="me-sm-2" for="country">Country</label>
-                            <input class="form-control black_input" type="text" name="country" value="{!! $customerProfile->country !!}">
-                            @error('country')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                       
                         <div class="form-group col-xl-6">
                             <label class="me-sm-2 black_label" for="city">City</label>
                             <input class="form-control black_input" type="text" name="city" value="{!! $customerProfile->city !!}">
                             @error('city')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-xl-6">
-                            <label class="me-sm-2 black_label" for="state">State</label>
-                            <input class="form-control black_input" type="text" name="state" value="{!! $customerProfile->state !!}">
-                            @error('state')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-xl-6">
-                            <label class="me-sm-2 black_label" for="postal_code">Postal Code</label>
-                            <input type="text" class="form-control black_input" name="postal_code"
-                                value="{{ $customerProfile->postal_code ?? '' }}">
-                            @error('postal_code')
                                 <span class="text-danger" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

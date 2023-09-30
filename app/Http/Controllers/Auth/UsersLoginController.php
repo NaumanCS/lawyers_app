@@ -47,7 +47,7 @@ class UsersLoginController extends Controller
         // if($user > 0){
         //     return redirect()->back()->withErrors('Your account is blocked, please check your email for details.');
         // }
-        $credentials = ['email' => $request->email, 'password' => $request->password];
+        $credentials = ['phone' => $request->phone, 'password' => $request->password];
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->role == 'lawyer') {
