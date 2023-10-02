@@ -75,7 +75,10 @@
                                         <button  class="btn btn-primary text-white"><a class="text-white" href="{{ route('book.service',$lawyer->id) }}" > Book Service </a> 
                                         </button>
                                     
-                                        <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
+                                        {{-- <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
+                                        </button> --}}
+
+                                        <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('meeting.schedule.create',$lawyer->id) }}" > Video Call </a>
                                         </button>
                                         <button  class="btn btn-primary text-white "> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Call </a>
                                         </button>

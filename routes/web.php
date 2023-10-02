@@ -172,6 +172,13 @@ Route::middleware(['auth', 'customer', 'blockedUser'])->group(function () {
     Route::post('/order/delete/{id}', [OrderController::class, 'order_delete'])->name('order.delete');
     // update order status
     Route::post('/order/status', [OrderController::class, 'order_status'])->name('order.status');
+
+    // Meeting Schedule
+    Route::get('meeting/schedule/list', [JitsiVideoCallController::class, 'meeting_schedule_list'])->name('meeting.schedule.list');
+    Route::get('meeting/schedule/{id}', [JitsiVideoCallController::class, 'meeting_schedule_create'])->name('meeting.schedule.create');
+    Route::post('meeting/schedule/store', [JitsiVideoCallController::class, 'meeting_schedule_store'])->name('meeting.schedule.store');
+
+
 });
 
 Route::middleware(['auth'])->group(function () {

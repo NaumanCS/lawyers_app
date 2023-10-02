@@ -30,6 +30,11 @@
                     <i class="fas fa-user"></i> <span>Orders</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('meeting.schedule.list') }}" class="nav-link">
+                    <i class="fas fa-user"></i> <span>Meeting Schedule</span>
+                </a>
+            </li>
             {{-- <li class="nav-item">
                 <a href="favourites.html" class="nav-link">
                     <i class="fas fa-heart"></i> <span>Favourites</span>

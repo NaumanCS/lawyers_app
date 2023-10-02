@@ -13,5 +13,6 @@ class CreateMeeting extends Model
       'created_by',
       'meeting_with',
       'meeting_link',
+      'select_time_span'
     ];
 }
