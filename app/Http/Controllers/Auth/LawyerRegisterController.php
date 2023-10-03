@@ -48,6 +48,10 @@ class LawyerRegisterController extends Controller
         ]);
     }
 
+    public function index(){
+        return view('front-layouts.pages.auth.lawyer_register');
+    }
+
     /**
      * Create a new user instance after a valid registration.
      *

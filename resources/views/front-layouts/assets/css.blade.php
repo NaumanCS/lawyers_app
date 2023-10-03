@@ -34,5 +34,6 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropify/dist/css/dropify.min.css">
+<link rel="stylesheet" href="{{url('/')}}/AdminAssets/assets/plugins/select2/css/select2.min.css">
 
 @yield('injected-css')

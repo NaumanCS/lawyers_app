@@ -53,10 +53,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontController::class, 'index'])->name('front');
 Route::get('/blocked', [FrontController::class, 'user_blocked'])->name('blocked.users');
-Route::post('lawyer/signup', [LawyerRegisterController::class, 'create'])->name('lawyer.register');
+Route::post('/lawyer/signup', [LawyerRegisterController::class, 'create'])->name('lawyer.register');
 Route::post('customer/signup', [CustomerRegisterController::class, 'create'])->name('customer.register');
 // Route::post('/admin/login', [DashboardController::class, 'admin_login'])->name('admin.login');
 Route::post('user/login', [UsersLoginController::class, 'login'])->name('users.login');
+Route::get('/lawyer/signup', [LawyerRegisterController::class, 'index'])->name('lawyer.register.page');
 
 Route::get('/categories/{filter}', [FrontController::class, 'categories'])->name('categories');
 Route::get('/lawyers/{category}', [FrontController::class, 'lawyers_with_category'])->name('lawyers.with.category');
@@ -163,7 +164,7 @@ Route::middleware(['auth', 'customer', 'blockedUser'])->group(function () {
     Route::post('customer/profile/update/{user}', [CustomerController::class, 'customerProfileUpdate'])->name('customer.profile.update');
 
     Route::get('book/service/{id}', [CheckOutController::class, 'book_service'])->name('book.service');
- 
+
 
     Route::get('/order/index', [OrderController::class, 'order_index'])->name('order.index');
     Route::get('/order/form/{id}', [OrderController::class, 'order_form'])->name('order.form');
@@ -215,7 +216,7 @@ Route::group(['middleware' => ['auth']], function () {
  Route::post('/store-meeting-link', [JitsiVideoCallController::class, 'storeMeetingLink'])->name('store-meeting-link');
  Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');
 
- 
+
 // Route::group(['middleware' => 'lawyer'], function () {
 //     Route::group(['prefix' => 'lawyer'], function () {
 //         Route::get('/dashboard', [LawyerController::class, 'index'])->name('lawyer.dashboard');
