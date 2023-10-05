@@ -15,4 +15,11 @@ class CreateMeeting extends Model
       'meeting_link',
       'select_time_span'
     ];
+
+    public function spanTime(){
+      return $this->hasOne(LawyersTimeSpan::class,'id','select_time_span');
+    }
+    public function user(){
+      return $this->hasOne(User::class,'id','meeting_with');
+    }
 }

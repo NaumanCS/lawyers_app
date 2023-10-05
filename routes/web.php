@@ -212,6 +212,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
  // Jitsi Vieeo call
  Route::get('jitsi/video/call/{lawyerId?}', [JitsiVideoCallController::class, 'jitsi_video_call'])->name('jitsi.video.call');
+ Route::get('video/call/{meetingId}',[JitsiVideoCallController::class, 'video_call'])->name('video.call');
  Route::get('/video/call/lawyer', [JitsiVideoCallController::class, 'video_call_lawyer'])->name('video.call.lawyer');
  Route::post('/store-meeting-link', [JitsiVideoCallController::class, 'storeMeetingLink'])->name('store-meeting-link');
  Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');

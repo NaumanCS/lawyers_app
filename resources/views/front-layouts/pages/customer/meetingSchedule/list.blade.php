@@ -36,14 +36,14 @@
                                         @foreach ($obj as $key => $val)
                                             <tr>
                                                 
-                                                <td>{{ $val->meeting_with }}</td>
+                                                <td>{{ $val->user->name }}</td>
                                                 <td>{{ $val->meeting_link }}</td>
-                                                <td>{{ $val->select_time_span }}</td>
+                                                <td>{{ $val->spanTime->time_spans }}</td> 
                                                
 
 
                                                 <td class="text-end">
-                                                    <a href="{{ route('jitsi.video.call',$link='will-update-this') }}"
+                                                    <a href="{{ route('video.call',$val->meeting_link ) }}"
                                                         class="btn btn-sm bg-success-light me-2"> <i
                                                             class="fas fa-video me-1"></i> Join</a>
                                                    
