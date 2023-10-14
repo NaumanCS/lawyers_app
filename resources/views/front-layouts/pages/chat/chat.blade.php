@@ -223,8 +223,6 @@
                                 '" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">';
                             messageHtml += '</li>';
                         }
-
-                        // Append the message HTML to the chat container
                         $('#chat-container').append(messageHtml);
                     });
                 },
@@ -255,7 +253,7 @@
                         $('#textAreaExample2').val('');
                         console.log(JSON.stringify(response) +
                             "========== send message response");
-                        chatHistory.push(response.chat);
+                        chatHistory.push(response);
                         renderChatHistory();
                     },
                     error: function(error) {

@@ -25,14 +25,15 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-     public function create_chat_room(Request $request){
+    public function create_chat_room(Request $request)
+    {
         $chat = Chat::create([
             'sender_id' => Auth::id(),
-            'receiver_id' => $request->lawyerId
+            'receiver_id' => $request->lawyerId,
         ]);
         return redirect()->route('chat');
-     }
-     public function index()
+    }
+    public function index()
     {
         return view('layouts.pages.dashboard');
     }
@@ -70,12 +71,12 @@ class HomeController extends Controller
         $chMessage->save();
 
         $chat = ChMessage::where('chat_id', $room_id)->with('user')->get();
-        \Log::info($chat);
         return response()->json(['status' => true, 'chat' => $chat]);
     }
 
     public function fetch_new_messages()
     {
-
+        $rooms = Chat::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->with('sender', 'receiver')->get();
+        return view('front-layouts.pages.chat.chat', get_defined_vars());
     }
 }
