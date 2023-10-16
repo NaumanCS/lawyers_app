@@ -1,5 +1,17 @@
 @extends('layouts.mainlayout')
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    @if (session('message'))
+        toastr.success('{{ session('message') }}');
+    @endif
+</script>
+<script>
+    @if (session('error'))
+        toastr.error('{{ session('error') }}');
+    @endif
+</script>
     <div class="page-wrapper">
         <div class="content container-fluid">
 
@@ -78,6 +90,7 @@
                                             <th>Customer id</th>
                                             <th>Category id</th>
                                             <th>Amount</th>
+                                            <th>status</th>
 
                                             <th class="text-end">Action</th>
                                         </tr>
@@ -87,14 +100,41 @@
                                             <tr>
                                                 <td>
                                                     <a href="{{ $val->payment_slip }}" target="_blank" download>
-                                                        <img class="rounded service-img me-1" src="{{ $val->payment_slip }}" alt="nav logo">
+                                                        <img class="rounded service-img me-1" src="{{ $val->payment_slip }}"
+                                                            alt="nav logo">
                                                     </a>
                                                 </td>
-                                                <td>{{ $val->lawyer_id }}</td>
-                                                <td>{{ $val->customer_id }}</td>
+                                                <td>{{ $val->lawyer->name }}</td>
+                                                <td>{{ $val->customer->name }}</td>
                                                 <td>{{ $val->category_id }}</td>
                                                 <td>{{ $val->amount }}</td>
+                                                <td>
+                                                    <!-- Example single danger button -->
+                                                    <div class="btn-group">
+                                                        @if ($val->status == 1)
+                                                            <button type="button" class="btn btn-success dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                               Approved
+                                                            </button>
+                                                        @else
+                                                            <button type="button" class="btn btn-danger dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                             Rejected
+                                                            </button>
+                                                        @endif
 
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('admin.order.status', ['status' => '1', 'orderId' => $val->id]) }}">Approved</a>
+                                                            </li>
+
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('admin.order.status', ['status' => '0', 'orderId' => $val->id]) }}">Reject</a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </td>
 
                                                 <td class="text-end">
                                                     <a href="{{ route('admin.order.form', $val->id) }}"

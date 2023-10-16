@@ -172,7 +172,7 @@ class DashboardController extends Controller
     // ORDERS
     public function order_index()
     {
-        $obj = Order::get();
+        $obj = Order::with('customer','lawyer')->get();
         return view('layouts.pages.orders.index', get_defined_vars());
     }
     public function order_form($id)
@@ -251,6 +251,21 @@ class DashboardController extends Controller
             'message' => $message,
         ]);
     }
+    public function admin_order_status($orderId=null ,$status=null)
+    {
+
+       
+           
+    
+            $orderStatus = Order::find($orderId);
+            $orderStatus->status = $status;
+            $orderStatus->save();
+    
+            return redirect()->route('admin.order.index')->with('message', 'Order status changed successfully');
+     
+    }
+    
+
 
     //  General Setting
     public function general_setting_index()

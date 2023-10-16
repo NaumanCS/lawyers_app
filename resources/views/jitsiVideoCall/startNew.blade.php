@@ -33,10 +33,10 @@
                 // jwt: "Your-JWT-Token"
             });
 
-            // Start the timer to close the meeting after 1 minute
-            timer = setTimeout(function() {
+           // Start the timer to close the meeting after 1 minute
+           timer = setTimeout(function() {
                 closeMeeting();
-            }, 30000); // 15 minutes in milliseconds
+            }, 900000); // 15 minutes in milliseconds
         }
 
         function closeMeeting() {

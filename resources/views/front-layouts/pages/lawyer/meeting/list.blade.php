@@ -40,7 +40,7 @@
                                         <td>{{ $row->date }}</td>
                                         <td>{{ $row->created_by }}</td>
                                         <td>
-                                            <a class="text-success" href="{{ route('video.call.lawyer') }}">Meet</a>
+                                            <a class="text-success" href="{{ route('video.call.lawyer',$row->meeting_link) }}">Meet</a>
                                         </td>
                                        
 

@@ -65,7 +65,7 @@
                                     
                                             <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}"
                                                 id="">
-                                            <input type="hidden" name="amount" value="1000" id="">
+                                            <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
                                             <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}">
                                     <label class="mb-0" for="select_time_span{{$span->id}}">{{ $span->time_spans }}</label>
 

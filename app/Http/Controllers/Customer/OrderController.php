@@ -32,18 +32,19 @@ class OrderController extends Controller
     public function order_store(Request $req, $id)
     {
         $orderDetail = session()->get('orderDetail');
+
         $auth = auth()->user();
-        $customerWallet = Wallet::where('user_id', $auth->id)->first();
-        if ($customerWallet != null && $customerWallet->amount >= $req->amount) {
 
-            // Sufficient balance, process the order
-            $customerWallet->amount -=  $req->amount;
-            $customerWallet->save();
+        // $customerWallet = Wallet::where('user_id', $auth->id)->first();
+        // if ($customerWallet != null && $customerWallet->amount >= $req->amount) {
+        //     // Sufficient balance, process the order
+        //     $customerWallet->amount -=  $req->amount;
+        //     $customerWallet->save();
 
-            $currentDateTime = Carbon::now();
-            $lawyer = User::where('id', $req->lawyer_id)->first();
-
-            $imageUpdateId = $id;
+        $currentDateTime = Carbon::now();
+        $lawyer = User::where('id', $req->lawyer_id)->first();
+        $imageUpdateId = $id;
+        if ($orderDetail) {
             if (isset($id) && !empty($id)) {
                 $obj = Order::whereId($id)->update([
                     'lawyer_id' => $orderDetail['lawyer_id'],
@@ -69,35 +70,36 @@ class OrderController extends Controller
                 ]);
                 $imageUpdateId = $obj->id;
             }
-
-            if ($req->file('jazzcash_slip')) {
-                $paymentSlip = time() . '.' . $req->jazzcash_slip->extension();
-                $req->jazzcash_slip->move(public_path('uploads/user'), $paymentSlip);
-                Order::whereId($imageUpdateId)->update([
-                    'payment_slip' => $paymentSlip
-                ]);
-            }
-            if ($req->file('bank_slip')) {
-                $paymentSlip = time() . '.' . $req->bank_slip->extension();
-                $req->bank_slip->move(public_path('uploads/user'), $paymentSlip);
-                Order::whereId($imageUpdateId)->update([
-                    'payment_slip' => $paymentSlip
-                ]);
-            }
-            session()->forget('orderDetail');
-            return redirect()->route('lawyer.list')->with('message', 'Order placed successfully');
-            
-            // return response()->json(['message' => 'Order placed successfully']);
-        } else {
-            session()->forget('orderDetail');
-            // return response()->json(['error' => 'Insufficient balance']);
-            return redirect()->route('lawyer.list')->with('error', 'insuficient balance');
         }
+
+        if ($req->file('jazzcash_slip')) {
+            $paymentSlip = time() . '.' . $req->jazzcash_slip->extension();
+            $req->jazzcash_slip->move(public_path('uploads/user'), $paymentSlip);
+            Order::whereId($imageUpdateId)->update([
+                'payment_slip' => $paymentSlip
+            ]);
+        }
+        if ($req->file('bank_slip')) {
+            $paymentSlip = time() . '.' . $req->bank_slip->extension();
+            $req->bank_slip->move(public_path('uploads/user'), $paymentSlip);
+            Order::whereId($imageUpdateId)->update([
+                'payment_slip' => $paymentSlip
+            ]);
+        }
+        session()->forget('orderDetail');
+        return redirect()->route('lawyer.list')->with('message', 'Order placed successfully');
+
+        // return response()->json(['message' => 'Order placed successfully']);
+        // } else {
+        //     session()->forget('orderDetail');
+        //     // return response()->json(['error' => 'Insufficient balance']);
+        //     return redirect()->route('lawyer.list')->with('error', 'insuficient balance');
+        // }
     }
 
     public function order_detail($id)
     {
-        $title = 'service Detail';
+        $title = 'Order Detail';
         $jobDetail = Order::where('id', $id)->first();
         return view('layouts.pages.service.detail', get_defined_vars());
     }

@@ -1,8 +1,5 @@
 @extends('front-layouts.master-user-layout')
 @section('content')
-
-
-
     <div class="col-xl-9 col-md-8">
 
         <div class="page-wrapper">
@@ -24,7 +21,7 @@
                 <!-- /Page Header -->
 
                 <!-- Search Filter -->
-              
+
                 <!-- /Search Filter -->
 
                 <div class="row">
@@ -36,6 +33,8 @@
                                         <thead>
                                             <tr>
                                                 <th>id</th>
+                                                <th>Payment Slip</th>
+                                                <th>Upload Slip</th>
                                                 <th>Lawyer id</th>
                                                 <th>Lawyer Location</th>
                                                 <th>Amount</th>
@@ -50,6 +49,14 @@
                                                 <tr>
                                                     <td>
                                                         {{ $val->id }}
+                                                    </td>
+                                                    <td>
+                                                      
+                                                        <img class="w-25 h-25" src="{{ $val->payment_slip }}" alt="Payment Slip">
+                                                    </td>
+                                                    <td>
+                                                      
+                                                        <a class="btn btn-primary text-white" href="{{ route('upload.payment.slip',$val->id) }}">Upload</a>
                                                     </td>
                                                     <td>{{ $val->lawyer_id }}</td>
                                                     <td>{{ $val->lawyer_location }}</td>

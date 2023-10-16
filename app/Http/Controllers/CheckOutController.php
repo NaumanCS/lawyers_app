@@ -12,13 +12,15 @@ use PayMob\Facades\PayMob;
 class CheckOutController extends Controller
 {
 
-    public function book_service($id){
+    public function book_service($id)
+    {
 
-        $lawyerDetail = User::where('id', $id)->with('time_spans')->first();
-       return view('front-layouts.pages.customer.checkout.bookService',get_defined_vars());
+        $lawyerDetail = User::where('id', $id)->with('service','time_spans')->first();
+        return view('front-layouts.pages.customer.checkout.bookService', get_defined_vars());
     }
 
-    public function selectPaymentType(Request $request){
+    public function checkout(Request $request)
+    {
 
         $orderDetail = [
             'lawyer_id' => $request->lawyer_id,
@@ -26,33 +28,40 @@ class CheckOutController extends Controller
             'select_time_span' => $request->select_time_span,
             // ... (other fields you need)
         ];
-        session()->put('orderDetail',$orderDetail);
-       
+        session()->put('orderDetail', $orderDetail);
 
+
+        return redirect()->route('select.payment.method');
+    }
+    public function select_payment_method($id =null)
+    {
+        $obj=Order::where('id',$id)->first();
         return view('front-layouts.pages.customer.checkout.paymentType',get_defined_vars());
     }
 
-    public function index(){
-        $order=Order::create([
-            'amount'=>1000,
+    public function index()
+    {
+        $order = Order::create([
+            'amount' => 1000,
         ]);
 
-        $PaymentKey=PayMobController::pay(total_price:$order->amount,order_id:$order->id);
+        $PaymentKey = PayMobController::pay(total_price: $order->amount, order_id: $order->id);
 
-        return view('front-layouts.pages.paymob.paymob')->with(key:'token',value:$PaymentKey);
+        return view('front-layouts.pages.paymob.paymob')->with(key: 'token', value: $PaymentKey);
     }
 
-    public function checkout_processed(Request $request){
+    public function checkout_processed(Request $request)
+    {
         $request_hmac = $request->hmac;
         $calc_hmac = PayMob::calcHMAC($request);
-    
+
         if ($request_hmac == $calc_hmac) {
             $order_id = $request->obj['order']['merchant_order_id'];
             $amount_cents = $request->obj['amount_cents'];
             $transaction_id = $request->obj['id'];
-    
+
             $order = Order::find($order_id);
-    
+
             if ($request->obj['success'] == true && ($order->total_price * 100) == $amount_cents) {
                 $order->update([
                     'transaction_status' => 'finished',
@@ -72,15 +81,12 @@ class CheckOutController extends Controller
         $user = User::first();
         //  + total price
         $payMob = new PayMobServices(103);
-        $id=$payMob->get_id();
-     
-       
-        $url=$payMob->make_order($user);
-   
-        $url = "https://pakistan.paymob.com/api/acceptance/iframes/131588?payment_token={payment_key_obtained_previously}".$url;
-        return $url ;
+        $id = $payMob->get_id();
 
+
+        $url = $payMob->make_order($user);
+
+        $url = "https://pakistan.paymob.com/api/acceptance/iframes/131588?payment_token={payment_key_obtained_previously}" . $url;
+        return $url;
     }
-
-    
 }

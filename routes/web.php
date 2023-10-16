@@ -104,6 +104,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('admin/order/store/{id}', [DashboardController::class, 'order_store'])->name('admin.order.store');
     Route::get('admin/order/detail/{id}', [DashboardController::class, 'order_detail'])->name('admin.order.details');
     Route::post('admin/order/delete/{id}', [DashboardController::class, 'order_delete'])->name('admin.order.delete');
+    Route::get('admin/order/status/{orderId?}/{status?}', [DashboardController::class, 'admin_order_status'])->name('admin.order.status');
+
 
     Route::get('admin/general-setting/index', [DashboardController::class, 'general_setting_index'])->name('admin.general.setting.index');
     Route::get('admin/general-setting/form/{id}', [DashboardController::class, 'general_setting_form'])->name('admin.general.setting.form');
@@ -194,7 +196,11 @@ Route::middleware(['auth'])->group(function () {
     // });
 
     // Payment Method
-    Route::post('/checkout', [CheckOutController::class, 'selectPaymentType'])->name('checkout');
+    Route::post('/checkout', [CheckOutController::class, 'checkout'])->name('checkout');
+
+    Route::get('/select/payment/method/{id?}', [CheckOutController::class, 'select_payment_method'])->name('select.payment.method');
+    Route::get('/upload/payment/slip/{id?}', [CheckOutController::class, 'select_payment_method'])->name('upload.payment.slip');
+
 });
 
 Route::get('payTest/page', [PayMobController::class, 'paymobtestpage'])->name('paymob.test.page');
@@ -213,7 +219,7 @@ Route::group(['middleware' => ['auth']], function () {
  // Jitsi Vieeo call
  Route::get('jitsi/video/call/{lawyerId?}', [JitsiVideoCallController::class, 'jitsi_video_call'])->name('jitsi.video.call');
  Route::get('video/call/{meetingId}',[JitsiVideoCallController::class, 'video_call'])->name('video.call');
- Route::get('/video/call/lawyer', [JitsiVideoCallController::class, 'video_call_lawyer'])->name('video.call.lawyer');
+ Route::get('/video/call/lawyer/{meetingId}', [JitsiVideoCallController::class, 'video_call_lawyer'])->name('video.call.lawyer');
  Route::post('/store-meeting-link', [JitsiVideoCallController::class, 'storeMeetingLink'])->name('store-meeting-link');
  Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');
 

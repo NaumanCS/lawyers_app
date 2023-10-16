@@ -105,4 +105,8 @@ class User extends Authenticatable
     public function time_spans(){
         return $this->hasMany(LawyersTimeSpan::class, 'user_id');
     }
+
+    public function service(){
+        return $this->hasOne(Service::class, 'user_id');
+    } 
 }
