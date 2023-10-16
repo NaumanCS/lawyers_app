@@ -1,11 +1,12 @@
 @extends('front-layouts.master-layout')
 
 <head>
-    <!-- Include Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- Include Bootstrap Multiselect CSS -->
+    <link rel="stylesheet" href="{{ asset('node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css') }}">
 
-    <!-- Include Select2 JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- Include Bootstrap Multiselect JS -->
+    <script src="{{ asset('node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
+
 </head>
 @section('content')
     <div class="breadcrumb-bar">
@@ -90,12 +91,11 @@
                                     placeholder="********">
                             </div>
                             <div class="col-lg-6">
-                                <select class="select2" multiple name="example">
+                                <select id="exampleSelect" class="form-select" multiple="multiple">
                                     <option value="1">Option 1</option>
                                     <option value="2">Option 2</option>
                                     <option value="3">Option 3</option>
                                 </select>
-
                             </div>
                         </div>
                         <div class="text-end">
@@ -114,7 +114,7 @@
 @section('injected-script')
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+            $('#exampleSelect').multiselect();
         });
     </script>
 @endsection
