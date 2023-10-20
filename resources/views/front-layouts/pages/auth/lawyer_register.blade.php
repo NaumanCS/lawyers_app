@@ -1,14 +1,9 @@
 @extends('front-layouts.master-layout')
-
-<head>
-    <!-- Include Bootstrap Multiselect CSS -->
-    <link rel="stylesheet" href="{{ asset('node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css') }}">
-
-    <!-- Include Bootstrap Multiselect JS -->
-    <script src="{{ asset('node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
-
-</head>
 @section('content')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
     <div class="breadcrumb-bar">
         <div class="container">
             <div class="row">
@@ -38,83 +33,549 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <img src="{{ asset('front') }}/assets/img/LawyerSignup.jpg" alt="Sign Up to the App" class="img-fluid">
                 </div>
+
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                    <form method="POST" action="{{ route('lawyer.register') }}">
+                    <form method="POST" action="{{ route('lawyer.register') }}" enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
-                                <label class="focus-label">Name</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                    name="name" value="{{ old('name') }}" required autocomplete="name"
-                                    placeholder="Your Name">
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div id="step1">
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Name</label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        name="name" value="{{ old('name') }}" required autocomplete="name"
+                                        placeholder="Your Name">
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Mobile Number</label>
+                                    <input type="number" class="form-control @error('phone') is-invalid @enderror"
+                                        name="phone" value="{{ old('phone') }}" required placeholder="Phone">
+                                    @error('phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-12 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Email</label>
+                                    <input type="text" class="form-control @error('email') is-invalid @enderror"
+                                        name="email" value="{{ old('email') }}" required autocomplete="email"
+                                        placeholder="abc@exapmle.com">
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">City</label>
+                                    <input type="text" class="form-control @error('city') is-invalid @enderror"
+                                        name="city" value="{{ old('city') }}" required autocomplete="city"
+                                        placeholder="City">
+                                    @error('city')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Country</label>
+                                    <input type="text" class="form-control @error('country') is-invalid @enderror"
+                                        name="country" value="{{ old('country') }}" required autocomplete="country"
+                                        placeholder="Country">
+                                    @error('country')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Address</label>
+                                    <input type="text" class="form-control @error('address') is-invalid @enderror"
+                                        name="address" value="{{ old('address') }}" required autocomplete="address"
+                                        placeholder="Address">
+                                    @error('address')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Create Password</label>
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                        name="password" required autocomplete="new-password" placeholder="********">
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
+                                    <label class="focus-label">Confirm password</label>
+                                    <input id="password-confirm" type="password" class="form-control"
+                                        name="password_confirmation" required autocomplete="new-password"
+                                        placeholder="********">
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="black_label">Category<span class="text-danger ">*</span></label>
+                                        <select id="multiSelect" class="form-control form-select" name="categories[]"
+                                            multiple="multiple">
+
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id ?? '' }}">{{ $category->title ?? '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('categories')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
-                                <label class="focus-label">Mobile Number</label>
-                                <input type="number" class="form-control @error('phone') is-invalid @enderror"
-                                    name="phone" value="{{ old('phone') }}" required placeholder="986 452 1236">
-                                @error('phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="text-end">
+                                <a class="nav-link header-login" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#login_modal">Already have an account?</a>
                             </div>
-                            <div class="col-lg-12 col-md-6 col-sm-12 form-group form-focus">
-                                <label class="focus-label">Email</label>
-                                <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email"
-                                    placeholder="abc@exapmle.com">
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                            <div class="text-end">
+                                <button type="button" class="btn btn-primary btn-block btn-lg login-btn"
+                                    onclick="showStep(2)">Next</button>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
-                                <label class="focus-label">Create Password</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    name="password" required autocomplete="new-password" placeholder="********">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
-                                <label class="focus-label">Confirm password</label>
-                                <input id="password-confirm" type="password" class="form-control"
-                                    name="password_confirmation" required autocomplete="new-password"
-                                    placeholder="********">
-                            </div>
-                            <div class="col-lg-6">
-                                <select id="exampleSelect" class="form-select" multiple="multiple">
-                                    <option value="1">Option 1</option>
-                                    <option value="2">Option 2</option>
-                                    <option value="3">Option 3</option>
-                                </select>
-                            </div>
+
                         </div>
-                        <div class="text-end">
-                            <a class="nav-link header-login" href="javascript:void(0);" data-bs-toggle="modal"
-                                data-bs-target="#login_modal">Already have an account?</a>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Signup</button>
+
+                        <!-- Step 2: Address and Categories -->
+                        <div id="step2" style="display: none;">
+
+                            <div class="row">
+                                <h6 class="bg-black text-white rounded p-2">Lawyer Experience</h6>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="black_label">Degree<span class="text-danger ">*</span></label>
+                                        <select class="form-control form-select" name="degree" id="degree">
+                                            <option selected disabled>Select Degree</option>
+                                            <option value="Advocate" {{ old('degree') == 'Advocate' ? 'selected' : '' }}>
+                                                Advocate
+                                            </option>
+                                            <option value="Barister" {{ old('degree') == 'Barister' ? 'selected' : '' }}>
+                                                Barister
+                                            </option>
+                                            <option value="Attorney" {{ old('degree') == 'Attorney' ? 'selected' : '' }}>
+                                                Attorney
+                                            </option>
+                                        </select>
+                                        @error('degree')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6" id="baristerHighCourt">
+                                    <div class="form-group">
+                                        <input type="checkbox" class="license-checkbox" name="high_court" value="1"
+                                            {{ is_array(old('high_court')) && in_array('1', old('high_court')) ? 'checked' : '' }}>
+                                        <label class="mx-2" for="monday">High Court</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 " id="baristerSupremeCourt">
+                                    <div class="form-group">
+                                        <input type="checkbox" class="license-checkbox" name="supreme_court"
+                                            value="1"
+                                            {{ is_array(old('supreme_court')) && in_array('1', old('supreme_court')) ? 'checked' : '' }}>
+                                        <label class="mx-2" for="monday">Supreme Court</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div id="highCourtLicenseDiv" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Upload High Court Licence<span
+                                                    class="text-danger">*</span></label>
+
+                                            <input type="file" name="high_court_licence" class="dropify"
+                                                value="{{ old('high_court_licence') }}" data-default-file="">
+                                            @error('high_court_licence')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div id="supremeCourtLicenseDiv" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Upload Supreme Court Licence<span
+                                                    class="text-danger">*</span></label>
+
+                                            <input type="file" name="supreme_court_licence" class="dropify"
+                                                value="{{ old('supreme_court_licence') }}" data-default-file="">
+                                            @error('supreme_court_licence')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="black_label">Experience In Years<span
+                                                class="text-danger ">*</span></label>
+                                        <select class="form-control form-select" name="experience_in_years"
+                                            id="experience_in_years">
+                                            <option selected disabled>Select Years</option>
+                                            <option value="1-10"
+                                                {{ old('experience_in_years') == '1-10' ? 'selected' : '' }}>
+                                                1-10
+                                            </option>
+                                            <option value="10-20"
+                                                {{ old('experience_in_years') == '10-20' ? 'selected' : '' }}>
+                                                10-20
+                                            </option>
+                                            <option value="20-30"
+                                                {{ old('experience_in_years') == '20-30' ? 'selected' : '' }}>
+                                                20-30
+                                            </option>
+                                            <option value="30-40"
+                                                {{ old('experience_in_years') == '30-40' ? 'selected' : '' }}>
+                                                30-40
+                                            </option>
+                                        </select>
+                                        @error('experience_in_years')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="black_label">Qualification<span
+                                                class="text-danger ">*</span></label>
+                                        <select class="form-control form-select" name="qualification" id="qualification">
+                                            <option selected disabled>Select Qualification</option>
+                                            <option value="LLB" {{ old('qualification') == 'LLB' ? 'selected' : '' }}>
+                                                LLB
+                                            </option>
+                                            <option value="LLM" {{ old('qualification') == 'LLM' ? 'selected' : '' }}>
+                                                LLM
+                                            </option>
+                                            <option value="Baristrate"
+                                                {{ old('qualification') == 'Baristrate' ? 'selected' : '' }}>
+                                                Baristrate
+                                            </option>
+                                        </select>
+                                        @error('qualification')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div id="qualificationCertificate" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Upload Qualification Certificate/Degree<span
+                                                    class="text-danger">*</span></label>
+
+                                            <input type="file" name="qualification_certificate" class="dropify"
+                                                value="{{ old('qualification_certificate') }}" data-default-file="">
+                                            @error('qualification_certificate')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- SET DAY AND TIME --}}
+                                <div class="col-lg-12">
+                                    <h6 class="bg-black text-white rounded p-2">Set Days in week-Time per day</h6>
+                                    <div class="form-group">
+                                        <label class="black_label">Days of the week<span
+                                                class="text-danger">*</span></label>
+                                        <div class="checkboxes">
+                                            <input type="checkbox" name="days[]" value="monday"
+                                                {{ is_array(old('days')) && in_array('monday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="monday">Mon</label>
+
+                                            <input type="checkbox" name="days[]" value="tuesday"
+                                                {{ is_array(old('days')) && in_array('tuesday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="tuesday">Tues</label>
+
+                                            <input type="checkbox" name="days[]" value="wednesday"
+                                                {{ is_array(old('days')) && in_array('wednesday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="wednesday">Wed</label>
+
+                                            <input type="checkbox" name="days[]" value="thursday"
+                                                {{ is_array(old('days')) && in_array('thursday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="thursday">Thurs</label>
+
+                                            <input type="checkbox" name="days[]" value="friday"
+                                                {{ is_array(old('days')) && in_array('friday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="friday">Fri</label>
+
+                                            <input type="checkbox" name="days[]" value="saturday"
+                                                {{ is_array(old('days')) && in_array('saturday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="saturday">Sat</label>
+
+                                            <input type="checkbox" name="days[]" value="sunday"
+                                                {{ is_array(old('days')) && in_array('sunday', old('days')) ? 'checked' : '' }}>
+                                            <label class="mx-2" for="sunday">Sun</label>
+
+                                            <!-- Repeat the above for each day of the week -->
+                                        </div>
+                                        @error('days')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="black_label">Start Time<span class="text-danger ">*</span></label>
+                                        <input class="form-control black_input" type="time" name="start_time"
+                                            value="{{ old('start_time') }}" required>
+                                        @error('start_time')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="black_label">End Time<span class="text-danger ">*</span></label>
+                                        <input class="form-control black_input" type="time" name="end_time" required
+                                            value="{{ old('end_time') }}">
+                                        @error('end_time')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="black_label">Amount<span class="text-danger ">*</span></label>
+                                        <input class="form-control " type="text" name="amount" required
+                                            value="{{ old('amount') }}">
+                                        @error('amount')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{-- ADD Account Info --}}
+                                <h6 class="bg-black text-white rounded p-2">Account information</h6>
+                                <div class="col-lg-6" id="bankAccount">
+                                    <div class="form-group">
+                                        <input type="checkbox" class="account-checkbox" name="bank_account" value="1"
+                                            {{ is_array(old('bank_account')) && in_array('1', old('bank_account')) ? 'checked' : '' }}>
+                                        <label class="mx-2" for="monday">Bank Account</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 " id="jazzCashAccount">
+                                    <div class="form-group">
+                                        <input type="checkbox" class="account-checkbox" name="jazzcash_account"
+                                            value="1"
+                                            {{ is_array(old('jazzcash_account')) && in_array('1', old('jazzcash_account')) ? 'checked' : '' }}>
+                                        <label class="mx-2" for="monday">jazzcash_account</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div id="bankAccountDiv" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Bank Account Title<span
+                                                    class="text-danger">*</span></label>
+
+                                                    <input class="form-control " type="text" name="bank_account_title" 
+                                                    value="{{ old('bank_account_title') }}">
+                                            @error('bank_account_title')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+
+                                            <label class="black_label">Bank Name<span
+                                                class="text-danger">*</span></label>
+
+                                                <input class="form-control " type="text" name="bank_name" 
+                                                value="{{ old('bank_name') }}">
+                                        @error('bank_name')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+
+                                        <label class="black_label">Bank Account Number<span
+                                            class="text-danger">*</span></label>
+
+                                            <input class="form-control " type="text" name="bank_account_number" 
+                                            value="{{ old('bank_account_number') }}">
+                                    @error('bank_account_number')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                             
+                                <div class="col-lg-6">
+                                    <div id="jazzCashDiv" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Jazz Cash Title<span class="text-danger">*</span></label>
+
+                                            <input class="form-control " type="text" name="jazzcash_account_title" 
+                                                value="{{ old('jazzcash_account_title') }}">
+                                            @error('jazzcash_account_title')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+
+                                            <label class="black_label">Jazz Cash Number<span class="text-danger">*</span></label>
+
+                                            <input class="form-control " type="text" name="jazzcash_number" 
+                                                value="{{ old('jazzcash_number') }}">
+                                            @error('jazzcash_number')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-primary" onclick="showStep(1)">Previous</button>
+                                <button type="submit" class="btn btn-primary">Signup</button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('#multiSelect').select2({
+                maximumSelectionLength: 2 // Limit the maximum selection to 2
+            });
+        });
+
+        function showStep(step) {
+            if (step === 1) {
+                document.getElementById('step1').style.display = 'block';
+                document.getElementById('step2').style.display = 'none';
+            } else if (step === 2) {
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+            }
+        }
+
+
+
+        // $(document).ready(function() {
+        //     // Initially check the selected value and show/hide the Barister Certificate field
+        //     toggleBaristerCertificateField();
+
+        //     // Add an event listener to the degree dropdown
+        //     $('#degree').on('change', function() {
+        //         toggleBaristerCertificateField();
+        //     });
+
+        //     function toggleBaristerCertificateField() {
+        //         var selectedDegree = $('#degree').val();
+        //         if (selectedDegree === 'Barister') {
+        //             $('#baristerHighCourt').show();
+        //             $('#baristerSupremeCourt').show();
+
+        //         } else {
+        //             $('#baristerHighCourt').hide();
+        //             $('#baristerSupremeCourt').hide();
+
+        //         }
+        //     }
+        // });
+
+        $(document).ready(function() {
+            $('.license-checkbox').on('change', function() {
+                if ($('input[name="high_court"]').is(':checked')) {
+                    $('#highCourtLicenseDiv').show();
+                } else {
+                    $('#highCourtLicenseDiv').hide();
+                }
+
+                if ($('input[name="supreme_court"]').is(':checked')) {
+                    $('#supremeCourtLicenseDiv').show();
+                } else {
+                    $('#supremeCourtLicenseDiv').hide();
+                }
+            });
+        });
+
+        // qualification degree
+        $(document).ready(function() {
+            $('#qualification').on('change', function() {
+                var selectedQualification = $(this).val();
+
+                if (selectedQualification === 'LLB' || selectedQualification === 'LLM' ||
+                    selectedQualification === 'Baristrate') {
+                    $('#qualificationCertificate').show();
+                } else {
+                    $('#qualificationCertificate').hide();
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            $('.account-checkbox').on('change', function() {
+                if ($('input[name="jazzcash_account"]').is(':checked')) {
+                    $('#jazzCashDiv').show();
+                } else {
+                    $('#jazzCashDiv').hide();
+                }
+
+                if ($('input[name="bank_account"]').is(':checked')) {
+                    $('#bankAccountDiv').show();
+                } else {
+                    $('#bankAccountDiv').hide();
+                }
+            });
+        });
+    </script>
 @endsection
 @section('injected-script')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#exampleSelect').multiselect();
         });
-    </script>
+    </script> --}}
 @endsection

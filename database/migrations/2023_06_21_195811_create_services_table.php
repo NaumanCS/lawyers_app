@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->string('amount')->nullable();
             $table->string('categories_id')->nullable();
+            $table->string('days')->nullable();
             $table->string('start_day')->nullable();
             $table->string('end_day')->nullable();
             $table->string('start_time')->nullable();

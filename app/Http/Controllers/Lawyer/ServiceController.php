@@ -19,9 +19,17 @@ class ServiceController extends Controller
         return view('front-layouts.pages.lawyer.service.list', get_defined_vars());
     }
 
-    public function create()
+    public function create($id)
     {
-        $id = 0;
+        $service = null; // Initialize $service as null
+        if ($id) {
+           
+            $service = Service::where('id', $id)->first();
+        }else{
+            $id = 0;
+           
+        }
+       
         $categories = Category::get();
         return view('front-layouts.pages.lawyer.service.create', get_defined_vars());
     }
@@ -48,14 +56,16 @@ class ServiceController extends Controller
         //     'add_extra_day' => 'required',
         //     'cover_image' => 'required',
         // ]);
-
+     
         $update_id = $request->id;
+        $selectedDays = $request->input('days', []);
         if ($update_id) {
             $service = Service::where('id', $request->id)->first();
             $service->title = $request->title;
             $service->location = $request->location;
             $service->amount = $request->amount;
             $service->categories_id = $request->categories_id;
+            $service->days = $selectedDays;
             $service->start_day = $request->start_day;
             $service->end_day = $request->end_day;
             $service->start_time = $request->start_time;

@@ -41,14 +41,34 @@ class FrontController extends Controller
 
     public function lawyers_services(Request $request, $filter)
     {
-        if ($filter) {
-            $services = Service::where('categories_id', $filter)->with('user', 'category')->paginate(9);
-        } else {
-            $services = Service::where('categories_id', $request->category_id)->orWhere('location', $request->location)->orderBy('amount', $request->price_order)->paginate(9);
+        $query = Service::with('user', 'category');
+    
+        if ($filter !== '0') {
+            $query->where('categories_id', $filter);
         }
+    
+        if ($request->filled('price_order')) {
+            $priceOrder = $request->price_order == 'asc' ? 'asc' : 'desc';
+            $query->orderBy('amount', $priceOrder);
+        }
+    
+        if ($request->filled('category_id')) {
+            $query->where('categories_id', $request->category_id);
+        }
+    
+        if ($request->filled('location')) {
+            $query->whereHas('user', function ($query) use ($request) {
+                $query->where('city', $request->location);
+            });
+        }
+    
+        $services = $query->paginate(9);
         $categories = Category::get();
-        return view('front-layouts.pages.online_lawyers', get_defined_vars());
+    
+        return view('front-layouts.pages.online_lawyers', compact('services', 'categories'));
     }
+    
+      
 
     public function advanceSearch(Request $request)
     {

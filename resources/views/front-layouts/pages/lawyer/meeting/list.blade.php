@@ -26,9 +26,11 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Room name</th>
-                                    <th>Date</th>
                                     <th>Created By</th>
-                                   
+                                    <th>Created at Date</th>
+                                    <th>Date</th>
+
+                                    <th>Time</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -37,8 +39,11 @@
                                     <tr>
                                         <td>{{ $row->id }}</td>
                                         <td>{{ $row->meeting_link }}</td>
+                                        <td>{{ $row->createdByUser->name }}</td>
+                                        <td>{{ $row->created_at }}</td>
                                         <td>{{ $row->date }}</td>
-                                        <td>{{ $row->created_by }}</td>
+
+                                        <td>{{ $row->spanTime->time_spans }}</td> 
                                         <td>
                                             <a class="text-success" href="{{ route('video.call.lawyer',$row->meeting_link) }}">Meet</a>
                                         </td>

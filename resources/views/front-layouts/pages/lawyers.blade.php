@@ -48,9 +48,9 @@
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-12"
                         style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                        <a href="#" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
+                        <a href="{{ route('login.page') }}" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
                                 class="fa-solid fa-video"></i>Video Consultation</a>
-                        <a href="#" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
+                        <a href="{{ route('login.page') }}" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
                                 class="fa-solid fa-calendar-check"></i>Book Appointment</a>
                     </div>
                 </div>

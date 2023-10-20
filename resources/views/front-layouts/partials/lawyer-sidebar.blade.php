@@ -34,7 +34,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="provider-wallet.html" class="nav-link">
+                <a href="{{ route('lawyer.wallet') }}" class="nav-link">
                     <i class="far fa-money-bill-alt"></i> <span>Wallet</span>
                 </a>
             </li>

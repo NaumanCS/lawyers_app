@@ -32,7 +32,10 @@
                     <div class="card filter-card" style="border: none !important;">
                         <div class="card-body" style="background: dimgrey; border-radius: 20px;">
                             <h4 class="text-light mb-4">Search Filter</h4>
-                            <form action="{{ route('lawyers.services', ['filter' => 0]) }}" method="GET">
+                          
+                              
+                            
+                            <form action="{{ route('lawyers.services', ['filter' => '0']) }}" method="GET">
                                 @csrf
                                 <div class="filter-widget">
                                     <div class="filter-list">
@@ -45,8 +48,7 @@
                                     </div>
                                     <div class="filter-list">
                                         <h4 class="filter-title">Categories</h4>
-                                        <select name="category_id"
-                                            class="form-control form-control selectbox select form-select">
+                                        <select name="category_id" class="form-control selectbox select form-select">
                                             <option value="" selected disabled>Select Category</option>
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">
@@ -57,15 +59,17 @@
                                     </div>
                                     <div class="filter-list">
                                         <h4 class="filter-title">Location</h4>
-                                        <select name="location"
-                                            class="form-control form-control selectbox select form-select">
+                                        <select name="location" class="form-control selectbox select form-select">
                                             <option value="" selected disabled>Available Locations</option>
-                                            @foreach ($services->unique('location') as $city)
-                                                <option value="{{ $city->location }}">
-                                                    {{ $city->location }}
-                                                </option>
+                                            @foreach ($services as $service)
+                                                @if ($service->user)
+                                                    <option value="{{ $service->user->city }}">
+                                                        {{ $service->user->city }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
+                                        
                                     </div>
                                 </div>
                                 <button class="btn btn-primary pl-5 pr-5 btn-block get_services w-100"
@@ -86,7 +90,7 @@
                                                 alt="">
                                             <div class="cate-title online">
                                                 <div class="w-100">
-                                                    <h3 class="text-center mb-2">{{ $service->title ?? '' }}</h3>
+                                                   
                                                     <div class="w-100 px-3 bg-white d-flex justify-content-between">
                                                         <p class="mb-0" style="color: black !important;">Category:</p>
                                                         <p class="mb-0" style="color: black !important;">
@@ -94,7 +98,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="lawyerDetails">
-                                                    <h6 class="text-light text-center">Advocate</h6>
+                                                    <h6 class="text-light text-center">{{ $service->user->degree ?? '' }}</h6>
                                                     <p class="mb-1">{{ $service->user->name ?? '' }}</p>
                                                 </div>
                                                 <div class="w-100 d-flex justify-content-between">

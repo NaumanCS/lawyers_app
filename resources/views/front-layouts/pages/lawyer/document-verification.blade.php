@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>Lawyer Verification</title>
@@ -69,8 +70,7 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
-
+<div class="main-wrapper">
         <!-- Header -->
         <header class="header">
             <nav class="navbar navbar-expand-lg header-nav">
@@ -111,36 +111,9 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="section-header text-center">
-                            <h2>Please Add The Required Documents</h2>
-                            <p><b> After that you can start providing your services </b></p>
+                            <h2>Thank You for Registration</h2>
+                            <p>We will shortly verify your profile, and you can provide services.</p>
                         </div>
-                        <form method="POST" action="{{ route('lawyer.documents.submit') }}"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <div class="col-6 mb-4">
-                                    <label for="degree"><b>Upload Your Law Degree Here</b></label>
-                                    <input type="file" name="degree" class="dropify"
-                                        data-default-file="{{ asset('front') }}/assets/img/document.png">
-                                </div>
-                                <div class="col-6 d-flex justify-content-end">
-                                    <img class="w-75" src="{{ asset('front') }}/assets/img/graduation.jpg"
-                                        alt="Court Scale">
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="images[]"><b>Upload Your Awards and Certificates</b></label>
-                                        <input type="file" name="images[]" id="demo-4" multiple />
-                                    </div>
-                                    <div class="form-group mb-0">
-                                        <button type="reset" class="btn btn-dark">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="submit-section text-center">
-                                <button class="btn btn-primary submit-btn" type="submit">Submit</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

@@ -38,6 +38,8 @@
                                                 
                                                 <td>{{ $val->user->name }}</td>
                                                 <td>{{ $val->meeting_link }}</td>
+                                                <td>{{ $val->date }}</td>
+
                                                 <td>{{ $val->spanTime->time_spans }}</td> 
                                                
 

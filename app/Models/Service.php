@@ -9,7 +9,7 @@ class Service extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'user_id', 'location', 'amount', 'start_day', 'end_day', 'start_time', 'end_time', 'add_extra_day', 'extra_day', 'extra_day_start_time', 'extra_day_end_time', 'cover_image'
+        'title', 'user_id', 'location', 'amount','days', 'start_day', 'end_day', 'start_time', 'end_time', 'add_extra_day', 'extra_day', 'extra_day_start_time', 'extra_day_end_time', 'cover_image'
     ];
 
     protected $casts = [
@@ -31,4 +31,10 @@ class Service extends Model
     public function user(){
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function categories()
+{
+    return $this->belongsToMany(Category::class);
+}
+
 }

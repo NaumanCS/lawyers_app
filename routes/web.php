@@ -32,6 +32,7 @@ use App\Http\Controllers\PayMobController;
 use App\Http\Controllers\Lawyer\BookingController;
 use App\Http\Controllers\Lawyer\LawyerPaymentController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\Notification\NotificationController;
 // ==============> Lawyers Controller Ends
 
 use App\Http\Controllers\PusherController;
@@ -56,8 +57,12 @@ Route::get('/blocked', [FrontController::class, 'user_blocked'])->name('blocked.
 Route::post('/lawyer/signup', [LawyerRegisterController::class, 'create'])->name('lawyer.register');
 Route::post('customer/signup', [CustomerRegisterController::class, 'create'])->name('customer.register');
 // Route::post('/admin/login', [DashboardController::class, 'admin_login'])->name('admin.login');
+Route::get('/login/page', [UsersLoginController::class, 'login_page'])->name('login.page');
+
 Route::post('user/login', [UsersLoginController::class, 'login'])->name('users.login');
 Route::get('/lawyer/signup', [LawyerRegisterController::class, 'index'])->name('lawyer.register.page');
+Route::get('/customer/signup', [CustomerRegisterController::class, 'index'])->name('customer.register.page');
+
 
 Route::get('/categories/{filter}', [FrontController::class, 'categories'])->name('categories');
 Route::get('/lawyers/{category}', [FrontController::class, 'lawyers_with_category'])->name('lawyers.with.category');
@@ -125,6 +130,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/notify', [VerificationController::class, 'notify'])->name('admin.notify.lawyer');
 
     Route::get('/admin/block/user', [VerificationController::class, 'blockUser'])->name('admin.block.user');
+
+    Route::get('admin/user/accounts/index', [DashboardController::class, 'user_accounts_index'])->name('admin.user.accounts.index');
+    Route::get('admin/user/accounts/form/{id}', [DashboardController::class, 'user_accounts_form'])->name('admin.user.accounts.form');
+    Route::post('admin/user/accounts/store/{id}', [DashboardController::class, 'user_accounts_store'])->name('admin.user.accounts.store');
+    Route::get('admin/user/accounts/detail/{id}', [DashboardController::class, 'user_accounts_detail'])->name('admin.user.accounts.details');
+    Route::post('admin/user/accounts/delete/{id}', [DashboardController::class, 'user_accounts_delete'])->name('admin.user.accounts.delete');
+   
 });
 
 // ADMIN PART
@@ -138,6 +150,7 @@ Route::middleware(['auth', 'lawyer', 'blockedUser'])->group(function () {
 
     Route::get('/lawyer/profile/setting', [LawyerController::class, 'profile_setting'])->name('lawyer.profile.setting');
     Route::post('/lawyer/profile/submit', [LawyerController::class, 'profile_submit'])->name('lawyer.profile.submit');
+    Route::post('/lawyer/account/update', [LawyerController::class, 'lawyer_account_update'])->name('lawyer.account.update');
 
     // Services Crud
     Route::get('/lawyer/service/list', [ServiceController::class, 'index'])->name('lawyer.service.list');
@@ -148,9 +161,13 @@ Route::middleware(['auth', 'lawyer', 'blockedUser'])->group(function () {
 
     // Orders Crud
     Route::get('lawyer/orders/all', [BookingController::class, 'index'])->name('lawyer.all.orders');
-
+    Route::post('/lawyer/order/status', [OrderController::class, 'lawyer_order_status'])->name('lawyer.order.status');
+    Route::get('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     // Earnings Crud
-    Route::get('/lawyer/wallet', [LawyerPaymentController::class, 'index'])->name('lawyer.wallet');
+    Route::get('/lawyer/wallet', [LawyerPaymentController::class, 'lawyer_wallet'])->name('lawyer.wallet');
+
+    // meeting Schedule
+    Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');
 });
 
 // CUSTOMER PART
@@ -221,7 +238,7 @@ Route::group(['middleware' => ['auth']], function () {
  Route::get('video/call/{meetingId}',[JitsiVideoCallController::class, 'video_call'])->name('video.call');
  Route::get('/video/call/lawyer/{meetingId}', [JitsiVideoCallController::class, 'video_call_lawyer'])->name('video.call.lawyer');
  Route::post('/store-meeting-link', [JitsiVideoCallController::class, 'storeMeetingLink'])->name('store-meeting-link');
- Route::get('lawyer/meeting/list', [JitsiVideoCallController::class, 'lawyer_meeting_list'])->name('lawyer_meeting_list');
+
 
 
 // Route::group(['middleware' => 'lawyer'], function () {

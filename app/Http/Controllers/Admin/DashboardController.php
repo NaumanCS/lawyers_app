@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountDetail;
 use App\Models\Category;
 use App\Models\GeneralSetting;
 use App\Models\Order;
@@ -344,5 +345,50 @@ class DashboardController extends Controller
             'success' => $success,
             'message' => $message,
         ]);
+    }
+
+
+    // User Accounts
+    public function user_accounts_index()
+    {
+        $obj = AccountDetail::with('user')->get();
+        return view('layouts.pages.userAccounts.index', get_defined_vars());
+    }
+   
+
+    public function user_accounts_detail($id)
+    {
+        $title = 'User Account Detail';
+        $userAccountDetail = AccountDetail::where('id', $id)->with('user')->first();
+        // dd($orderDetail);
+        return view('layouts.pages.orders.detail', get_defined_vars());
+    }
+
+    public function user_accounts_delete(Request $req)
+    {
+
+        $delete = AccountDetail::destroy($req->id);
+
+
+        if ($delete == 1) {
+            $success = true;
+            $message = "Order deleted successfully";
+        } else {
+            $success = true;
+            $message = "Order not found";
+        }
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
+    }
+    public function admin_user_accounts_status($orderId=null ,$status=null)
+    {
+            $orderStatus = AccountDetail::find($orderId);
+            $orderStatus->status = $status;
+            $orderStatus->save();
+    
+            return redirect()->route('admin.order.index')->with('message', 'Order status changed successfully');
+     
     }
 }

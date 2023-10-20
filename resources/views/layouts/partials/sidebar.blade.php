@@ -34,6 +34,10 @@
                     <a href="{{ route('admin.transaction.index') }}"><i class="fas fa-columns"></i>
                         <span>Transaction</span></a>
                 </li>
+                <li class="{{ request()->is('admin/user/accounts*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.user.accounts.index') }}"><i class="fas fa-columns"></i>
+                        <span>User Accounts</span></a>
+                </li>
                 {{-- <li>
                     <a href="subcategories.html"><i class="fab fa-buffer"></i> <span>Sub Categories</span></a>
                 </li>

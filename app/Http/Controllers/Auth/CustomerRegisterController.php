@@ -57,6 +57,12 @@ class CustomerRegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
+
+     public function index()
+     {
+       
+         return view('front-layouts.pages.auth.customer_register', get_defined_vars());
+     }
     public function create(Request $request)
     {
 

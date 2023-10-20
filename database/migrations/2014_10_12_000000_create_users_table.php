@@ -32,6 +32,13 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->tinyInteger('is_document_submit')->default(0)->nullable();
             $table->string('degree')->nullable();
+            $table->string('high_court')->nullable();
+            $table->string('supreme_court')->nullable();
+            $table->string('high_court_licence')->nullable();
+            $table->string('supreme_court_licence')->nullable();
+            $table->string('experience_in_years')->nullable();
+            $table->string('qualification')->nullable();
+            $table->string('qualification_certificate')->nullable();
             $table->string('certificates')->nullable();
             $table->string('document_status')->default('not submitted')->nullable();
             $table->string('reason')->nullable();

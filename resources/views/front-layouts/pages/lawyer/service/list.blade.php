@@ -26,12 +26,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Image</th>
-                                    <th>Title</th>
                                     <th>Category</th>
                                     <th>Amount</th>
-                                    <th>Location</th>
-                                    <th>Starting Day</th>
-                                    <th>Ending Day</th>
+                                    <th>Days</th>
                                     <th>Starting Time</th>
                                     <th>Ending Time</th>
                                     <th>Action</th>
@@ -43,15 +40,15 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td style="width: 10%;"><img src="{{ $row->cover_image }}" class="w-100"
                                                 alt="Service Image"></td>
-                                        <td>{{ $row->title }}</td>
+                                     
                                         <td>{{ $row->category->title ?? "" }}</td>
                                         <td>{{ $row->amount }}</td>
-                                        <td>{{ $row->location }}</td>
-                                        <td>{{ $row->start_day }}</td>
-                                        <td>{{ $row->end_day }}</td>
+                                        <td>{{ $row->days }}</td>
                                         <td>{{ $row->start_time }}</td>
                                         <td>{{ $row->end_time }}</td>
-
+                                        <td>
+                                            <a class="text-success" href="{{ route('lawyer.service.create',$row->id) }}">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
 

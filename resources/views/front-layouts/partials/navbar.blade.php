@@ -108,12 +108,17 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#provider-register">Become a
-                        Professional</a>
+                    {{-- <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#provider-register">Become a
+                        Professional</a> --}}
+                        <a href="{{ route('lawyer.register.page') }}" >Become a
+                            Professional</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" type="button" data-bs-toggle="modal"
+                    {{-- <a href="javascript:void(0);" type="button" data-bs-toggle="modal"
                         data-bs-target="#user-register">Become a
+                        Customer</a> --}}
+
+                        <a href="{{ route('customer.register.page') }}" >Become a
                         Customer</a>
                 </li>
             </ul>
@@ -133,8 +138,7 @@
         @else
             <ul class="nav header-navbar-rht">
                 <li class="nav-item">
-                    <a class="nav-link header-login" href="javascript:void(0);" data-bs-toggle="modal"
-                        data-bs-target="#login_modal">Login</a>
+                    <a class="nav-link header-login" href="{{ route('login.page') }}" >Login</a>
                 </li>
             </ul>
         @endif

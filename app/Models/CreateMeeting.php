@@ -13,6 +13,7 @@ class CreateMeeting extends Model
       'created_by',
       'meeting_with',
       'meeting_link',
+      'date',
       'select_time_span'
     ];
 
@@ -21,5 +22,9 @@ class CreateMeeting extends Model
     }
     public function user(){
       return $this->hasOne(User::class,'id','meeting_with');
+    }
+
+    public function createdByUser(){
+      return $this->hasOne(User::class,'id','created_by');
     }
 }

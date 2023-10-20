@@ -35,6 +35,13 @@ class User extends Authenticatable
         'image',
         'is_document_submit',
         'degree',
+        'high_court',
+        'supreme_court',
+        'high_court_licence',
+        'supreme_court_licence',
+        'experience_in_years',
+        'qualification',
+        'qualification_certificate',
         'certificates',
         'document_status',
         'reason'
@@ -67,18 +74,28 @@ class User extends Authenticatable
         }
         return asset('uploads/user') . '/' . $this->attributes['image'];
     }
-    public function getDegreeAttribute(){
-        if($this->attributes['degree'] == null){
-            return asset('uploads/user.jpg');
+
+    public function getHighCourtLicenceAttribute()
+    {
+        if ($this->attributes['high_court_licence'] == null) {
+            return asset('admin/assets/img/licence.png');
         }
-        return asset('uploads/lawyer/documents') . '/' . $this->attributes['degree'];
+        return asset('uploads/lawyer/documents') . '/' . $this->attributes['high_court_licence'];
     }
-    // public function getCertificatesAttribute(){
-    //     if($this->attributes['certificates'] == null){
-    //         return asset('uploads/user.jpg');
-    //     }
-    //     return asset('uploads/lawyer/documents') . '/' . $this->attributes['certificates'];
-    // }
+    public function getSupremeCourtLicenceAttribute()
+    {
+        if ($this->attributes['supreme_court_licence'] == null) {
+            return asset('admin/assets/img/licence.png');
+        }
+        return asset('uploads/lawyer/documents') . '/' . $this->attributes['supreme_court_licence'];
+    }
+    public function getQualificationCertificateAttribute()
+    {
+        if ($this->attributes['qualification_certificate'] == null) {
+            return asset('admin/assets/img/qualification.jpg');
+        }
+        return asset('uploads/lawyer/documents') . '/' . $this->attributes['qualification_certificate'];
+    }
 
     public function getCustomerImageAttribute()
     {
@@ -98,15 +115,23 @@ class User extends Authenticatable
         return $this->role === 'lawyer';
     }
 
-    public function category(){
-        return $this->hasOne(Category::class,'id','category_id');
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
-    public function time_spans(){
+    public function time_spans()
+    {
         return $this->hasMany(LawyersTimeSpan::class, 'user_id');
     }
 
-    public function service(){
+    public function service()
+    {
         return $this->hasOne(Service::class, 'user_id');
-    } 
+    }
+
+    public function accountDetail()
+    {
+        return $this->hasOne(AccountDetail::class, 'user_id');
+    }
 }

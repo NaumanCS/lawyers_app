@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('created_by')->nullable();
             $table->string('meeting_with')->nullable();
             $table->string('meeting_link')->nullable();
+            $table->string('date')->nullable();
+            $table->string('select_time_span')->nullable();
+
             
 
             $table->timestamps();

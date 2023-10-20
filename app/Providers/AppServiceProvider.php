@@ -30,5 +30,14 @@ class AppServiceProvider extends ServiceProvider
             $category = Category::get();
             $view->with('categories', $category);
         });
+
+        view()->composer('front-layouts.partials.lawyer-navbar', function ($view) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                $notifications = $user->notifications;
+ 
+                $view->with('notifications', $notifications);
+            }
+        });
     }
 }

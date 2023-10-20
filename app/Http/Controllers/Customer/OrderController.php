@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Notifications\BookingNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -69,6 +70,15 @@ class OrderController extends Controller
                     'customer_location' => $auth->city ?? 'no city provided',
                 ]);
                 $imageUpdateId = $obj->id;
+
+
+                $orderId=$obj->id;
+                $orderId=Order::find($orderId);
+                $lawyer = User::find($orderId->lawyer_id); // Replace $userId with the actual user ID
+        
+            //    dd($lawyer);
+                $lawyer->notify(new BookingNotification($orderId));
+                
             }
         }
 
@@ -86,6 +96,9 @@ class OrderController extends Controller
                 'payment_slip' => $paymentSlip
             ]);
         }
+
+       
+
         session()->forget('orderDetail');
         return redirect()->route('lawyer.list')->with('message', 'Order placed successfully');
 

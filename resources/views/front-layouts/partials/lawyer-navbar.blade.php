@@ -40,11 +40,11 @@
                     <div class="noti-content">
                         <ul class="notification-list">
                             {{-- {{dd(auth()->user()->notification)}} --}}
-                            @if (auth()->user()->notifications->isEmpty())
+                            @if (auth()->user()->notifications)
                                 @foreach (auth()->user()->unreadnotifications as $notification)
                                     {{-- <div id="flash-message" class="mb-3"> --}}
                                     <li class="notification-message">
-                                        <a href="notifications.html">
+                                        <a href="{{ route('notifications.markAsRead', $notification->id) }}">
                                             <div class="media d-flex">
                                                 <span class="avatar avatar-sm flex-shrink-0">
                                                     <img class="avatar-img rounded-circle" alt="User Image"

@@ -19,21 +19,28 @@
                                 <table class="table table-center">
                                     <thead>
                                         <tr>
-                                            <th>Booking Date</th>
-                                            <th>Lawyer Status</th>
-                                            <th>Customer Status</th>
-                                            <th>Lawyer location</th>
-                                            <th>Customer location</th>
+                                            <th>User Name</th>
+                                            <th>User Type</th>
+                                            <th>Bank Account Title</th>
+                                            <th>Bank Name</th>
+                                            <th>Bank Account Number</th>
+                                            <th>Jazzcash Account Title</th>
+                                            <th>Jazzcash Account Number</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         <tr>
-                                            <td>{{ $orderDetail->booking_date }}</td>
-                                            <td>{{ $orderDetail->lawyer_status ?? '' }}</td>
-                                            <td>{{ $orderDetail->customer_status ?? '' }}</td>
-                                            <td>{{ $orderDetail->lawyer_location ?? '' }}</td>
-                                            <td>{{ $orderDetail->customer_location ?? '' }}</td>
+                                            <td>{{ $userAccountDetail->user->name }}</td>
+                                            <td>{{ $userAccountDetail->user_type ?? '' }}</td>
+                                            <td>{{ $userAccountDetail->bank_account_title ?? '' }}</td>
+                                            <td>{{ $userAccountDetail->bank_name ?? '' }}</td>
+
+                                            <td>{{ $userAccountDetail->bank_account_number ?? '' }}</td>
+
+                                            <td>{{ $userAccountDetail->jazzcash_account_title ?? '' }}</td>
+                                            <td>{{ $userAccountDetail->jazzcash_account_number ?? '' }}</td>
 
 
                                         </tr>

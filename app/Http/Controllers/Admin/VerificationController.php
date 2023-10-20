@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Notification;
 class VerificationController extends Controller
 {
     public function all_verifications(){
-        $obj = User::where('role', 'lawyer')->where('is_document_submit', 1)->where('document_status', 'pending')->get();
+        // $obj = User::where('role', 'lawyer')->where('is_document_submit', 1)->where('document_status', 'pending')->get();
+        // $obj = User::where('role', 'lawyer')->where('document_status','!=', 'approved')->get();
+        $obj = User::where('role', 'lawyer')->orWhere('document_status',null)->whereNotIn('document_status', ['approved'])->get();
+       
         return view('layouts.pages.verifications.all_verifications', get_defined_vars());
     }
     public function details($id){

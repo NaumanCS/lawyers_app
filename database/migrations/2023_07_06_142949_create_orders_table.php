@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('customer_location')->nullable();
             $table->string('payment_slip')->nullable();
             $table->string('status')->nullable();
+            $table->string('payment_status')->nullable();
+
 
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CreateMeeting;
 use App\Models\Order;
 use App\Models\User;
+use App\Notifications\CreateMeetingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -49,7 +50,7 @@ class JitsiVideoCallController extends Controller
 
         // Get the current time
         $currentTime = now(); // You may need to adjust this based on your timezone
-
+        $currentDate = $currentTime->toDateString();
         // Split the time_spans into start and end times
         [$startTime, $endTime] = explode(' - ', $meetingSchedule->spanTime->time_spans);
 
@@ -58,8 +59,8 @@ class JitsiVideoCallController extends Controller
         // dd($endTime);
 
         // Check if the current time is equal to or after the start time
-        if ($currentTime >= $startTime) {
-            if ($currentTime <= $endTime) {
+        if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
+            if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
                 return view('jitsiVideoCall.startNew', get_defined_vars());
             } else {
                 Toastr::error('The meeting time has been ended.', 'Create New Meeting');
@@ -80,6 +81,7 @@ class JitsiVideoCallController extends Controller
 
         // Get the current time
         $currentTime = now(); // You may need to adjust this based on your timezone
+        $currentDate = $currentTime->toDateString();
 
         // Split the time_spans into start and end times
         [$startTime, $endTime] = explode(' - ', $meetingSchedule->spanTime->time_spans);
@@ -89,8 +91,8 @@ class JitsiVideoCallController extends Controller
         // dd($endTime);
 
 
-        if ($currentTime >= $startTime) {
-            if ($currentTime <= $endTime) {
+        if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
+            if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
                 return view('jitsiVideoCall.startLawyerVideo', get_defined_vars());
             } else {
                 Toastr::error('The meeting time has been ended.', 'Create New Meeting');
@@ -123,7 +125,7 @@ class JitsiVideoCallController extends Controller
     // In Lawyers Side
     public function lawyer_meeting_list()
     {
-        $data = CreateMeeting::where('meeting_with', Auth::id())->get();
+        $data = CreateMeeting::where('meeting_with', Auth::id())->with('createdByUser')->get();
         return view('front-layouts.pages.lawyer.meeting.list', get_defined_vars());
     }
 
@@ -151,21 +153,25 @@ class JitsiVideoCallController extends Controller
     public function meeting_schedule_store(Request $request)
     {
 
-        // dd($request); 
+       
         $roomName = Str::random(10); // You can adjust the length as needed
         // $baseURL = 'https://lawyers-app/meeting/';
         // $meetingLink = $baseURL . $roomName;
         $meetingLink = $roomName;
-
-
 
         $auth = auth()->user();
         $meeting = new CreateMeeting();
         $meeting->created_by = $auth->id;
         $meeting->meeting_with = $request->lawyer_id;
         $meeting->meeting_link = $meetingLink;
+        $meeting->date = $request->date;
         $meeting->select_time_span = $request->select_time_span;
         $meeting->save();
+
+        $newMeeting=$meeting->id;
+        $newMeeting=CreateMeeting::find($newMeeting);
+        $lawyer = User::find($newMeeting->meeting_with); // Replace $userId with the actual user ID
+        $lawyer->notify(new CreateMeetingNotification($newMeeting));
 
         return redirect()->route('lawyer.list');
     }

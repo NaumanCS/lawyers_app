@@ -31,7 +31,10 @@
                                     <th>Booking Date</th>
                                     <th>Order Status</th>
                                     <th>Payment Status</th>
+                                    <th>Lawyer status</th>
+                                    <th>Customer Status</th>
                                     <th>Action</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,9 +44,28 @@
                                         <td>{{ $row->customer->name ?? 'N/A' }}</td>
                                         <td>{{ $row->category->title ?? 'N/A' }}</td>
                                         <td>{{ $row->amount }}</td>
-                                        <td>{{ $row->booking_date }}</td>
-                                        <td>{{ $row->order_status }}</td>
-                                        <td>{{ $row->payment_status }}</td>
+                                        <td>{{ $row->created_at }}</td>
+                                        <td>{{ $row->status == '1' ? 'Approved' : 'Pending' }}</td>
+                                        <td>{{ $row->payment_status ?? 'pending' }}</td>
+                                       
+                                        <td>
+                                            <form id="my-form" action="{{ route('lawyer.order.status') }}"
+                                                method="POST">
+                                                @csrf
+                                                <input type="hidden" name="order_id"
+                                                    value="{{ $row->id }}">
+                                                <select id="status-select" class="form-control select"
+                                                    name="status">
+                                                    <option>{!! $row->lawyer_status ?? 'Status' !!}</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Completed">Completed</option>
+                                                </select>
+                                            </form>
+
+                                        </td>
+                                        <td>
+                                            <span class="text-danger">{!! $row->customer_status ?? 'pending' !!}</span>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

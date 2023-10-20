@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountDetail;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class LawyerController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->is_document_submit == 1) {
+        // if ($user->is_document_submit == 1) {
+        if ($user->document_status == 'approved') {
             $service = Service::where('user_id', Auth::id())->count();
             $booking = Service::where('user_id', Auth::id())->count();
             $category = Service::where('user_id', Auth::id())->count();
@@ -105,5 +107,31 @@ class LawyerController extends Controller
 
         Flash::success('Your Data is updated successfully');
         return redirect()->back()->with('message', 'Your Data is updated successfully');
+    }
+
+    public function lawyer_account_update(Request $request){
+        
+        $lawyerAccount=AccountDetail::where('user_id',$request->lawyer_id)->first();
+        if($lawyerAccount){
+            $lawyerAccount->update($request->except( '_token','bank_account','jazzcash_account'));
+            if($request->bank_account != null){
+                $lawyerAccount->bank_account='1';
+
+            }
+            if($request->jazzcash_account != null){
+                $lawyerAccount->jazzcash_account='1';
+
+            }
+          
+
+        }else{
+            $lawyerAccount = AccountDetail::create($request->except( '_token','user_id','user_type'));
+            $lawyerAccount->user_id=$request->lawyer_id;
+            $lawyerAccount->user_type='lawyer';
+            $lawyerAccount->save();
+        }
+
+        Flash::success('Your Account Detail is updated successfully');
+        return redirect()->route('lawyer.profile.setting')->with('message', 'Your Data is updated successfully');
     }
 }

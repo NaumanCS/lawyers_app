@@ -17,9 +17,9 @@
             <!-- /Page Header -->
             <div class="row justify-content-between">
                 <div class="col-3">
-                    <label>Degree</label>
+                    <label>Qualification Certificate/Degree</label>
                     <a href="{{ $lawyer->degree }}" data-lightbox="image-gallery">
-                        <img class="img-fluid" src="{{ $lawyer->degree }}" alt="Degree">
+                        <img class="img-fluid" src="{{ $lawyer->qualification_certificate }}" alt="Degree">
                     </a>
                 </div>
                 <div class="col-3">
@@ -31,14 +31,26 @@
             </div>
             <hr>
             <div class="row justify-content-evenly">
-                <label>Certificates</label><br>
+                {{-- <label>Certificates</label><br>
                 @foreach ($certificates as $key => $certificate)
                     <div class="col-3">
                         <a href="{{ $baseURL . $certificate }}" data-lightbox="image-gallery">
                             <img class="img-fluid" src="{{ $baseURL . $certificate }}" alt="Certificate">
                         </a>
                     </div>
-                @endforeach
+                @endforeach --}}
+                <div class="col-3">
+                    <label>High Court Licence</label><br>
+                    <a href="{{ $lawyer->high_court_licence }}" data-lightbox="image-gallery">
+                        <img class="img-fluid" src="{{ $lawyer->high_court_licence }}" alt="Profile Pic">
+                    </a>
+                </div>
+                <div class="col-3">
+                    <label>Supreme Court Licence</label><br>
+                    <a href="{{ $lawyer->supreme_court_licence }}" data-lightbox="image-gallery">
+                        <img class="img-fluid" src="{{ $lawyer->supreme_court_licence }}" alt="Profile Pic">
+                    </a>
+                </div> 
             </div>
             <hr>
             <div class="adminDiv pb-3">
@@ -53,6 +65,7 @@
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
                                     <option value="rejected">Reject</option>
+                                    <option value="depreciated">Depreciated</option>
                                 </select>
                             </div>
                             <div class="form-group">

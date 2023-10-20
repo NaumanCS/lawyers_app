@@ -99,15 +99,15 @@
                                         @foreach ($obj as $key => $val)
                                             <tr>
                                                 <td>
-                                                    <a href="{{ $val->payment_slip }}" target="_blank" download>
+                                                    <a href="{{ $val->payment_slip ?? '' }}" target="_blank" download>
                                                         <img class="rounded service-img me-1" src="{{ $val->payment_slip }}"
                                                             alt="nav logo">
                                                     </a>
                                                 </td>
-                                                <td>{{ $val->lawyer->name }}</td>
-                                                <td>{{ $val->customer->name }}</td>
-                                                <td>{{ $val->category_id }}</td>
-                                                <td>{{ $val->amount }}</td>
+                                                <td>{{ $val->lawyer->name ?? '' }}</td>
+                                                <td>{{ $val->customer->name ?? '' }}</td>
+                                                <td>{{ $val->category_id ?? '' }}</td>
+                                                <td>{{ $val->amount ?? '' }}</td>
                                                 <td>
                                                     <!-- Example single danger button -->
                                                     <div class="btn-group">

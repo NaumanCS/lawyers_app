@@ -40,6 +40,12 @@ class UsersLoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function login_page()
+    {
+    
+        return view('front-layouts.pages.auth.login', get_defined_vars());
+    }
+
     public function login(Request $request)
     {
 
