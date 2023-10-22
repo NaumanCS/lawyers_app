@@ -46,7 +46,7 @@ class HomeController extends Controller
 
     public function single_chat($roomId)
     {
-        $chat = ChMessage::where('chat_id', $roomId)->with('user')->get();
+        $chat = ChMessage::where('chat_id', $roomId)->with('user')->orderBy('created_at', 'desc')->get();
         foreach ($chat as $message) {
             $message->seen = 1;
             $message->save();

@@ -1,5 +1,8 @@
 @extends('front-layouts.master-layout')
 @section('content')
+    @php
+        use App\General\ChatClass;
+    @endphp
     <style>
         .chatUnavailableContainer {
             text-align: center;
@@ -74,10 +77,27 @@
             background-color: white;
             z-index: 11111;
         }
+
+        #chat3 .form-control {
+            border-color: transparent;
+        }
+
+        #chat3 .form-control:focus {
+            border-color: transparent;
+            box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+        .badge-dot {
+            border-radius: 50%;
+            height: 10px;
+            width: 10px;
+            margin-left: 2.9rem;
+            margin-top: -0.75rem;
+        }
     </style>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
-    <section style="background-color: #eee;">
+    <section style="background-color: #36353e">
         @if ($rooms->isEmpty())
             <div class="chatUnavailableContainer">
                 <div class="chat-overlay">
@@ -87,76 +107,142 @@
                 </div>
             </div>
         @else
-            <div class="container py-3">
+            <div class="container py-2">
                 <div class="row">
-                    <div class="col-md-12 col-lg-5 col-xl-4 mb-4 mb-md-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <ul class="list-unstyled mb-0" id="chat-rooms-list">
-                                    @foreach ($rooms as $room)
-                                        @if ($room->sender->id !== auth()->user()->id)
-                                            <div class="single-room-chat" data-room-id="{{ $room->id }}">
-                                                <li class="p-2 border-bottom chat-list-box">
-                                                    <a href="#!" class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row">
-                                                            <img src="{{ $room->sender->image }}" alt="avatar"
-                                                                class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
-                                                                width="60">
-                                                            <div class="pt-1">
-                                                                <p class="fw-bold mb-0">{{ $room->sender->name }}</p>
-                                                                <p class="small text-muted">Hello, Are you there?</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pt-1">
-                                                            <p class="small text-muted mb-1">Just now</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
+                    <div class="col-md-12">
+                        <div class="card" id="chat3" style="border-radius: 15px;">
+                            <div class="card-body p-0 pt-3">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4 mb-md-0"
+                                        style="border-right: 1px solid #36353e;">
+                                        <div class="py-3">
+                                            <div class="input-group rounded mb-3 d-none">
+                                                <input type="search" class="form-control rounded" placeholder="Search"
+                                                    aria-label="Search" aria-describedby="search-addon" />
+                                                <span class="input-group-text border-0" id="search-addon">
+                                                    <i class="fas fa-search"></i>
+                                                </span>
                                             </div>
-                                        @endif
-                                        @if ($room->receiver->id !== auth()->user()->id)
-                                            <div class="single-room-chat" data-room-id="{{ $room->id }}">
-                                                <li class="p-2 border-bottom chat-list-box">
-                                                    <a href="#!" class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row">
-                                                            <img src="{{ $room->receiver->image }}" alt="avatar"
-                                                                class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
-                                                                width="60">
-                                                            <div class="pt-1">
-                                                                <p class="fw-bold mb-0">{{ $room->receiver->name }}</p>
-                                                                <p class="small text-muted">Hello, Are you there?</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="pt-1">
-                                                            <p class="small text-muted mb-1">Just now</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
+
+                                            <div data-mdb-perfect-scrollbar="true"
+                                                style="
+                                                    position: relative;
+                                                    height: 400px;
+                                                    overflow-y: auto !important;
+                                                ">
+                                                <ul class="list-unstyled mb-0">
+                                                    @foreach ($rooms as $room)
+                                                        @if ($room->sender->id !== auth()->user()->id)
+                                                            <li class="p-2 border-bottom single-room-chat"
+                                                                data-room-id="{{ $room->id }}">
+                                                                <a href="#!" class="d-flex justify-content-between">
+                                                                    <div class="d-flex flex-row">
+                                                                        <div>
+                                                                            <img src="{{ $room->sender->image }}"
+                                                                                alt="avatar"
+                                                                                class="d-flex align-self-center me-3"
+                                                                                width="60"
+                                                                                style="border-radius: 30px;" />
+                                                                            <span class="badge bg-success badge-dot"></span>
+                                                                        </div>
+                                                                        <div class="pt-1">
+                                                                            <p class="fw-bold mb-0">
+                                                                                {{ $room->sender->name }}
+                                                                            </p>
+                                                                            <p class="small text-muted">
+                                                                                {{ ChatClass::getLatestMessage($room->id) }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="pt-1">
+                                                                        <p class="small text-muted text-end mb-1">
+                                                                            {{ ChatClass::getLatestMessageTime($room->id) }}
+                                                                        </p>
+                                                                        @if (ChatClass::getUnreadCount($room->id))
+                                                                            <span
+                                                                                class="badge bg-danger rounded-pill float-end">
+                                                                                {{ ChatClass::getUnreadCount($room->id) }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                        @if ($room->receiver->id !== auth()->user()->id)
+                                                            <li class="p-2 border-bottom single-room-chat"
+                                                                data-room-id="{{ $room->id }}">
+                                                                <a href="#!" class="d-flex justify-content-between">
+                                                                    <div class="d-flex flex-row">
+                                                                        <div>
+                                                                            <img src="{{ $room->receiver->image }}"
+                                                                                alt="avatar"
+                                                                                class="d-flex align-self-center me-3"
+                                                                                width="60"
+                                                                                style="border-radius: 30px;" />
+                                                                            <span class="badge bg-warning badge-dot"></span>
+                                                                        </div>
+                                                                        <div class="pt-1">
+                                                                            <p class="fw-bold mb-0">
+                                                                                {{ $room->receiver->name }}
+                                                                            </p>
+                                                                            <p class="small text-muted">
+                                                                                {{ ChatClass::getLatestMessage($room->id) }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="pt-1">
+                                                                        <p class="small text-muted mb-1">
+                                                                            {{ ChatClass::getLatestMessageTime($room->id) }}
+                                                                        </p>
+                                                                        @if (ChatClass::getUnreadCount($room->id))
+                                                                            <span
+                                                                                class="badge bg-danger rounded-pill float-end">
+                                                                                {{ ChatClass::getUnreadCount($room->id) }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
                                             </div>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-7 col-xl-8 parent-container" id="parent-container">
-                        <div class="d-flex bg-dark p-2">
-                            <h5 class="text-light mb-0" id="user-name">Lawyer's Legal App</h5>
-                        </div>
-                        <ul class="list-unstyled px-3" id="chat-container"></ul>
-                        <div class="bg-white mx-3" id="chat-input-container">
-                            <form class="mb-0" id="newMessageForm">
-                                <div class="form-outline d-flex">
-                                    <textarea class="form-control" id="message-box" rows="2" placeholder="Type your message..."></textarea>
-                                    <button type="submit" class="btn btn-info btn-rounded float-end submitButton"
-                                        data-user-Id="{{ auth()->user()->id }}">Send</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                        <div class="pt-3 pe-3" data-mdb-perfect-scrollbar="true"
+                                            style="
+                                                position: relative;
+                                                height: 400px;
+                                                overflow-y: auto !important;
+                                            ">
+                                        </div>
+
+                                        <form action="" id="newMessageForm">
+                                            <div
+                                                class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                                                    alt="avatar 3" style="width: 40px; height: 100%;" />
+
+                                                <div class="d-flex align-items-center w-100">
+                                                    <input type="text" class="form-control form-control-lg message-box"
+                                                        id="exampleFormControlInput2" placeholder="Type message" />
+                                                    {{-- <a class="ms-1 text-muted" href="#!"><i
+                                                    class="fas fa-paperclip"></i></a>
+                                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a> --}}
+                                                    <a class="" type="submit"><i class="fas fa-paper-plane"></i></a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         @endif
+    </section>
     </section>
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -234,7 +320,7 @@
 
         $('#newMessageForm').on('submit', function(e) {
             e.preventDefault();
-            let message = $('#message-box').val();
+            let message = $('.message-box').val();
             let userId = {{ auth()->user()->id }};
 
             if (message !== "" && message !== null) {
