@@ -1,41 +1,35 @@
-<?php
-    if ($chat->sender_id == Auth::id) {
-        ?>
-<div class="d-flex flex-row justify-content-end">
-    <div>
-        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-            {{ $chat->body }}
-        </p>
-        <p class="small me-3 mb-3 rounded-3 text-muted">
-            12:00 PM | Aug 13
-        </p>
-    </div>
-    <img src="{{ $chat->user->image }}" alt="{{ $chat->user->name }}" style=" width: 45px; height: auto;" />
-</div>
-
-<?php
-    }else{
-?>
-
-<div class="d-flex flex-row justify-content-start">
-    <img src="{{ $chat->user->image }}" alt="{{ $chat->user->name }}"
-        style="width: 45px; height: auto;" />
-    <div>
-        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
-            {{ $chat->body }}
-        </p>
-        <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
-            12:00 PM | Aug 13
-        </p>
-    </div>
-</div>
-
-
-<?php
-    }
-?>
-
-
+@php
+    use App\General\ChatClass;
+@endphp
+@foreach ($chat as $data)
+    @if ($data->sender_id == auth()->user()->id)
+        <div class="d-flex flex-row justify-content-end">
+            <div>
+                <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-dark">
+                    {{ $data->body }}
+                </p>
+                <p class="small me-3 mb-3 rounded-3 text-muted">
+                    {{ ChatClass::getMessageTimeInFormat($data->created_at) }}
+                </p>
+            </div>
+            <img src="{{ $data->user->image }}" alt="{{ $data->user->name }}"
+                style="width: 46px;height: 46px;border-radius: 50%;" />
+        </div>
+    @else
+        <div class="d-flex flex-row justify-content-start">
+            <img src="{{ $data->user->image }}" alt="{{ $data->user->name }}"
+                style="width: 46px;height: 46px;border-radius: 50%;" />
+            <div>
+                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
+                    {{ $data->body }}
+                </p>
+                <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
+                    {{ ChatClass::getMessageTimeInFormat($data->created_at) }}
+                </p>
+            </div>
+        </div>
+    @endif
+@endforeach
 
 {{-- <div class="d-flex flex-row justify-content-start">
     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp" alt="avatar 1"

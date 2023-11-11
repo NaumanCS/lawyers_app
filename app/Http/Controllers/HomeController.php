@@ -46,12 +46,13 @@ class HomeController extends Controller
 
     public function single_chat($roomId)
     {
-        $chat = ChMessage::where('chat_id', $roomId)->with('user')->orderBy('created_at', 'desc')->get();
+        $chat = ChMessage::where('chat_id', $roomId)->with('user')->orderBy('created_at', 'asc')->get();
         foreach ($chat as $message) {
             $message->seen = 1;
             $message->save();
         }
-        return response()->json(['status' => true, 'chat' => $chat]);
+        // dd($chat);
+        return view('front-layouts.pages.chat.ajax.messages_container', compact('chat'))->render();
     }
 
     public function send_message(Request $request)
@@ -70,8 +71,8 @@ class HomeController extends Controller
         }
         $chMessage->save();
 
-        $chat = ChMessage::where('chat_id', $room_id)->with('user')->get();
-        return response()->json(['status' => true, 'chat' => $chat]);
+        $chat = ChMessage::where('chat_id', $room_id)->with('user')->orderBy('created_at', 'asc')->get();
+        return view('front-layouts.pages.chat.ajax.messages_container', compact('chat'))->render();
     }
 
     public function fetch_new_messages()

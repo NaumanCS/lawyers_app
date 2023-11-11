@@ -57,13 +57,6 @@
             position: relative;
         }
 
-        #chat-container {
-            height: 70vh;
-            overflow-y: auto;
-            padding-top: 1rem;
-            margin-bottom: 2rem;
-        }
-
         #chat-rooms-list {
             height: 60vh;
             overflow-y: auto
@@ -85,6 +78,14 @@
         #chat3 .form-control:focus {
             border-color: transparent;
             box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+        .single-room-chat.active {
+            background: black;
+        }
+
+        .single-room-chat.active p {
+            color: white;
         }
 
         .badge-dot {
@@ -114,7 +115,7 @@
                             <div class="card-body p-0 pt-3">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4 mb-md-0"
-                                        style="border-right: 1px solid #36353e;">
+                                        style="border-right: 1px solid #36353e; padding-right: 2px;">
                                         <div class="py-3">
                                             <div class="input-group rounded mb-3 d-none">
                                                 <input type="search" class="form-control rounded" placeholder="Search"
@@ -209,11 +210,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                                        <div class="pt-3 pe-3" data-mdb-perfect-scrollbar="true"
+                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 parent-container">
+                                        <div class="pt-3 pe-3" id="chat-container" data-mdb-perfect-scrollbar="true"
                                             style="
                                                 position: relative;
-                                                height: 400px;
+                                                height: 70vh;
                                                 overflow-y: auto !important;
                                             ">
                                         </div>
@@ -226,7 +227,7 @@
 
                                                 <div class="d-flex align-items-center w-100">
                                                     <input type="text" class="form-control form-control-lg message-box"
-                                                        id="exampleFormControlInput2" placeholder="Type message" />
+                                                        id="typeChatMessage" placeholder="Type message" />
                                                     {{-- <a class="ms-1 text-muted" href="#!"><i
                                                     class="fas fa-paperclip"></i></a>
                                             <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a> --}}
@@ -245,8 +246,29 @@
     </section>
     </section>
 @endsection
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
 <script>
+    // function getSingleRoomChat(roomId) {
+    //     if ($(this).hasClass('active')) {
+    //         return;
+    //     }
+    //     $('.parent-container').show();
+    //     $('#chat-container').empty();
+    //     $('single-room-chat').removeClass('active');
+    //     $(this).addClass('active');
+    //     $.ajax({
+    //         url: '/display-single-chat/' + roomId,
+    //         type: 'GET',
+    //         success: function(response) {
+    //             $('#chat-container').append(response);
+    //             scrollChatToBottom();
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // }
     $(document).ready(function() {
         let roomId = null;
         let authUserId = {{ auth()->user()->id }};
@@ -255,65 +277,23 @@
 
         $(document).on('click', '.single-room-chat', function(e) {
             e.preventDefault();
-            if ($(this).find('li').hasClass('active')) {
-                return; // Don't proceed with the Ajax request
+            if ($(this).hasClass('active')) {
+                return;
             }
+            $('.parent-container').show();
             roomId = $(this).data('room-id');
             $('#chat-container').empty();
-            $('.chat-list-box').removeClass('active');
-            var clickedLi = $(this).find('li');
-            clickedLi.addClass('active');
+            $('single-room-chat').removeClass('active');
+            $(this).addClass('active');
             $.ajax({
                 url: '/display-single-chat/' + roomId,
                 type: 'GET',
-                dataType: 'json',
                 success: function(response) {
-                    $('.parent-container').show();
-                    var chatRecords = response.chatRecords;
-                    response.chat.forEach(function(message) {
-                        chatHistory.push(message);
-                        var messageHtml = '';
-                        $('#user-name').text(message.user.name);
-
-                        if (message.sender_id == authUserId) {
-                            messageHtml +=
-                                '<li class="d-flex justify-content-between mb-4">';
-                            messageHtml += '<img src="' + message.user.image +
-                                '" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">';
-                            messageHtml += '<div class="card px-3 py-2">';
-                            messageHtml +=
-                                '<div class="d-flex justify-content-end">';
-                            messageHtml +=
-                                '<p class="text-muted small mb-0"><i class="far fa-clock"></i> ' +
-                                message.created_at + '</p>';
-                            messageHtml += '</div>';
-                            messageHtml += '<p class="mb-0">' + message.body +
-                                '</p>';
-                            messageHtml += '</div>';
-                            messageHtml += '</li>';
-                        } else {
-                            messageHtml +=
-                                '<li class="d-flex justify-content-between mb-4">';
-                            messageHtml +=
-                                '<div class="card w-100 card px-3 py-2">';
-                            messageHtml +=
-                                '<div class="d-flex justify-content-end">';
-                            messageHtml +=
-                                '<p class="text-muted small mb-0"><i class="far fa-clock"></i> ' +
-                                message.created_at + '</p>';
-                            messageHtml += '</div>';
-                            messageHtml += '<p class="mb-0">' + message.body +
-                                '</p>';
-                            messageHtml += '</div>';
-                            messageHtml += '<img src="' + message.user.image +
-                                '" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">';
-                            messageHtml += '</li>';
-                        }
-                        $('#chat-container').append(messageHtml);
-                    });
+                    $('#chat-container').append(response);
+                    scrollChatToBottom();
                 },
                 error: function(xhr, status, error) {
-                    console.error(error);
+                    console.log(error);
                 }
             });
         });
@@ -336,11 +316,15 @@
                         'message': message
                     },
                     success: function(response) {
-                        $('#textAreaExample2').val('');
-                        console.log(JSON.stringify(response) +
-                            "========== send message response");
-                        chatHistory.push(response);
-                        renderChatHistory();
+                        $('#typeChatMessage').val('');
+                        $('#chat-container').empty();
+                        $('#chat-container').append(response);
+                        scrollChatToBottom();
+                        // $('#textAreaExample2').val('');
+                        // console.log(JSON.stringify(response) +
+                        //     "========== send message response");
+                        // chatHistory.push(response);
+                        // renderChatHistory();
                     },
                     error: function(error) {
                         console.log(error);
@@ -349,6 +333,10 @@
             }
         });
 
+        function scrollChatToBottom() {
+            var chatContainer = $('#chat-container');
+            chatContainer.scrollTop(chatContainer[0].scrollHeight);
+        }
 
         function renderChatHistory() {
             $('#chat-container').empty();
@@ -419,17 +407,18 @@
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error(error);
+                    alert('error');
+                    console.log(error + "=========== error");
                 }
             });
         }
 
         // Call fetchAllChatData when needed to fetch all chat data for the authenticated user
-        fetchAllChatData();
+        // fetchAllChatData();
 
 
         // setInterval(() => {
-        renderChatHistory();
+        // renderChatHistory();
         // }, 3000);
     });
 </script>

@@ -3,6 +3,7 @@
 namespace App\General;
 
 use App\Models\ChMessage;
+use Carbon\Carbon;
 
 class ChatClass
 {
@@ -18,7 +19,7 @@ class ChatClass
 
     public static function getUnreadCount($chatId)
     {
-        $count = ChMessage::where("chat_id", $chatId)->where("seen", 0)->count();
+        $count = ChMessage::where("chat_id", $chatId)->where("seen", 0)->where('sender_id', '!=', \Auth::id())->count();
         if ($count) {
             return $count;
         } else {
@@ -49,5 +50,9 @@ class ChatClass
         } else {
             return '';
         }
+    }
+
+    public static function getMessageTimeInFormat($createdAt){
+        return Carbon::parse($createdAt)->format('h:i A | M d');
     }
 }
