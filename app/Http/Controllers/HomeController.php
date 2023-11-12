@@ -44,6 +44,11 @@ class HomeController extends Controller
         return view('front-layouts.pages.chat.chat', get_defined_vars());
     }
 
+    public function get_rooms(){
+        $rooms = Chat::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->with('sender', 'receiver')->get();
+        return view('front-layouts.pages.chat.ajax.rooms_container', compact('rooms'))->render();
+    }
+
     public function single_chat($roomId)
     {
         $chat = ChMessage::where('chat_id', $roomId)->with('user')->orderBy('created_at', 'asc')->get();

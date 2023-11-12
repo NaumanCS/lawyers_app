@@ -131,7 +131,7 @@
                                                     height: 400px;
                                                     overflow-y: auto !important;
                                                 ">
-                                                <ul class="list-unstyled mb-0">
+                                                <ul class="list-unstyled mb-0" id="chatRoomsColumn">
                                                     @foreach ($rooms as $room)
                                                         @if ($room->sender->id !== auth()->user()->id)
                                                             <li class="p-2 border-bottom single-room-chat"
@@ -249,31 +249,57 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
 <script>
-    // function getSingleRoomChat(roomId) {
-    //     if ($(this).hasClass('active')) {
-    //         return;
-    //     }
-    //     $('.parent-container').show();
-    //     $('#chat-container').empty();
-    //     $('single-room-chat').removeClass('active');
-    //     $(this).addClass('active');
-    //     $.ajax({
-    //         url: '/display-single-chat/' + roomId,
-    //         type: 'GET',
-    //         success: function(response) {
-    //             $('#chat-container').append(response);
-    //             scrollChatToBottom();
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
     $(document).ready(function() {
-        let roomId = null;
-        let authUserId = {{ auth()->user()->id }};
-        let chatHistory = [];
+        var room_id = 0;
+        var userScrolledUp = false;
         $('.parent-container').hide();
+
+        function scrollChatToBottom() {
+            var chatContainer = $('#chat-container');
+            chatContainer.scrollTop(chatContainer[0].scrollHeight);
+        }
+
+        function getSingleRoomChat(roomId) {
+            $.ajax({
+                url: '/display-single-chat/' + roomId,
+                type: 'GET',
+                success: function(response) {
+                    $('#chat-container').empty();
+                    $('#chat-container').append(response);
+                    if (!userScrolledUp) {
+                        scrollChatToBottom();
+                    } else {
+                        toastr.success('New Message Received');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function getRoomsLatestData() {
+            $.ajax({
+                url: '/display-rooms',
+                type: 'GET',
+                success: function(response) {
+                    $('#chatRoomsColumn .single-room-chat').remove();
+                    $('#chatRoomsColumn').append(response);
+
+                    if (room_id) {
+                        $(`.single-room-chat[data-room-id='${room_id}']`).addClass('active');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        setInterval(function() {
+            getSingleRoomChat(room_id);
+            getRoomsLatestData();
+        }, 5000);
 
         $(document).on('click', '.single-room-chat', function(e) {
             e.preventDefault();
@@ -283,19 +309,15 @@
             $('.parent-container').show();
             roomId = $(this).data('room-id');
             $('#chat-container').empty();
-            $('single-room-chat').removeClass('active');
+            $('.single-room-chat').removeClass('active');
             $(this).addClass('active');
-            $.ajax({
-                url: '/display-single-chat/' + roomId,
-                type: 'GET',
-                success: function(response) {
-                    $('#chat-container').append(response);
-                    scrollChatToBottom();
-                },
-                error: function(xhr, status, error) {
-                    console.log(error);
-                }
-            });
+            room_id = roomId;
+            getSingleRoomChat(roomId);
+        });
+
+        $('#chat-container').on('scroll', function() {
+            // Check if the user has manually scrolled up
+            userScrolledUp = this.scrollTop + this.clientHeight < this.scrollHeight;
         });
 
         $('#newMessageForm').on('submit', function(e) {
@@ -319,12 +341,9 @@
                         $('#typeChatMessage').val('');
                         $('#chat-container').empty();
                         $('#chat-container').append(response);
-                        scrollChatToBottom();
-                        // $('#textAreaExample2').val('');
-                        // console.log(JSON.stringify(response) +
-                        //     "========== send message response");
-                        // chatHistory.push(response);
-                        // renderChatHistory();
+                        if (!userScrolledUp) {
+                            scrollChatToBottom();
+                        }
                     },
                     error: function(error) {
                         console.log(error);
@@ -332,93 +351,5 @@
                 });
             }
         });
-
-        function scrollChatToBottom() {
-            var chatContainer = $('#chat-container');
-            chatContainer.scrollTop(chatContainer[0].scrollHeight);
-        }
-
-        function renderChatHistory() {
-            $('#chat-container').empty();
-
-            chatHistory.forEach(function(message) {
-                var messageHtml = '';
-                if (message.sender_id == authUserId) {
-                    messageHtml +=
-                        '<li class="d-flex justify-content-between mb-4">';
-                    messageHtml += '<img src="' + (message.user ? message.user.image : '') +
-                        // Check if message.user is defined
-                        '" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">';
-                    messageHtml += '<div class="card px-3 py-2">';
-                    messageHtml +=
-                        '<div class="d-flex justify-content-end">';
-                    messageHtml +=
-                        '<p class="text-muted small mb-0"><i class="far fa-clock"></i> ' +
-                        message.created_at + '</p>';
-                    messageHtml += '</div>';
-                    messageHtml += '<p class="mb-0">' + message.body +
-                        '</p>';
-                    messageHtml += '</div>';
-                    messageHtml += '</li>';
-                } else {
-                    messageHtml +=
-                        '<li class="d-flex justify-content-between mb-4">';
-                    messageHtml +=
-                        '<div class="card w-100 card px-3 py-2">';
-                    messageHtml +=
-                        '<div class="d-flex justify-content-end">';
-                    messageHtml +=
-                        '<p class="text-muted small mb-0"><i class="far fa-clock"></i> ' +
-                        message.created_at + '</p>';
-                    messageHtml += '</div>';
-                    messageHtml += '<p class="mb-0">' + message.body +
-                        '</p>';
-                    messageHtml += '</div>';
-                    messageHtml += '<img src="' + (message.user ? message.user.image : '') +
-                        // Check if message.user is defined
-                        '" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">';
-                    messageHtml += '</li>';
-                }
-                // Append the message HTML to the chat container
-                $('#chat-container').append(messageHtml);
-            });
-        }
-
-        function fetchAllChatData() {
-            $.ajax({
-                url: '/fetch-new-messages',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    // Handle the response containing all chat rooms and messages
-                    var chatData = response.chats;
-
-                    // Process and display the chat rooms and messages as needed
-                    chatData.forEach(function(chatRoom) {
-                        // Access chat room details (e.g., chatRoom.id, chatRoom.name, etc.)
-
-                        // Access messages for this chat room
-                        var messages = chatRoom.messages;
-
-                        // Iterate through messages and display them
-                        messages.forEach(function(message) {
-                            // Access message details (e.g., message.id, message.body, etc.)
-                        });
-                    });
-                },
-                error: function(xhr, status, error) {
-                    alert('error');
-                    console.log(error + "=========== error");
-                }
-            });
-        }
-
-        // Call fetchAllChatData when needed to fetch all chat data for the authenticated user
-        // fetchAllChatData();
-
-
-        // setInterval(() => {
-        // renderChatHistory();
-        // }, 3000);
     });
 </script>

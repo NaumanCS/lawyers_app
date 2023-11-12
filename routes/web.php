@@ -84,6 +84,7 @@ Route::get('/search', [FrontController::class, 'search'])->name('search');
 Auth::routes();
 Route::get('/create/chat/room/{lawyerId}', [HomeController::class, 'create_chat_room'])->name('create.chat.room');
 Route::get('chat', [HomeController::class, 'chat'])->name('chat');
+Route::get('display-rooms', [HomeController::class, 'get_rooms'])->name('display.chat.rooms');
 Route::get('display-single-chat/{roomId}', [HomeController::class, 'single_chat'])->name('display.single.chat');
 Route::post('/send/new/message', [HomeController::class, 'send_message']);
 Route::get('/fetch-new-messages', [HomeController::class, 'fetch_new_messages']);
@@ -136,7 +137,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('admin/user/accounts/store/{id}', [DashboardController::class, 'user_accounts_store'])->name('admin.user.accounts.store');
     Route::get('admin/user/accounts/detail/{id}', [DashboardController::class, 'user_accounts_detail'])->name('admin.user.accounts.details');
     Route::post('admin/user/accounts/delete/{id}', [DashboardController::class, 'user_accounts_delete'])->name('admin.user.accounts.delete');
-   
+
 });
 
 // ADMIN PART
