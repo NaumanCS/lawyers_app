@@ -15,8 +15,8 @@ class FrontController extends Controller
 {
     public function index()
     {
-        $categories = Category::get();
-        $services = Service::get();
+        $categories = Category::take(6)->get();
+        $services = Service::take(6)->get();
         $cities = User::where('role', 'lawyer')->get();
 
         return view('front-layouts.pages.home', get_defined_vars());

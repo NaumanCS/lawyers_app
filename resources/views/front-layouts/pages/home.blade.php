@@ -176,7 +176,7 @@
                 </div>
             </div>
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-                <div class="carousel-indicators">
+                <div class="carousel-indicators" style="display: none !important;">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                         aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
@@ -196,9 +196,9 @@
                                             <div class="service-content">
                                                 <h3 class="title">
                                                     <a href="service-details.html"
-                                                        class="text-black">{{ $service->title }}</a>
+                                                        class="text-black">{{ $service->title ?? "I can be your personal counselor" }}</a>
                                                 </h3>
-                                                <div class="rating">
+                                                <div class="rating" style="display: none;">
                                                     <i class="fas fa-star filled"></i>
                                                     <i class="fas fa-star filled"></i>
                                                     <i class="fas fa-star filled"></i>
