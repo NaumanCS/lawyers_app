@@ -8,6 +8,11 @@
         @endif
     </script>
     <script>
+        @if (session('alert'))
+            toastr.alert('{{ session('alert') }}');
+        @endif
+    </script>
+    <script>
         @if (session('error'))
             toastr.error('{{ session('error') }}');
         @endif
@@ -38,8 +43,9 @@
                                 <a href="">{{ $lawyer->name }}</a>
                             </h3>
                             <div class="rating">
-                                <a href="{{url('/')}}/create/chat/room/{{$lawyer->id}}" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
-                                    class="fa-solid fa-calendar-check"></i>Start Chat</a>
+                                <a href="{{ url('/') }}/create/chat/room/{{ $lawyer->id }}"
+                                    class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
+                                        class="fa-solid fa-calendar-check"></i>Start Chat</a>
                             </div>
                             <div class="user-info">
                                 <div class="service-action">
@@ -52,7 +58,7 @@
 
                                         <?php
                                         $update_id = 0;
-
+                                        
                                         if (isset($obj->id) && !empty($obj->id)) {
                                             $update_id = $obj->id;
                                         }
@@ -72,16 +78,49 @@
                                             </button>
 
                                         </form> --}}
-                                        <button  class="btn btn-primary text-white"><a class="text-white" href="{{ route('book.service',$lawyer->id) }}" > Book Service </a> 
+                                        <button class="btn btn-primary text-white"><a class="text-white"
+                                                href="{{ route('book.service', $lawyer->id) }}"> Book Service </a>
                                         </button>
-                                    
+
                                         {{-- <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
                                         </button> --}}
+                                        @if ($meetings->isEmpty())
+                                            <button class="btn btn-primary text-white my-2"> <a class="text-white"
+                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}">
+                                                    Video
+                                                    Call </a>
+                                            </button>
+                                            <button class="btn btn-primary text-white "> <a class="text-white"
+                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}">
+                                                    Call
+                                                </a>
+                                            </button>
+                                        @else
+                                            @foreach ($meetings as $meeting)
+                                                @if ($meeting->meeting_with == $lawyer->id)
+                                                    <button class="btn btn-primary text-white my-2"> <a class="text-white"
+                                                            href="{{ route('video.call', $meeting->meeting_link) }}"> Video
+                                                            Call </a>
+                                                    </button>
+                                                    <button class="btn btn-primary text-white "> <a class="text-white"
+                                                            href="{{ route('video.call', $meeting->meeting_link) }}"> Call
+                                                        </a>
+                                                    </button>
+                                                @else
+                                                    <button class="btn btn-primary text-white my-2"> <a class="text-white"
+                                                            href="{{ route('meeting.schedule.create', $lawyer->id) }}">
+                                                            Video
+                                                            Call </a>
+                                                    </button>
+                                                    <button class="btn btn-primary text-white "> <a class="text-white"
+                                                            href="{{ route('meeting.schedule.create', $lawyer->id) }}">
+                                                            Call
+                                                        </a>
+                                                    </button>
+                                                @endif
+                                            @endforeach
+                                        @endif
 
-                                        <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('meeting.schedule.create',$lawyer->id) }}" > Video Call </a>
-                                        </button>
-                                        <button  class="btn btn-primary text-white "> <a class="text-white" href="{{ route('meeting.schedule.create',$lawyer->id) }}" > Call </a>
-                                        </button>
                                     </div>
                                 </div>
                             </div>

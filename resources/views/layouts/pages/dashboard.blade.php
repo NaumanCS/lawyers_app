@@ -22,7 +22,7 @@
                                     <i class="far fa-user"></i>
                                 </span>
                                 <div class="dash-widget-info">
-                                    <h3>429</h3>
+                                    <h3>{{ $countAllUsers ?? '0' }}</h3>
                                     <h6 class="text-muted">Users</h6>
                                 </div>
                             </div>
@@ -37,8 +37,8 @@
                                     <i class="fas fa-user-shield"></i>
                                 </span>
                                 <div class="dash-widget-info">
-                                    <h3>148</h3>
-                                    <h6 class="text-muted">Providers</h6>
+                                    <h3>{{ $countAllOrders ?? 0 }}</h3>
+                                    <h6 class="text-muted">Orders</h6>
                                 </div>
                             </div>
                         </div>
@@ -52,8 +52,8 @@
                                     <i class="fas fa-qrcode"></i>
                                 </span>
                                 <div class="dash-widget-info">
-                                    <h3>124</h3>
-                                    <h6 class="text-muted">Services</h6>
+                                    <h3>{{ $totalPayment ?? '0' }}</h3>
+                                    <h6 class="text-muted">Total Payment</h6>
                                 </div>
                             </div>
                         </div>
@@ -67,8 +67,8 @@
                                     <i class="far fa-credit-card"></i>
                                 </span>
                                 <div class="dash-widget-info">
-                                    <h3>$11378</h3>
-                                    <h6 class="text-muted">Subscription</h6>
+                                    <h3>{{ $adminProfit ?? '0' }}</h3>
+                                    <h6 class="text-muted">Admin 20%</h6>
                                 </div>
                             </div>
                         </div>

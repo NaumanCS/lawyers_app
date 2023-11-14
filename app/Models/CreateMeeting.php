@@ -9,6 +9,7 @@ class CreateMeeting extends Model
 {
     use HasFactory;
     protected $fillable=[
+      'order_id',
       'meeting_name',
       'created_by',
       'meeting_with',

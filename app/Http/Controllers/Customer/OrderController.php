@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\JitsiVideoCallController;
+use App\Http\Controllers\MeetingController;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Wallet;
@@ -33,7 +35,6 @@ class OrderController extends Controller
     public function order_store(Request $req, $id)
     {
         $orderDetail = session()->get('orderDetail');
-
         $auth = auth()->user();
 
         // $customerWallet = Wallet::where('user_id', $auth->id)->first();
@@ -52,7 +53,8 @@ class OrderController extends Controller
                     'customer_id' => $auth->id,
                     'category_id' => $req->category_id,
                     'amount' => $orderDetail['amount'],
-                    'booking_date' => $req->currentDateTime,
+                    // 'booking_date' => $req->currentDateTime,
+                    'booking_date' => $orderDetail['booking_date'],
                     'lawyer_location' => $lawyer->city ?? 'no city provided',
                     'customer_location' => $auth->city ?? 'no city provided',
                 ]);
@@ -65,20 +67,36 @@ class OrderController extends Controller
                     'customer_id' => $auth->id,
                     'category_id' => $req->category_id,
                     'amount' => $orderDetail['amount'],
-                    'booking_date' => $req->currentDateTime,
+                    // 'booking_date' => $req->currentDateTime,
+                    'booking_date' => $orderDetail['booking_date'],
                     'lawyer_location' => $lawyer->city ?? 'no city provided',
                     'customer_location' => $auth->city ?? 'no city provided',
                 ]);
                 $imageUpdateId = $obj->id;
 
 
-                $orderId=$obj->id;
-                $orderId=Order::find($orderId);
-                $lawyer = User::find($orderId->lawyer_id); // Replace $userId with the actual user ID
-        
-            //    dd($lawyer);
-                $lawyer->notify(new BookingNotification($orderId));
-                
+
+                $orderId = $obj->id;
+                $order = Order::find($orderId);
+                if ($order) {
+                    $lawyer = User::find($order->lawyer_id);
+                    if ($lawyer) {
+                        $lawyer->notify(new BookingNotification($order));
+                    } else {
+                        $deleteOrder = Order::where('id', $order->id)->delete();
+                        return back()->with('message', 'Lawyer Id not found');
+                    }
+                } else {
+                    return back()->with('message', 'Order Id not found');
+                }
+
+                $meetingController = new JitsiVideoCallController();
+                $lawyerId = $orderDetail['lawyer_id']; 
+                $date = $orderDetail['booking_date']; 
+                $selectTimeSpan = $orderDetail['select_time_span']; 
+
+                // Call the meeting_schedule_store function from the MeetingController
+                $meetingController->meeting_schedule_store($lawyerId, $date, $selectTimeSpan,$orderId);
             }
         }
 
@@ -97,7 +115,7 @@ class OrderController extends Controller
             ]);
         }
 
-       
+
 
         session()->forget('orderDetail');
         return redirect()->route('lawyer.list')->with('message', 'Order placed successfully');
@@ -138,11 +156,27 @@ class OrderController extends Controller
 
     public function order_status(Request $request)
     {
+        // dd($request);
         $status = $request->input('status');
         $updateOrderStatus = Order::where('id', $request->order_id)->first();
 
         if ($updateOrderStatus) {
             $updateOrderStatus->customer_status = $status;
+            $updateOrderStatus->save();
+
+            return redirect()->back()->with('success', 'Order status updated successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to update order status.');
+        }
+    }
+
+    public function lawyer_order_status(Request $request)
+    {
+        $status = $request->input('status');
+        $updateOrderStatus = Order::where('id', $request->order_id)->first();
+
+        if ($updateOrderStatus) {
+            $updateOrderStatus->lawyer_status = $status;
             $updateOrderStatus->save();
 
             return redirect()->back()->with('success', 'Order status updated successfully!');

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Transaction;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yoeunes\Toastr\Facades\Toastr;
 
 class TransactionController extends Controller
 {
@@ -83,5 +88,41 @@ class TransactionController extends Controller
             'success' => $success,
             'message' => $message,
         ]);
+    }
+
+    // PAY NOW
+    public function pay_now()
+    {
+        $payNow = Order::where('status', 'completed')->whereNot('payment_status','completed')
+            ->with('lawyer.accountDetail')
+            ->select('lawyer_id', DB::raw('SUM(amount) as total_amount'))
+            ->groupBy('lawyer_id')
+            ->get();
+        // dd($payNow);
+        return view('layouts.pages.transaction.payNow', get_defined_vars());
+    }
+
+    public function send_paymnet(Request $request)
+    {
+       
+        $orders = Order::where('lawyer_id', $request->lawyer_id)->where('status', 'completed')->get();
+        foreach ($orders as $order) {
+            $order->update([
+                'payment_status' => 'completed',
+            ]);
+
+            $currentDate= Carbon::now()->toDateString();;
+            // dd($currentDate);
+            $transactions = Transaction::create([
+                'order_id' => $order->id,
+                'user_id' => $order->lawyer_id,
+                'amount' => $order->amount - ($order->amount * 0.2),
+                'date' => $currentDate,
+                'status' =>'completed',
+            ]);
+        }
+      
+        Toastr::error('Payment Send Successfully.');
+        return redirect()->back();
     }
 }

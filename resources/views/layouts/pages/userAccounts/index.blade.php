@@ -21,7 +21,11 @@
                     <div class="col">
                         <h3 class="page-title">All Users Accounts</h3>
                     </div>
-                   
+                    <div class="col-auto text-end">
+                        <a href="{{ route('pay.now', $update_id = 0) }}" class="btn btn-primary add-button ms-3">
+                            <i class="fas fa-money">Pay Now</i>
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- /Page Header -->

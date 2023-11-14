@@ -13,6 +13,33 @@
 @endsection
 @section('content')
     <div class="row">
+        <div class="row">
+            <div class="col-lg-4 ">
+                <a href="" class="dash-widget dash-bg-2">
+                    <span class="dash-widget-icon">{{ $totalPayment - $totalPayment *0.2 ?? '' }}</span>
+                    <div class="dash-widget-info">
+                        <span>Total Payment</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4">
+                <a href="" class="dash-widget dash-bg-2">
+                    <span class="dash-widget-icon">{{ $completedPayment - $completedPayment *0.2 ?? '' }}</span>
+                    <div class="dash-widget-info">
+                        <span>Completed Payment</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4">
+                <a href="" class="dash-widget dash-bg-2">
+                    <span class="dash-widget-icon">{{ $pendingPayment - $pendingPayment *0.2 ?? '' }}</span>
+                    <div class="dash-widget-info">
+                        <span>Pending Payment</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <P>Note : 20 percent is detected as a service fee from your payment.</P>
         <div class="col-md-12 d-flex">
             <!-- Payments -->
             <div class="card card-table flex-fill boxShadowClass">
@@ -25,25 +52,16 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                              
                                     <th>Amount</th>
-                                  
                                     <th>Payment Status</th>
-                                   
-                                   
-
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($wallet as $row)
                                     <tr>
                                         <td>{{ $row->id }}</td>
-                                        
-                                        <td>{{ $row->amount }}</td>
-                                      
-                                        <td>{{ $row->payment_status ?? 'pending' }}</td>
-                                       
-                                        
+                                        <td>{{ $row->amount -$row->amount *0.2 }}</td>
+                                        <td>{{ $row->payment_status ?? 'pending' }}</td> 
                                     </tr>
                                 @endforeach
                             </tbody>

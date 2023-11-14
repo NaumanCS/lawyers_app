@@ -35,8 +35,10 @@ class User extends Authenticatable
         'image',
         'is_document_submit',
         'degree',
+        'advocate',
         'high_court',
         'supreme_court',
+        'advocate_licence',
         'high_court_licence',
         'supreme_court_licence',
         'experience_in_years',
@@ -133,5 +135,15 @@ class User extends Authenticatable
     public function accountDetail()
     {
         return $this->hasOne(AccountDetail::class, 'user_id');
+    }
+
+    public function lawyerCategory()
+    {
+        return $this->hasMany(Service::class, 'user_id', 'id');
+    }
+
+    public function lawyerTotalRating()
+    {
+        return $this->hasMany(feedBack::class, 'lawyer_id', 'id');
     }
 }

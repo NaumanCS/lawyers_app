@@ -138,14 +138,7 @@
 
                         </div>
                     </div>
-                    <div class="service-fields mb-3">
-                        <h3 class="heading-2">Cover Image</h3>
-                        <div class="col-8 mb-4">
-                            <label for="image" class="black_label"><b>Upload Your Service Cover</b></label>
-                            <input type="file" name="image" class="dropify" value="{{ old('image') }}"
-                                data-default-file="{{ asset('front') }}/assets/img/category/Category1.jpg">
-                        </div>
-                    </div>
+                   
                     <div class="submit-section">
                         <button class="btn btn-primary submit-btn" type="submit">Submit</button>
                     </div>

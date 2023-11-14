@@ -110,10 +110,25 @@
             <div class="container m-0">
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
+                        @if ($user->document_status == 'depreciated')
+                        <div class="section-header text-center">
+                            <h2>Depreciated</h2>
+                            <p>Please be informed that some of your documents are not approved.</p>
+                            <span class="text-danger">Reason</span>
+                            <p>{{ $user->reason ?? '' }}</p>
+                            <div class="mt-3">
+                                <a href="{{ route('lawyer.document.verification.update') }}">
+                                <button class="btn btn-primary">Update</button>
+                            </a>
+                            </div>
+                        </div>
+                        @else
                         <div class="section-header text-center">
                             <h2>Thank You for Registration</h2>
                             <p>We will shortly verify your profile, and you can provide services.</p>
                         </div>
+                        @endif
+                      
                     </div>
                 </div>
             </div>

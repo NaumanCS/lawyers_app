@@ -61,6 +61,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-5 my-3">
+                    <span class="text-danger">Note : You can upload this payment slip latter on Orders Table</span>
+                </div>
                 <div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

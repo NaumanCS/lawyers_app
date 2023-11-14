@@ -71,11 +71,11 @@
                             <h3>Find Best <span>Lawyers</span></h3>
                             <p>Discuss your problems by meeting and on online sessions</p>
                             <div class="search-box" style="z-index: 9999">
-                                <form action="{{ route('search') }}" method="GET">
+                                <form action="{{ route('lawyers.services', ['filter' => '0']) }}" method="GET">
                                     <div class="search-input line">
                                         <i class="fas fa-tv bficon"></i>
                                         <div class="form-group mb-0">
-                                            <select name="select_category" class="form-control mt-2 text-center"
+                                            <select name="category_id" class="form-control mt-2 text-center"
                                                 style="border: #f6f6f6">
                                                 <option value="">Select Category</option>
                                                 @foreach ($categories as $category)
@@ -88,7 +88,7 @@
                                         <i class="fas fa-location-arrow bficon">
                                         </i>
                                         <div class="form-group mb-0">
-                                            <select name="select_location" class="form-control mt-2 text-center"
+                                            <select name="location" class="form-control mt-2 text-center"
                                                 style="border: #f6f6f6">
                                                 <option value="">Select Location</option>
                                                 @foreach ($cities->unique('city') as $city)

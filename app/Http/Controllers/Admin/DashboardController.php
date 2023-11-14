@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AccountDetail;
 use App\Models\Category;
+use App\Models\feedBack;
 use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
@@ -27,7 +29,14 @@ class DashboardController extends Controller
     // users
     public function allUsers()
     {
-        $allUsers = User::whereNot('id', auth()->user()->id)->get();
+        $allUsers = User::whereNot('id', auth()->user()->id)
+        ->with('lawyerCategory.category', 'lawyerTotalRating')
+        ->withCount(['lawyerTotalRating as totalRating' => function ($query) {
+            $query->select(DB::raw('coalesce(sum(rating), 0)'));
+        }])
+        ->orderByDesc('totalRating')
+        ->get();
+        // dd($allUsers);
         return view('layouts.pages.user.index', get_defined_vars());
     }
 

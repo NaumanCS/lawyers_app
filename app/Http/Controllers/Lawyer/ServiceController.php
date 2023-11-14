@@ -76,7 +76,7 @@ class ServiceController extends Controller
             $service->extra_day_end_time = $request->extra_day_end_time;
             $service->user_id = Auth::id();
 
-            if ($request->file()) {
+            if ($request->file('cover_image')) {
                 $imageName = rand(0, 9999) . time() . '.' . $request->image->extension();
                 $request->file('cover_image')->move(public_path('uploads/lawyer/service'), $imageName);
                 $service->image = $imageName;
@@ -103,7 +103,7 @@ class ServiceController extends Controller
             $service->extra_day_end_time = $request->extra_day_end_time;
             $service->user_id = Auth::id();
 
-            if ($request->file()) {
+            if ($request->file('cover_image')) {
                 $imageName = rand(0, 9999) . time() . '.' . $request->image->extension();
                 $request->file('image')->move(public_path('uploads/lawyer/service'), $imageName);
                 $service->cover_image = $imageName;

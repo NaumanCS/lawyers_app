@@ -50,8 +50,7 @@
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-12"
                         style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                        <a href="#" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center"><i
-                                class="fa-solid fa-video"></i>Video Consultation</a>
+                       
                           <button type="submit" class="py-2 btn btn-primary d-flex justify-content-evenly align-items-center">     
                         </i>Book Appointment
                             </button> 
@@ -60,13 +59,18 @@
                 <div class="scrollable-div mt-3">
                     <div class="card me-4 w-100" style="display: inline-block; background:black !important;">
                         <div class="card-body row">
+                            <input type="date" name="date"
+                            id="" required>
+                            <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}"
+                            id="">
+                        <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
                             @foreach ($lawyerDetail->time_spans as $span)
                                 <div class="col-2 m-3 px-3 py-2 d-flex align-items-center justify-content-center bg-light">
                                     
                                             <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}"
                                                 id="">
                                             <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
-                                            <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}">
+                                            <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}" required>
                                     <label class="mb-0" for="select_time_span{{$span->id}}">{{ $span->time_spans }}</label>
 
                                         

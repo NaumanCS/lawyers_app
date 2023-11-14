@@ -14,8 +14,13 @@ class CheckOutController extends Controller
 
     public function book_service($id)
     {
+        $auth = auth()->user();
+        $lawyerDetail = User::where('id', $id)->with('service', 'time_spans')->first();
+        $checkOrder = Order::where('customer_id', $auth->id)->where('lawyer_id', $id)->first();
+        if ($checkOrder !== null && $checkOrder->status != 'completed') {
+            return back()->with('alert', 'You already Booked this service');
+        }
 
-        $lawyerDetail = User::where('id', $id)->with('service','time_spans')->first();
         return view('front-layouts.pages.customer.checkout.bookService', get_defined_vars());
     }
 
@@ -26,6 +31,7 @@ class CheckOutController extends Controller
             'lawyer_id' => $request->lawyer_id,
             'amount' => $request->amount,
             'select_time_span' => $request->select_time_span,
+            'booking_date' => $request->date,
             // ... (other fields you need)
         ];
         session()->put('orderDetail', $orderDetail);
@@ -33,10 +39,10 @@ class CheckOutController extends Controller
 
         return redirect()->route('select.payment.method');
     }
-    public function select_payment_method($id =null)
+    public function select_payment_method($id = null)
     {
-        $obj=Order::where('id',$id)->first();
-        return view('front-layouts.pages.customer.checkout.paymentType',get_defined_vars());
+        $obj = Order::where('id', $id)->first();
+        return view('front-layouts.pages.customer.checkout.paymentType', get_defined_vars());
     }
 
     public function index()

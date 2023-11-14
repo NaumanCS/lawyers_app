@@ -32,7 +32,14 @@ class LawyerController extends Controller
     }
     public function document_submission()
     {
-        return view('front-layouts.pages.lawyer.document-verification');
+        $user = Auth::user();
+        if ($user->document_status == 'approved') {
+
+            return redirect()->route('lawyer.dashboard');
+        } else {
+            return view('front-layouts.pages.lawyer.document-verification',get_defined_vars());
+        }
+       
     }
 
     public function submit_documents(Request $request)
@@ -61,6 +68,38 @@ class LawyerController extends Controller
             $user->update();
             return redirect()->route('lawyer.dashboard')->with(['message' => 'Documents uploaded successfully', 'images' => $uploadedImages]);
         }
+    }
+    public function document_submission_update()
+    {
+        $user = Auth::user();
+        return view('front-layouts.pages.lawyer.document-verification-update',get_defined_vars());
+    }
+
+    public function documents_update(Request $request)
+    {
+        
+        $id = Auth::user()->id;
+        $user = User::where('id', $id)->first();
+
+        if ($request->file('qualification_certificate')) {
+            $qualification = rand(0, 9999) . time() . '.' . $request->qualification_certificate->extension();
+            $request->file('qualification_certificate')->move(public_path('uploads/lawyer/documents'), $qualification);
+            $user->qualification_certificate = $qualification;
+        }
+        if ($request->file('high_court_licence')) {
+            $high_court_licence = rand(0, 9999) . time() . '.' . $request->high_court_licence->extension();
+            $request->file('high_court_licence')->move(public_path('uploads/lawyer/documents'), $high_court_licence);
+            $user->high_court_licence = $high_court_licence;
+        }
+        if ($request->file('supreme_court_licence')) {
+            $supreme_court_licence = rand(0, 9999) . time() . '.' . $request->supreme_court_licence->extension();
+            $request->file('supreme_court_licence')->move(public_path('uploads/lawyer/documents'), $supreme_court_licence);
+            $user->supreme_court_licence = $supreme_court_licence;
+        }
+        $user->update();
+
+        Flash::success('Your Data is updated successfully');
+        return redirect()->route('lawyer.document.verification')->with('message', 'Your Data is updated successfully');
     }
 
     public function profile_setting()

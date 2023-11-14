@@ -31,8 +31,7 @@
                                     <th>Booking Date</th>
                                     <th>Order Status</th>
                                     <th>Payment Status</th>
-                                    <th>Lawyer status</th>
-                                    <th>Customer Status</th>
+                                   
                                     <th>Action</th>
 
                                 </tr>
@@ -43,12 +42,13 @@
                                         <td>{{ $row->id }}</td>
                                         <td>{{ $row->customer->name ?? 'N/A' }}</td>
                                         <td>{{ $row->category->title ?? 'N/A' }}</td>
-                                        <td>{{ $row->amount }}</td>
+                                        <td>{{ $row->amount - ($row->amount * 0.20) }}</td>
+
                                         <td>{{ $row->created_at }}</td>
-                                        <td>{{ $row->status == '1' ? 'Approved' : 'Pending' }}</td>
+                                        <td>{{ $row->status == 'completed' ? 'Completed' : 'Pending' }}</td>
                                         <td>{{ $row->payment_status ?? 'pending' }}</td>
                                        
-                                        <td>
+                                        {{-- <td>
                                             <form id="my-form" action="{{ route('lawyer.order.status') }}"
                                                 method="POST">
                                                 @csrf
@@ -57,15 +57,13 @@
                                                 <select id="status-select" class="form-control select"
                                                     name="status">
                                                     <option>{!! $row->lawyer_status ?? 'Status' !!}</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Completed">Completed</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="completed">Completed</option>
                                                 </select>
                                             </form>
 
-                                        </td>
-                                        <td>
-                                            <span class="text-danger">{!! $row->customer_status ?? 'pending' !!}</span>
-                                        </td>
+                                        </td> --}}
+                                       
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -76,4 +74,14 @@
             <!-- Payments -->
         </div>
     </div>
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script>
+        // Add an event listener to the select element
+        document.getElementById("status-select").addEventListener("change", function () {
+            // Automatically submit the form when the select value changes
+            document.getElementById("my-form").submit();
+        });
+    </script>
+
 @endsection

@@ -88,7 +88,6 @@
                                             <th>Payment Slip</th>
                                             <th>Lawyer id</th>
                                             <th>Customer id</th>
-                                            <th>Category id</th>
                                             <th>Amount</th>
                                             <th>status</th>
 
@@ -106,15 +105,15 @@
                                                 </td>
                                                 <td>{{ $val->lawyer->name ?? '' }}</td>
                                                 <td>{{ $val->customer->name ?? '' }}</td>
-                                                <td>{{ $val->category_id ?? '' }}</td>
-                                                <td>{{ $val->amount ?? '' }}</td>
+                                               
+                                                <td>{{ $val->amount - ($val->amount * 0.20) ?? '' }}</td>
                                                 <td>
                                                     <!-- Example single danger button -->
                                                     <div class="btn-group">
-                                                        @if ($val->status == 1)
+                                                        @if ($val->status == "completed")
                                                             <button type="button" class="btn btn-success dropdown-toggle"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                                               Approved
+                                                               Completed
                                                             </button>
                                                         @else
                                                             <button type="button" class="btn btn-danger dropdown-toggle"
@@ -125,11 +124,11 @@
 
                                                         <ul class="dropdown-menu">
                                                             <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.order.status', ['status' => '1', 'orderId' => $val->id]) }}">Approved</a>
+                                                                    href="{{ route('admin.order.status', ['status' => 'completed', 'orderId' => $val->id]) }}">Completed</a>
                                                             </li>
 
                                                             <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.order.status', ['status' => '0', 'orderId' => $val->id]) }}">Reject</a>
+                                                                    href="{{ route('admin.order.status', ['status' => 'rejected', 'orderId' => $val->id]) }}">Rejected</a>
                                                             </li>
 
                                                         </ul>

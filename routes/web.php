@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\CustomerRegisterController;
 
 // ==============> Lawyers Controller Starts
 use App\Http\Controllers\Auth\LawyerRegisterController;
+use App\Http\Controllers\FeedBackController;
 use App\Http\Controllers\JitsiVideoCallController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ServiceController;
@@ -138,6 +139,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/user/accounts/detail/{id}', [DashboardController::class, 'user_accounts_detail'])->name('admin.user.accounts.details');
     Route::post('admin/user/accounts/delete/{id}', [DashboardController::class, 'user_accounts_delete'])->name('admin.user.accounts.delete');
 
+    // Pay Now
+    Route::get('admin/pay/now', [TransactionController::class, 'pay_now'])->name('pay.now');
+    Route::post('admin/send/payment', [TransactionController::class, 'send_paymnet'])->name('send.payment');
+
 });
 
 // ADMIN PART
@@ -146,8 +151,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // LAWYER PART
 Route::middleware(['auth', 'lawyer', 'blockedUser'])->group(function () {
     Route::get('/lawyer/dashboard', [LawyerController::class, 'index'])->name('lawyer.dashboard');
+
     Route::get('/lawyer/documents/verification', [LawyerController::class, 'document_submission'])->name('lawyer.document.verification');
     Route::post('/lawyer/documents/submit', [LawyerController::class, 'submit_documents'])->name('lawyer.documents.submit');
+    Route::get('/lawyer/documents/verification/update', [LawyerController::class, 'document_submission_update'])->name('lawyer.document.verification.update');
+    Route::post('/lawyer/documents/update', [LawyerController::class, 'documents_update'])->name('lawyer.documents.update');
 
     Route::get('/lawyer/profile/setting', [LawyerController::class, 'profile_setting'])->name('lawyer.profile.setting');
     Route::post('/lawyer/profile/submit', [LawyerController::class, 'profile_submit'])->name('lawyer.profile.submit');
@@ -199,6 +207,11 @@ Route::middleware(['auth', 'customer', 'blockedUser'])->group(function () {
     Route::get('meeting/schedule/{id}', [JitsiVideoCallController::class, 'meeting_schedule_create'])->name('meeting.schedule.create');
     Route::post('meeting/schedule/store', [JitsiVideoCallController::class, 'meeting_schedule_store'])->name('meeting.schedule.store');
 
+// feedback
+Route::post('feedback/store', [FeedBackController::class, 'feedback_store'])->name('feedback.store');
+// routes/web.php
+
+Route::post('/delete-meeting/{meetingId}', [FeedBackController::class, 'deleteMeeting'])->name('delete-meeting');
 
 });
 

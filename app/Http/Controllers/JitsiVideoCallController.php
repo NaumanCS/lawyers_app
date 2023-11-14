@@ -47,9 +47,12 @@ class JitsiVideoCallController extends Controller
     {
         $meetingLink = $id;
         $meetingSchedule = CreateMeeting::where('meeting_link', $meetingLink)->with('spanTime')->first();
-
+        $orderCheck = Order::where('id', $meetingSchedule->order_id)->first();
+$paymentSlip=$orderCheck->payment_slip;
         // Get the current time
         $currentTime = now(); // You may need to adjust this based on your timezone
+        $createdTime = $meetingSchedule->created_at->addHours(2);
+        // dd($createdTime);
         $currentDate = $currentTime->toDateString();
         // Split the time_spans into start and end times
         [$startTime, $endTime] = explode(' - ', $meetingSchedule->spanTime->time_spans);
@@ -59,16 +62,30 @@ class JitsiVideoCallController extends Controller
         // dd($endTime);
 
         // Check if the current time is equal to or after the start time
-        if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
-            if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
-                return view('jitsiVideoCall.startNew', get_defined_vars());
+        if ($orderCheck != null && $orderCheck->payment_slip != null && $orderCheck->payment_slip != 'http://127.0.0.1:8000/admin/assets/img/uploadslip.jpg') {
+           
+            if ($currentTime > $createdTime) {
+                if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
+                    if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
+                        $lawyerId = $meetingSchedule->meeting_with;
+                        $customerId = auth()->user()->id;
+                        return view('jitsiVideoCall.startNew', get_defined_vars());
+                    } else {
+                        Toastr::error('The meeting time has been ended.', 'Create New Meeting');
+                        return redirect()->back();
+                    }
+                } else {
+                    // Show a toastr notification that the meeting time has not started
+                    Toastr::error('The meeting time has not started yet.', 'Meeting Not Started');
+                    return redirect()->back();
+                }
             } else {
-                Toastr::error('The meeting time has been ended.', 'Create New Meeting');
+                Toastr::error('Meeting will start after 2 hours,after reviewing your payment.');
                 return redirect()->back();
             }
         } else {
-            // Show a toastr notification that the meeting time has not started
-            Toastr::error('The meeting time has not started yet.', 'Meeting Not Started');
+          
+            Toastr::error('Upload Payment slip');
             return redirect()->back();
         }
     }
@@ -147,13 +164,12 @@ class JitsiVideoCallController extends Controller
         } else {
             return redirect()->back()->with('error', 'Please Book a service Or Upload the payment Slip');
         }
-       
     }
 
-    public function meeting_schedule_store(Request $request)
+    public function meeting_schedule_store($lawyerId, $date, $selectTimeSpan,$orderId)
     {
 
-       
+
         $roomName = Str::random(10); // You can adjust the length as needed
         // $baseURL = 'https://lawyers-app/meeting/';
         // $meetingLink = $baseURL . $roomName;
@@ -161,15 +177,16 @@ class JitsiVideoCallController extends Controller
 
         $auth = auth()->user();
         $meeting = new CreateMeeting();
+        $meeting->order_id = $orderId;
         $meeting->created_by = $auth->id;
-        $meeting->meeting_with = $request->lawyer_id;
+        $meeting->meeting_with = $lawyerId;
         $meeting->meeting_link = $meetingLink;
-        $meeting->date = $request->date;
-        $meeting->select_time_span = $request->select_time_span;
+        $meeting->date = $date;
+        $meeting->select_time_span = $selectTimeSpan;
         $meeting->save();
 
-        $newMeeting=$meeting->id;
-        $newMeeting=CreateMeeting::find($newMeeting);
+        $newMeeting = $meeting->id;
+        $newMeeting = CreateMeeting::find($newMeeting);
         $lawyer = User::find($newMeeting->meeting_with); // Replace $userId with the actual user ID
         $lawyer->notify(new CreateMeetingNotification($newMeeting));
 

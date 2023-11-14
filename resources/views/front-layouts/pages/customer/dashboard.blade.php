@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <a href="" class="dash-widget dash-bg-2">
-                    <span class="dash-widget-icon">0</span>
+                    <span class="dash-widget-icon">{{ $allOrder ?? '' }}</span>
                     <div class="dash-widget-info">
                         <span>All Orders</span>
                     </div>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-lg-4">
                 <a href="" class="dash-widget dash-bg-2">
-                    <span class="dash-widget-icon">0</span>
+                    <span class="dash-widget-icon">{{ $pendingOrder ?? '' }}</span>
                     <div class="dash-widget-info">
                         <span>Pending Order</span>
                     </div>
@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-4">
                 <a href="" class="dash-widget dash-bg-2">
-                    <span class="dash-widget-icon">0</span>
+                    <span class="dash-widget-icon">{{ $completedOrders ?? '' }}</span>
                     <div class="dash-widget-info">
                         <span>Completed Order</span>
                     </div>

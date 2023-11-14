@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('create_meetings', function (Blueprint $table) {
             $table->id();
+            $table->integer('order_id')->nullable();
             $table->string('meeting_name')->nullable();
             $table->string('created_by')->nullable();
             $table->string('meeting_with')->nullable();

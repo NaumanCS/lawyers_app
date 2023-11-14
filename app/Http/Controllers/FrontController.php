@@ -30,7 +30,24 @@ class FrontController extends Controller
 
     public function search(Request $request)
     {
-        $categories = Service::where('categories_id', $request->select_category)->orWhere('location', $request->select_location)->get();
+        // $categories = Service::where('categories_id', $request->select_category)->orWhere('location', $request->select_location)->get();
+
+        $query = Service::with('user', 'category');
+    
+        if ($request->filled('select_category')) {
+            $query->where('categories_id', $request->select_category);
+        }
+    
+        if ($request->filled('select_location')) {
+            $query->whereHas('user', function ($query) use ($request) {
+                $query->where('city', $request->select_location);
+            });
+        }
+    
+        $services = $query->paginate(9);
+        $categories = Category::get();
+
+        return view('front-layouts.pages.online_lawyers', compact('services', 'categories'));
     }
 
     public function lawyers_with_category($id)

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\ChMessage;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,7 +37,19 @@ class HomeController extends Controller
     }
     public function index()
     {
-        return view('layouts.pages.dashboard');
+        $allUsers=User::get();
+        $allOrders=Order::get();
+       
+        if($allUsers){
+            $countAllUsers=$allUsers->count();
+        }
+        if($allOrders){
+            $countAllOrders=$allOrders->count();
+            $totalPayment = Order::whereNotNull('payment_slip')->sum('amount');
+            $adminProfit = $totalPayment * 0.20;
+        }
+       
+        return view('layouts.pages.dashboard',get_defined_vars());
     }
 
     public function chat()

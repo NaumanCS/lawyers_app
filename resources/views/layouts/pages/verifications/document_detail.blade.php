@@ -18,7 +18,7 @@
             <div class="row justify-content-between">
                 <div class="col-3">
                     <label>Qualification Certificate/Degree</label>
-                    <a href="{{ $lawyer->degree }}" data-lightbox="image-gallery">
+                    <a href="{{ $lawyer->qualification_certificate }}" data-lightbox="image-gallery">
                         <img class="img-fluid" src="{{ $lawyer->qualification_certificate }}" alt="Degree">
                     </a>
                 </div>

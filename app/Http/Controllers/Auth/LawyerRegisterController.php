@@ -73,7 +73,6 @@ class LawyerRegisterController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'email' => 'required|email|unique:users,email',
-            'address' => 'required',
             'city' => 'required',
             'country' => 'required',
             'password' => 'required|string|min:8|confirmed',
@@ -84,10 +83,10 @@ class LawyerRegisterController extends Controller
             'name' => $request['name'],
             'phone' => $request['phone'],
             'email' => $request['email'],
-            'address' => $request['address'],
             'city' => $request['city'],
             'country' => $request['country'],
             'degree' => $request['degree'],
+            'advocate' => $request['advocate'],
             'high_court' => $request['high_court'],
             'supreme_court' => $request['supreme_court'],
             'experience_in_years' => $request['experience_in_years'],
@@ -97,6 +96,13 @@ class LawyerRegisterController extends Controller
             'document_status' => 'pending',
         ]);
 
+        if ($request->file('advocate_licence')) {
+            $advocateLicence = time() . '.' . $request->advocate_licence->extension();
+            $request->advocate_licence->move(public_path('uploads/lawyer/documents'), $advocateLicence);
+            User::whereId($user->id)->update([
+                'advocate_licence' => $advocateLicence
+            ]);
+        }
         if ($request->file('high_court_licence')) {
             $highCourtLicence = time() . '.' . $request->high_court_licence->extension();
             $request->high_court_licence->move(public_path('uploads/lawyer/documents'), $highCourtLicence);

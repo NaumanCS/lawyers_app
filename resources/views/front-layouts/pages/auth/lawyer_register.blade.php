@@ -73,7 +73,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">City</label>
                                     <input type="text" class="form-control @error('city') is-invalid @enderror"
                                         name="city" value="{{ old('city') }}" required autocomplete="city"
@@ -84,7 +84,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
+                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">Country</label>
                                     <input type="text" class="form-control @error('country') is-invalid @enderror"
                                         name="country" value="{{ old('country') }}" required autocomplete="country"
@@ -95,17 +95,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 form-group form-focus">
-                                    <label class="focus-label">Address</label>
-                                    <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                        name="address" value="{{ old('address') }}" required autocomplete="address"
-                                        placeholder="Address">
-                                    @error('address')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+
                                 <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">Create Password</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -124,7 +114,8 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="black_label">Category<span class="text-danger ">*</span></label>
+                                        <label class="black_label">Category<span class="text-danger ">*(Select any two
+                                                categories)</span></label>
                                         <select id="multiSelect" class="form-control form-select" name="categories[]"
                                             multiple="multiple">
 
@@ -160,7 +151,8 @@
                                 <h6 class="bg-black text-white rounded p-2">Lawyer Experience</h6>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="black_label">Degree<span class="text-danger ">*</span></label>
+                                        <label class="black_label">Degree / Advocacy Level<span
+                                                class="text-danger ">*</span></label>
                                         <select class="form-control form-select" name="degree" id="degree">
                                             <option selected disabled>Select Degree</option>
                                             <option value="Advocate" {{ old('degree') == 'Advocate' ? 'selected' : '' }}>
@@ -168,9 +160,6 @@
                                             </option>
                                             <option value="Barister" {{ old('degree') == 'Barister' ? 'selected' : '' }}>
                                                 Barister
-                                            </option>
-                                            <option value="Attorney" {{ old('degree') == 'Attorney' ? 'selected' : '' }}>
-                                                Attorney
                                             </option>
                                         </select>
                                         @error('degree')
@@ -181,24 +170,46 @@
                                     </div>
                                 </div>
 
-
-                                <div class="col-lg-6" id="baristerHighCourt">
+                                <div class="col-lg-3 " id="advocate">
+                                    <div class="form-group">
+                                        <input type="checkbox" class="license-checkbox" name="advocate" value="1"
+                                            {{ is_array(old('advocate')) && in_array('1', old('advocate')) ? 'checked' : '' }}>
+                                        <label class="mx-2">Advocate</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" id="baristerHighCourt">
                                     <div class="form-group">
                                         <input type="checkbox" class="license-checkbox" name="high_court" value="1"
                                             {{ is_array(old('high_court')) && in_array('1', old('high_court')) ? 'checked' : '' }}>
-                                        <label class="mx-2" for="monday">High Court</label>
+                                        <label class="" for="monday">Advocate High Court</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 " id="baristerSupremeCourt">
+                                <div class="col-lg-5 " id="baristerSupremeCourt">
                                     <div class="form-group">
                                         <input type="checkbox" class="license-checkbox" name="supreme_court"
                                             value="1"
                                             {{ is_array(old('supreme_court')) && in_array('1', old('supreme_court')) ? 'checked' : '' }}>
-                                        <label class="mx-2" for="monday">Supreme Court</label>
+                                        <label class="" for="monday">Advocate Supreme Court</label>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
+                                    <div id="advocateLicenseDiv" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="black_label">Upload Advocate Licence<span
+                                                    class="text-danger">*</span></label>
+
+                                            <input type="file" name="advocate_licence" class="dropify"
+                                                value="{{ old('advocate_licence') }}" data-default-file="">
+                                            @error('advocate_licence')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
                                     <div id="highCourtLicenseDiv" style="display: none;">
                                         <div class="form-group">
                                             <label class="black_label">Upload High Court Licence<span
@@ -214,7 +225,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div id="supremeCourtLicenseDiv" style="display: none;">
                                         <div class="form-group">
                                             <label class="black_label">Upload Supreme Court Licence<span
@@ -237,21 +248,168 @@
                                         <select class="form-control form-select" name="experience_in_years"
                                             id="experience_in_years">
                                             <option selected disabled>Select Years</option>
-                                            <option value="1-10"
-                                                {{ old('experience_in_years') == '1-10' ? 'selected' : '' }}>
-                                                1-10
+                                            <option value="1"
+                                                {{ old('experience_in_years') == '1' ? 'selected' : '' }}>
+                                                1
                                             </option>
-                                            <option value="10-20"
-                                                {{ old('experience_in_years') == '10-20' ? 'selected' : '' }}>
-                                                10-20
+                                            <option value="2"
+                                                {{ old('experience_in_years') == '2' ? 'selected' : '' }}>
+                                                2
                                             </option>
-                                            <option value="20-30"
-                                                {{ old('experience_in_years') == '20-30' ? 'selected' : '' }}>
-                                                20-30
+                                            <option value="3"
+                                                {{ old('experience_in_years') == '3' ? 'selected' : '' }}>
+                                                3
                                             </option>
-                                            <option value="30-40"
-                                                {{ old('experience_in_years') == '30-40' ? 'selected' : '' }}>
-                                                30-40
+                                            <option value="4"
+                                                {{ old('experience_in_years') == '4' ? 'selected' : '' }}>
+                                                4
+                                            </option>
+                                            <option value="5"
+                                                {{ old('experience_in_years') == '5' ? 'selected' : '' }}>
+                                                5
+                                            </option>
+                                            <option value="6"
+                                                {{ old('experience_in_years') == '6' ? 'selected' : '' }}>
+                                                6
+                                            </option>
+                                            <option value="7"
+                                                {{ old('experience_in_years') == '7' ? 'selected' : '' }}>
+                                                7
+                                            </option>
+                                            <option value="8"
+                                                {{ old('experience_in_years') == '8' ? 'selected' : '' }}>
+                                                8
+                                            </option>
+                                            <option value="9"
+                                                {{ old('experience_in_years') == '9' ? 'selected' : '' }}>
+                                                9
+                                            </option>
+                                            <option value="10"
+                                                {{ old('experience_in_years') == '10' ? 'selected' : '' }}>
+                                                10
+                                            </option>
+                                            <option value="11"
+                                                {{ old('experience_in_years') == '11' ? 'selected' : '' }}>
+                                                11
+                                            </option>
+                                            <option value="12"
+                                                {{ old('experience_in_years') == '12' ? 'selected' : '' }}>
+                                                12
+                                            </option>
+                                            <option value="13"
+                                                {{ old('experience_in_years') == '13' ? 'selected' : '' }}>
+                                                13
+                                            </option>
+                                            <option value="14"
+                                                {{ old('experience_in_years') == '14' ? 'selected' : '' }}>
+                                                14
+                                            </option>
+                                            <option value="15"
+                                                {{ old('experience_in_years') == '15' ? 'selected' : '' }}>
+                                                15
+                                            </option>
+                                            <option value="16"
+                                                {{ old('experience_in_years') == '16' ? 'selected' : '' }}>
+                                                16
+                                            </option>
+                                            <option value="17"
+                                                {{ old('experience_in_years') == '17' ? 'selected' : '' }}>
+                                                17
+                                            </option>
+
+                                            <option value="18"
+                                                {{ old('experience_in_years') == '18' ? 'selected' : '' }}>
+                                                18
+                                            </option>
+                                            <option value="19"
+                                                {{ old('experience_in_years') == '19' ? 'selected' : '' }}>
+                                                19
+                                            </option>
+                                            <option value="20"
+                                                {{ old('experience_in_years') == '20' ? 'selected' : '' }}>
+                                                20
+                                            </option>
+                                            <option value="21"
+                                                {{ old('experience_in_years') == '21' ? 'selected' : '' }}>
+                                                21
+                                            </option>
+                                            <option value="22"
+                                                {{ old('experience_in_years') == '22' ? 'selected' : '' }}>
+                                                22
+                                            </option>
+                                            <option value="23"
+                                                {{ old('experience_in_years') == '23' ? 'selected' : '' }}>
+                                                23
+                                            </option>
+                                            <option value="24"
+                                                {{ old('experience_in_years') == '24' ? 'selected' : '' }}>
+                                                24
+                                            </option>
+                                            <option value="25"
+                                                {{ old('experience_in_years') == '25' ? 'selected' : '' }}>
+                                                25
+                                            </option>
+                                            <option value="26"
+                                                {{ old('experience_in_years') == '26' ? 'selected' : '' }}>
+                                                26
+                                            </option>
+                                            <option value="27"
+                                                {{ old('experience_in_years') == '27' ? 'selected' : '' }}>
+                                                27
+                                            </option>
+
+                                            <option value="28"
+                                                {{ old('experience_in_years') == '28' ? 'selected' : '' }}>
+                                                28
+                                            </option>
+                                            <option value="29"
+                                                {{ old('experience_in_years') == '29' ? 'selected' : '' }}>
+                                                29
+                                            </option>
+                                            <option value="30"
+                                                {{ old('experience_in_years') == '30' ? 'selected' : '' }}>
+                                                30
+                                            </option>
+                                            <option value="31"
+                                                {{ old('experience_in_years') == '31' ? 'selected' : '' }}>
+                                                31
+                                            </option>
+                                            <option value="32"
+                                                {{ old('experience_in_years') == '32' ? 'selected' : '' }}>
+                                                32
+                                            </option>
+                                            <option value="33"
+                                                {{ old('experience_in_years') == '33' ? 'selected' : '' }}>
+                                                33
+                                            </option>
+                                            <option value="34"
+                                                {{ old('experience_in_years') == '34' ? 'selected' : '' }}>
+                                                34
+                                            </option>
+                                            <option value="35"
+                                                {{ old('experience_in_years') == '35' ? 'selected' : '' }}>
+                                                35
+                                            </option>
+                                            <option value="36"
+                                                {{ old('experience_in_years') == '36' ? 'selected' : '' }}>
+                                                36
+                                            </option>
+                                            <option value="37"
+                                                {{ old('experience_in_years') == '37' ? 'selected' : '' }}>
+                                                37
+                                            </option>
+
+                                            <option value="38"
+                                                {{ old('experience_in_years') == '38' ? 'selected' : '' }}>
+                                                38
+                                            </option>
+                                            <option value="39"
+                                                {{ old('experience_in_years') == '39' ? 'selected' : '' }}>
+                                                39
+                                            </option>
+                                            <option value="40"
+                                                {{ old('experience_in_years') == '40' ? 'selected' : '' }}>
+                                                40
                                             </option>
                                         </select>
                                         @error('experience_in_years')
@@ -371,9 +529,9 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="black_label">Amount<span class="text-danger ">*</span></label>
+                                        <label class="black_label">Amount<span class="text-danger ">* (amount for 15min consultancy.)</span></label>
                                         <input class="form-control " type="text" name="amount" required
                                             value="{{ old('amount') }}">
                                         @error('amount')
@@ -388,7 +546,8 @@
                                 <h6 class="bg-black text-white rounded p-2">Account information</h6>
                                 <div class="col-lg-6" id="bankAccount">
                                     <div class="form-group">
-                                        <input type="checkbox" class="account-checkbox" name="bank_account" value="1"
+                                        <input type="checkbox" class="account-checkbox" name="bank_account"
+                                            value="1"
                                             {{ is_array(old('bank_account')) && in_array('1', old('bank_account')) ? 'checked' : '' }}>
                                         <label class="mx-2" for="monday">Bank Account</label>
                                     </div>
@@ -408,45 +567,45 @@
                                             <label class="black_label">Bank Account Title<span
                                                     class="text-danger">*</span></label>
 
-                                                    <input class="form-control " type="text" name="bank_account_title" 
-                                                    value="{{ old('bank_account_title') }}">
+                                            <input class="form-control " type="text" name="bank_account_title"
+                                                value="{{ old('bank_account_title') }}">
                                             @error('bank_account_title')
                                                 <span class="text-danger" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
 
-                                            <label class="black_label">Bank Name<span
-                                                class="text-danger">*</span></label>
+                                            <label class="black_label">Bank Name<span class="text-danger">*</span></label>
 
-                                                <input class="form-control " type="text" name="bank_name" 
+                                            <input class="form-control " type="text" name="bank_name"
                                                 value="{{ old('bank_name') }}">
-                                        @error('bank_name')
-                                            <span class="text-danger" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            @error('bank_name')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
 
-                                        <label class="black_label">Bank Account Number<span
-                                            class="text-danger">*</span></label>
+                                            <label class="black_label">Bank Account Number<span
+                                                    class="text-danger">*(IBAN)</span></label>
 
-                                            <input class="form-control " type="text" name="bank_account_number" 
-                                            value="{{ old('bank_account_number') }}">
-                                    @error('bank_account_number')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                            <input class="form-control " type="text" name="bank_account_number"
+                                                value="{{ old('bank_account_number') }}">
+                                            @error('bank_account_number')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
-                             
+
                                 <div class="col-lg-6">
                                     <div id="jazzCashDiv" style="display: none;">
                                         <div class="form-group">
-                                            <label class="black_label">Jazz Cash Title<span class="text-danger">*</span></label>
+                                            <label class="black_label">Jazz Cash Title<span
+                                                    class="text-danger">*</span></label>
 
-                                            <input class="form-control " type="text" name="jazzcash_account_title" 
+                                            <input class="form-control " type="text" name="jazzcash_account_title"
                                                 value="{{ old('jazzcash_account_title') }}">
                                             @error('jazzcash_account_title')
                                                 <span class="text-danger" role="alert">
@@ -454,9 +613,10 @@
                                                 </span>
                                             @enderror
 
-                                            <label class="black_label">Jazz Cash Number<span class="text-danger">*</span></label>
+                                            <label class="black_label">Jazz Cash Number<span
+                                                    class="text-danger">*</span></label>
 
-                                            <input class="form-control " type="text" name="jazzcash_number" 
+                                            <input class="form-control " type="text" name="jazzcash_number"
                                                 value="{{ old('jazzcash_number') }}">
                                             @error('jazzcash_number')
                                                 <span class="text-danger" role="alert">
@@ -537,6 +697,12 @@
                     $('#supremeCourtLicenseDiv').show();
                 } else {
                     $('#supremeCourtLicenseDiv').hide();
+                }
+
+                if ($('input[name="advocate"]').is(':checked')) {
+                    $('#advocateLicenseDiv').show();
+                } else {
+                    $('#advocateLicenseDiv').hide();
                 }
             });
         });

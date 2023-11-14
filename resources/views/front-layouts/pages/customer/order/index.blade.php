@@ -39,9 +39,7 @@
                                                 <th>Lawyer Location</th>
                                                 <th>Amount</th>
                                                 <th>Booking Date</th>
-                                                <th>Lawyer status</th>
-                                                <th>Customer Status</th>
-
+                                              
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,24 +60,19 @@
                                                     <td>{{ $val->lawyer_location }}</td>
                                                     <td>{{ $val->amount }}</td>
                                                     <td>{{ $val->booking_date }}</td>
-                                                    <td>
-                                                        <span class="text-danger">{!! $val->lawyer_status ?? 'pending' !!}</span>
-                                                    </td>
-                                                    <td>
-                                                        <form id="my-form" action="{{ route('order.status') }}"
-                                                            method="POST">
+                                                   
+                                                    {{-- <td>
+                                                        <form class="my-form" action="{{ route('order.status') }}" method="POST">
                                                             @csrf
-                                                            <input type="hidden" name="order_id"
-                                                                value="{{ $val->id }}">
-                                                            <select id="status-select" class="form-control select"
-                                                                name="status">
+                                                            <input type="hidden" name="order_id" value="{{ $val->id }}">
+                                                            <select class="form-control select" name="status">
                                                                 <option>{!! $val->customer_status ?? 'Status' !!}</option>
-                                                                <option value="Pending">Pending</option>
-                                                                <option value="Completed">Completed</option>
+                                                                <option value="pending">Pending</option>
+                                                                <option value="completed">Completed</option>
                                                             </select>
                                                         </form>
 
-                                                    </td>
+                                                    </td> --}}
 
                                                 </tr>
                                             @endforeach
@@ -95,14 +88,23 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#status-select').on('change', function() {
                 $('#my-form').submit();
             });
         });
+    </script> --}}
+    <script>
+        // Add an event listener to all select elements with the class "my-form"
+        document.querySelectorAll(".my-form select").forEach(function(selectElement) {
+            selectElement.addEventListener("change", function () {
+                // Find the form element that contains this select and submit it
+                const form = this.closest(".my-form");
+                form.submit();
+            });
+        });
     </script>
-
     <script>
         toastr.success('Order placed successfully');
     </script>
