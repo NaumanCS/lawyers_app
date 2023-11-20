@@ -23,7 +23,7 @@
                 <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
                     {{ $data->body }}
                 </p>
-                <p class="small ms-3 mb-3 rounded-3 text-muted float-end">
+                <p class="small ms-3 mb-3 rounded-3 text-muted float-start">
                     {{ ChatClass::getMessageTimeInFormat($data->created_at) }}
                 </p>
             </div>

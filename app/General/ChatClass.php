@@ -19,7 +19,7 @@ class ChatClass
 
     public static function getUnreadCount($chatId)
     {
-        $count = ChMessage::where("chat_id", $chatId)->where("seen", 0)->where('sender_id', '!=', \Auth::id())->count();
+        $count = ChMessage::where("chat_id", $chatId)->where("seen", 0)->where('sender_id', '!=', auth()->user()->id)->count();
         if ($count) {
             return $count;
         } else {

@@ -219,19 +219,37 @@
                                             ">
                                         </div>
 
-                                        <form action="" id="newMessageForm">
+                                        {{-- <form action="" id="newMessageForm">
                                             <div
                                                 class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
                                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
                                                     alt="avatar 3" style="width: 40px; height: 100%;" />
-
+                                                <div id="imagePreviewContainer"></div>
                                                 <div class="d-flex align-items-center w-100">
                                                     <input type="text" class="form-control form-control-lg message-box"
                                                         id="typeChatMessage" placeholder="Type message" />
-                                                    {{-- <a class="ms-1 text-muted" href="#!"><i
-                                                    class="fas fa-paperclip"></i></a>
-                                            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a> --}}
+                                                    <a class="ms-1 text-muted" href="#!"><i
+                                                            class="fas fa-paperclip"></i></a>
                                                     <a class="" type="submit"><i class="fas fa-paper-plane"></i></a>
+                                                </div>
+                                            </div>
+                                        </form> --}}
+                                        <form action="" id="newMessageForm">
+                                            <div id="imagePreviewContainer"></div>
+                                            <div
+                                                class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"alt="avatar 3"
+                                                    style="width: 40px; height: 100%;" />
+                                                <div class="d-flex align-items-center w-100">
+                                                    <input type="text" class="form-control form-control-lg message-box"
+                                                        id="typeChatMessage" placeholder="Type message" />
+                                                    <label for="fileInput" class="ms-1 text-muted">
+                                                        <i class="fas fa-paperclip"></i>
+                                                    </label>
+                                                    <input type="file" id="fileInput" class="d-none" multiple>
+                                                    <a class="submit-button" type="submit">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </form>
@@ -350,6 +368,48 @@
                     }
                 });
             }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var selectedImages = [];
+
+        $('#fileInput').on('change', function() {
+            var input = this;
+            var files = input.files;
+
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    var imgSrc = e.target.result;
+                    var img = '<img src="' + imgSrc +
+                        '" class="img-thumbnail mx-1" style="width: 40px; height: 40px;" data-src="' +
+                        imgSrc + '" />';
+                    $('#imagePreviewContainer').append(img);
+                };
+
+                reader.readAsDataURL(files[i]);
+            }
+        });
+
+        $('#imagePreviewContainer').on('click', 'img', function() {
+            var imgSrc = $(this).data('src');
+            $(this).remove();
+            selectedImages = selectedImages.filter(function(item) {
+                return item !== imgSrc;
+            });
+        });
+
+        $('.submit-button').on('click', function() {
+            // Handle form submission or other actions
+            // Add code to send the message, including selectedImages, to the server
+            console.log("Selected Images:", selectedImages);
+            // Clear the image preview container
+            $('#imagePreviewContainer').empty();
+            // Clear the file input field
+            $('#fileInput').val('');
         });
     });
 </script>
