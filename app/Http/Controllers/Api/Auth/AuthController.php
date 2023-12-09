@@ -1,72 +1,76 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountDetail;
-use App\Models\Category;
 use App\Models\LawyersTimeSpan;
 use App\Models\Service;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class LawyerRegisterController extends Controller
+class AuthController extends Controller
 {
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => 'required|min:11',
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+    public function login(Request $request){
+        $data = $request->only('phone', 'password');
+        $validator = Validator::make($data, [
+            'phone' => 'required',
+            'password' => 'required|string|min:6|max:50'
         ]);
+    
+        $user = User::where('phone', $request->phone)->first();
+        if (!$user){
+            return response(['status' => false, 'message' => 'Phone Number does not exist'], 200);
+        }
+    
+        if (!Hash::check($request->password, $user->password)){
+            return response(['status' => false, 'message' => 'Invalid phone or password. Please try again'], 200);
+        }
+    
+        return ['code' => 200, 'status' => true, 'message' => 'Login Successfully', 'data' => $user, 'access_token' => $user->createToken($request->phone)->plainTextToken];
     }
 
-    public function index()
+    public function register_customer(Request $request)
     {
-        $categories = Category::get();
-        return view('front-layouts.pages.auth.lawyer_register', get_defined_vars());
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'phone' => 'required|unique:users|digits:10', // Ensure unique phone number
+            'city' => 'required|string',
+            'password' => 'required|min:6',
+        ]);
+
+        // Check if phone or email already exists
+        if (User::where('phone', $validatedData['phone'])->exists()) {
+            return response()->json(['error' => 'Phone already exists'], 400);
+        }
+
+        // Create a new user
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'phone' => $validatedData['phone'],
+            'email' => $request['email'],
+            'city' => $validatedData['city'],
+            'password' => Hash::make($validatedData['password']),
+            'role' => 'user',
+        ]);
+
+        if ($user) {
+            // Assuming you want to generate an API token for the user after registration
+            $token = $user->createToken('apiToken')->plainTextToken;
+
+            return response()->json(['user' => $user, 'token' => $token], 201);
+        } else {
+            return response()->json(['error' => 'Failed to create user'], 500);
+        }
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    public function create(Request $request)
+    public function register_lawyer(Request $request)
     {
       
         $request->validate([
@@ -158,83 +162,15 @@ class LawyerRegisterController extends Controller
         $this->make_time_slots($user->id, $service->id, $request->start_time, $request->end_time, $request->extra_day_start_time ?? null, $request->extra_day_end_time ?? null);
 
         if ($user) {
-            Auth::login($user);
-            return redirect()->route('lawyer.dashboard');
+            // Assuming you want to generate an API token for the user after registration
+            $token = $user->createToken('apiToken')->plainTextToken;
+
+            return response()->json(['user' => $user,'service' => $service,'accountDetail' => $accountDetail, 'token' => $token], 201);
         } else {
-            return redirect()->back()->with('error', 'You do not have access to this page');
+            return response()->json(['error' => 'Failed to create Lawyer Account'], 500);
         }
-    }
 
-    public function store(Request $request)
-    {
-        // $request->validate([
-        //     'title' => 'required|string',
-        //     'location' => 'required|string',
-        //     'amount' => 'required|numeric',
-        //     'categories_id' => 'required',
-        //     'start_day' => 'required',
-        //     'end_day' => 'required',
-        //     'start_time' => 'required',
-        //     'end_time' => 'required',
-        //     'add_extra_day' => 'required',
-        //     'cover_image' => 'required',
-        // ]);
-
-        $update_id = $request->id;
-        if ($update_id) {
-            $service = Service::where('id', $request->id)->first();
-            $service->title = $request->title;
-            $service->location = $request->location;
-            $service->amount = $request->amount;
-            $service->categories_id = $request->categories_id;
-            $service->start_day = $request->start_day;
-            $service->end_day = $request->end_day;
-            $service->start_time = $request->start_time;
-            $service->end_time = $request->end_time;
-            $service->add_extra_day = $request->add_extra_day;
-            $service->extra_day = $request->extra_day;
-            $service->extra_day_start_time = $request->extra_day_start_time;
-            $service->extra_day_end_time = $request->extra_day_end_time;
-            $service->user_id = Auth::id();
-
-            if ($request->file()) {
-                $imageName = rand(0, 9999) . time() . '.' . $request->image->extension();
-                $request->file('cover_image')->move(public_path('uploads/lawyer/service'), $imageName);
-                $service->image = $imageName;
-            }
-            $service->update();
-
-            $this->make_time_slots(Auth::id(), $service->id, $request->start_time, $request->end_time, $request->extra_day_start_time ?? null, $request->extra_day_end_time ?? null);
-
-            return redirect()->route('lawyer.service.list')->with('message', 'Service Updated Successfully');
-        } else {
-            $service = new Service();
-
-            $service->title = $request->title;
-            $service->location = $request->location;
-            $service->amount = $request->amount;
-            $service->categories_id = $request->categories_id;
-            $service->start_day = $request->start_day;
-            $service->end_day = $request->end_day;
-            $service->start_time = $request->start_time;
-            $service->end_time = $request->end_time;
-            $service->add_extra_day = $request->add_extra_day;
-            $service->extra_day = $request->extra_day;
-            $service->extra_day_start_time = $request->extra_day_start_time;
-            $service->extra_day_end_time = $request->extra_day_end_time;
-            $service->user_id = Auth::id();
-
-            if ($request->file()) {
-                $imageName = rand(0, 9999) . time() . '.' . $request->image->extension();
-                $request->file('image')->move(public_path('uploads/lawyer/service'), $imageName);
-                $service->cover_image = $imageName;
-            }
-            $service->save();
-
-            $this->make_time_slots(Auth::id(), $service->id, $request->start_time, $request->end_time, $request->extra_day_start_time ?? null, $request->extra_day_end_time ?? null);
-
-            return redirect()->route('lawyer.service.list')->with('message', 'Service Added Successfully');
-        }
+        
     }
 
     public function make_time_slots($user_id, $service_id, $req_start_time, $req_end_time, $req_extra_day_start_time, $req_extra_day_end_time)
@@ -281,4 +217,5 @@ class LawyerRegisterController extends Controller
 
         return $slotsData;
     }
+
 }

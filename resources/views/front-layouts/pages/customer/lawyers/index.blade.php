@@ -50,11 +50,7 @@
                             <div class="user-info">
                                 <div class="service-action">
                                     <div class="row">
-                                        <div class="col">
-                                            <a href="" class="text-success"><i class="fas fa-phone-alt"></i>
-                                                {{ $lawyer->phone }}</a>
-
-                                        </div>
+                                    
 
                                         <?php
                                         $update_id = 0;
@@ -85,6 +81,7 @@
                                         {{-- <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
                                         </button> --}}
                                         @if ($meetings->isEmpty())
+                                        
                                             <button class="btn btn-primary text-white my-2"> <a class="text-white"
                                                     href="{{ route('meeting.schedule.create', $lawyer->id) }}">
                                                     Video

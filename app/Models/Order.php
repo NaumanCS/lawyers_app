@@ -19,6 +19,7 @@ class Order extends Model
         'lawyer_location',
         'customer_location',
         'payment_slip',
+        'transaction_id',
         'status',
         'payment_status'
 

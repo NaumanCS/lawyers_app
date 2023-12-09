@@ -531,7 +531,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="black_label">Amount<span class="text-danger ">* (amount for 15min consultancy.)</span></label>
+                                        <label class="black_label">Amount<span class="text-danger ">* (amount for 20min consultancy.)</span></label>
                                         <input class="form-control " type="text" name="amount" required
                                             value="{{ old('amount') }}">
                                         @error('amount')

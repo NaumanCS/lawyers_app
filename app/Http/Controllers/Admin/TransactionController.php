@@ -19,6 +19,11 @@ class TransactionController extends Controller
         $obj = Transaction::get();
         return view('layouts.pages.transaction.index', get_defined_vars());
     }
+    public function transaction_pending()
+    {
+        $obj = Order::where('payment_status',null)->orWhere('payment_status','pending')->with('lawyer')->get();
+        return view('layouts.pages.transaction.pending', get_defined_vars());
+    }
     public function transaction_form($id)
     {
         $title = 'New Transaction';
@@ -94,7 +99,7 @@ class TransactionController extends Controller
     public function pay_now()
     {
         $payNow = Order::where('status', 'completed')->whereNot('payment_status','completed')
-            ->with('lawyer.accountDetail')
+            ->orWhere('payment_status',null)->with('lawyer.accountDetail')
             ->select('lawyer_id', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('lawyer_id')
             ->get();

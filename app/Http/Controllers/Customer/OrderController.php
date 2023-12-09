@@ -97,6 +97,8 @@ class OrderController extends Controller
 
                 // Call the meeting_schedule_store function from the MeetingController
                 $meetingController->meeting_schedule_store($lawyerId, $date, $selectTimeSpan,$orderId);
+                $meetingController->book_time_span($selectTimeSpan,1);
+
             }
         }
 

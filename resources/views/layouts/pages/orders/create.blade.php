@@ -57,6 +57,12 @@
                                         class="form-control" required placeholder="Type something" />
                                 </div>
                                 <div class="form-group">
+                                    <label>Transaction Id</label>
+                                    <input type="text" name="transaction_id"
+                                        value="<?= isset($obj->transaction_id) && !empty($obj->transaction_id) ? $obj->transaction_id : '' ?>"
+                                        class="form-control" required placeholder="Type something" />
+                                </div>
+                                <div class="form-group">
                                     <label>Booking Date</label>
                                     <input type="date" name="booking_date"
                                         value="<?= isset($obj->booking_date) && !empty($obj->booking_date) ? $obj->booking_date : '' ?>"

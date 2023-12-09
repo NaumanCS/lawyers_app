@@ -112,7 +112,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/order/detail/{id}', [DashboardController::class, 'order_detail'])->name('admin.order.details');
     Route::post('admin/order/delete/{id}', [DashboardController::class, 'order_delete'])->name('admin.order.delete');
     Route::get('admin/order/status/{orderId?}/{status?}', [DashboardController::class, 'admin_order_status'])->name('admin.order.status');
-
+    Route::post('admin/order/add/transaction-id/{id?}', [DashboardController::class, 'add_transaction_id'])->name('admin.add.transaction.id');
 
     Route::get('admin/general-setting/index', [DashboardController::class, 'general_setting_index'])->name('admin.general.setting.index');
     Route::get('admin/general-setting/form/{id}', [DashboardController::class, 'general_setting_form'])->name('admin.general.setting.form');
@@ -121,6 +121,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('admin/general-setting/delete/{id}', [DashboardController::class, 'general_setting_delete'])->name('admin.general.setting.delete');
 
     Route::get('admin/transaction/index', [TransactionController::class, 'transaction_index'])->name('admin.transaction.index');
+    Route::get('admin/pending/transaction', [TransactionController::class, 'transaction_pending'])->name('admin.transaction.pending');
     // Route::get('admin/transaction/form/{id}', [TransactionController::class, 'transaction_form'])->name('admin.transaction.form');
     // Route::post('admin/transaction/store/{id}', [TransactionController::class, 'transaction_store'])->name('admin.transaction.store');
     Route::get('admin/transaction/detail/{id}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction.details');

@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Yoeunes\Toastr\Facades\Toastr;
 
 class DashboardController extends Controller
 {
@@ -263,18 +264,28 @@ class DashboardController extends Controller
     }
     public function admin_order_status($orderId=null ,$status=null)
     {
-
-       
-           
-    
             $orderStatus = Order::find($orderId);
             $orderStatus->status = $status;
             $orderStatus->save();
     
             return redirect()->route('admin.order.index')->with('message', 'Order status changed successfully');
-     
+
     }
-    
+    public function add_transaction_id(Request $req, $id)
+    {  
+        $check=Order::where('transaction_id',$req->transaction_id)->first();
+        if($check){
+            Toastr::error('Dublicate TransactionID.');
+            return redirect(route('admin.order.index'));  
+        }else{
+            $obj = Order::whereId($id)->update([
+                'transaction_id' => $req->transaction_id,
+            ]);
+            Toastr::success('TransactionID Added Successfuly.');
+            return redirect(route('admin.order.index'));  
+        }
+            
+    }
 
 
     //  General Setting

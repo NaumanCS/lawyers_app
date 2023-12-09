@@ -64,71 +64,42 @@
                             <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}"
                             id="">
                         <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
-                            @foreach ($lawyerDetail->time_spans as $span)
-                                <div class="col-2 m-3 px-3 py-2 d-flex align-items-center justify-content-center bg-light">
-                                    
-                                            <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}"
-                                                id="">
-                                            <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
-                                            <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}" required>
-                                    <label class="mb-0" for="select_time_span{{$span->id}}">{{ $span->time_spans }}</label>
-
-                                        
-                                   
-                                </div>
-                            @endforeach
-                            
-                                       
+                        @foreach ($lawyerDetail->time_spans as $span)
+                        <?php
+                            // Extract start time from the time span
+                            list($startTime, $endTime) = explode(' - ', $span->time_spans);
+                    
+                            // Create DateTime objects for comparison
+                            $currentTime = new DateTime();
+                            $twoHoursLater = new DateTime('+2 hours');
+                            $spanStartTime = new DateTime($startTime);
+                    
+                            // Check if the start time is after 2 hours from the current time
+                            if ($spanStartTime > $twoHoursLater) {
+                        ?>
+                        @if ($span->booked == 1)
+                        <div class="col-2 m-3 px-3 py-2 d-flex align-items-center justify-content-center bg-danger text-white">
+                            <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}" id="">
+                            <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
+                            <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}" required disabled>
+                            <label class="mb-0" for="select_time_span{{$span->id}}">{{ $span->time_spans }}</label>
+                        </div>
+                        @else
+                        <div class="col-2 m-3 px-3 py-2 d-flex align-items-center justify-content-center bg-light">
+                            <input type="hidden" name="lawyer_id" value="{{ $lawyerDetail->id }}" id="">
+                            <input type="hidden" name="amount" value="{{ $lawyerDetail->service->amount ?? '' }}" id="">
+                            <input type="radio" value="{{$span->id}}" name="select_time_span" id="select_time_span{{$span->id}}" required>
+                            <label class="mb-0" for="select_time_span{{$span->id}}">{{ $span->time_spans }}</label>
+                        </div>
+                        @endif
+                           
+                        <?php
+                            }
+                        ?>
+                    @endforeach             
                         </div>
                     </div>
                 </form>
-                    {{-- <div class="card me-4 w-50" style="display: inline-block; background:black !important;">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Video Consultation</h5>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Monday - Friday | 12:00 PM - 06:00 PM
-                            </p>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Saturday - Sunday | 12:00 PM - 06:00 PM
-                            </p>
-                            <div class="d-flex justify-content-between">
-                                <span style="color: chartreuse;">Available from tomorrow</span>
-                                <span style="color: whitesmoke">Fee: Rs1500</span>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                    {{-- <div class="card me-4" style="display: inline-block; width: 40%; background:black !important;">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Chamber Address</h5>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Monday - Friday | 12:00 PM - 06:00 PM
-                            </p>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Saturday - Sunday | 12:00 PM - 06:00 PM
-                            </p>
-                            <div class="d-flex justify-content-between">
-                                <span style="color: chartreuse;">Available from tomorrow</span>
-                                <span style="color: whitesmoke">Fee: Rs1500</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card me-4" style="display: inline-block; width: 40%; background:black !important;">
-                        <div class="card-body">
-                            <h5 class="card-title text-light">Video Consultation</h5>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Monday - Friday | 12:00 PM - 06:00 PM
-                            </p>
-                            <p class="card-text d-flex align-items-center"><i class="fa-solid fa-clock"
-                                    style="font-size: 19px;margin-right: 10px;"></i>Saturday - Sunday | 12:00 PM - 06:00 PM
-                            </p>
-                            <div class="d-flex justify-content-between">
-                                <span style="color: chartreuse;">Available from tomorrow</span>
-                                <span style="color: whitesmoke">Fee: Rs1500</span>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>

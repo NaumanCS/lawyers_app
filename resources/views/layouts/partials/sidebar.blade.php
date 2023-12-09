@@ -12,7 +12,7 @@
                     <a href="{{ route('admin.dashboard') }}"><i class="fas fa-columns"></i> <span>Dashboard</span></a>
                 </li>
                 <li class="{{ request()->is('all-users*') ? 'active' : '' }}">
-                    <a href="{{ route('all.users') }}"><i class="fas fa-columns"></i> <span>All Users</span></a>
+                    <a href="{{ route('all.users') }}"><i class="fas fa-columns"></i> <span>All Lawyers</span></a>
                 </li>
                 <li>
                     <a href="{{route('admin.lawyer.verification')}}"><i class="fas fa-layer-group"></i> <span>Verifications</span></a>
@@ -32,7 +32,11 @@
                 </li>
                 <li class="{{ request()->is('admin/transaction*') ? 'active' : '' }}">
                     <a href="{{ route('admin.transaction.index') }}"><i class="fas fa-columns"></i>
-                        <span>Transaction</span></a>
+                        <span>Completed Transaction</span></a>
+                </li>
+                <li class="{{ request()->is('admin/pending/transaction') ? 'active' : '' }}">
+                    <a href="{{ route('admin.transaction.pending') }}"><i class="fas fa-columns"></i>
+                        <span>Pending Transaction</span></a>
                 </li>
                 <li class="{{ request()->is('admin/user/accounts*') ? 'active' : '' }}">
                     <a href="{{ route('admin.user.accounts.index') }}"><i class="fas fa-columns"></i>

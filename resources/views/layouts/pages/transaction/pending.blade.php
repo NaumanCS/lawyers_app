@@ -7,13 +7,12 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Pay Now</h3>
+                        <h3 class="page-title">Pending Transaction</h3>
                     </div>
                     <div class="col-auto text-end">
-                        {{-- <a href="{{ route('admin.transaction.form', $update_id = 0) }}"
-                            class="btn btn-primary add-button ms-3">
-                            <i class="fas fa-plus"></i>
-                        </a> --}}
+                        <a href="{{ route('pay.now', $update_id = 0) }}" class="btn btn-primary add-button ms-3">
+                            <i class="fas fa-money">Pay Now</i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -77,39 +76,36 @@
 
                                             <th>Order Id</th>
                                             <th>Lawyer</th>
-                                            <th>Jazzcash Account</th>
-                                            <th>Bank Account</th>
-                                            <th>Total Amount</th>
-                                            <th class="text-end">Action</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Order Status</th>
+                                            <th>Payment Status</th>
+
+                                            {{-- <th class="text-end">Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($payNow as $key => $val)
+                                        @foreach ($obj as $key => $val)
                                             <tr>
-                                                <td>{{ $val->id ?? '' }}</td>
-                                                <td>{{ $val->lawyer->name ?? '' }}</td>
-                                                <td>
-                                                    <div>Title : {{ $val->lawyer->accountDetail->jazzcash_title ?? '' }}</div>
-                                                    <div>Account Number : {{ $val->lawyer->accountDetail->jazzcash_number ?? '' }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>Title : {{ $val->lawyer->accountDetail->bank_account_title ?? '' }}</div>
-                                                    <div>Account Number :
-                                                        {{ $val->lawyer->accountDetail->bank_account_number ?? '' }} </div>
-                                                    <div>Bank Name : {{ $val->lawyer->accountDetail->bank_name ?? '' }}
-                                                    </div>
-                                                </td>
-                                                <td>{{ $val->total_amount - $val->total_amount * 0.2 ?? '' }}</td>
-                                                <td>
-                                                    <form action="{{ route('send.payment') }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="lawyer_id"
-                                                            value="{{ $val->lawyer->id }}">
-                                                        <button type="sumbit" class="btn btn-sm bg-success-light me-2"><i
-                                                                class="far fa-edit me-1"></i>Pay</button>
-                                                    </form>
-                                                </td>
+                                                <td>{{ $val->id }}</td>
+                                                <td>{{ $val->lawyer->name }}</td>
+                                                <td>{{ $val->amount }}</td>
+                                                <td>{{ $val->date }}</td>
+                                                <td>{{ $val->status }}</td>
+                                                <td>{{ $val->payment_status ?? "pending"}}</td>
+                                              
+
+
+                                                {{-- <td class="text-end">
+                                                    <a href="{{ route('admin.transaction.form', $val->id) }}"
+                                                        class="btn btn-sm bg-success-light me-2"> <i
+                                                            class="far fa-edit me-1"></i> Edit</a>
+                                                </td> --}}
+                                                {{-- <td class="text-end">
+                                                    <a href="{{ route('admin.transaction.details', $val->id) }}"
+                                                        class="btn btn-sm bg-success-light me-2"> <i
+                                                            class="far fa-eye me-1"></i> View</a>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
