@@ -37,19 +37,19 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $allUsers=User::get();
-        $allOrders=Order::get();
-       
-        if($allUsers){
-            $countAllUsers=$allUsers->count();
+        $allUsers = User::get();
+        $allOrders = Order::get();
+
+        if ($allUsers) {
+            $countAllUsers = $allUsers->count();
         }
-        if($allOrders){
-            $countAllOrders=$allOrders->count();
+        if ($allOrders) {
+            $countAllOrders = $allOrders->count();
             $totalPayment = Order::whereNotNull('payment_slip')->sum('amount');
             $adminProfit = $totalPayment * 0.20;
         }
-       
-        return view('layouts.pages.dashboard',get_defined_vars());
+
+        return view('layouts.pages.dashboard', get_defined_vars());
     }
 
     public function chat()
@@ -58,7 +58,8 @@ class HomeController extends Controller
         return view('front-layouts.pages.chat.chat', get_defined_vars());
     }
 
-    public function get_rooms(){
+    public function get_rooms()
+    {
         $rooms = Chat::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->with('sender', 'receiver')->get();
         return view('front-layouts.pages.chat.ajax.rooms_container', compact('rooms'))->render();
     }
@@ -86,8 +87,19 @@ class HomeController extends Controller
         $chMessage->body = $message;
 
         if ($request->file()) {
-            $chMessage->attachment = $request->attachment;
+            $images = $request->file('attachment');
+            $uploadedImages = [];
+
+            foreach ($images as $image) {
+                $imageName = uniqid() . '_' . time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads/chat'), $imageName);
+                $uploadedImages[] = 'uploads/chat/' . $imageName;
+            }
+
+            // Store file paths as an array
+            $chMessage->attachment = $uploadedImages;
         }
+
         $chMessage->save();
 
         $chat = ChMessage::where('chat_id', $room_id)->with('user')->orderBy('created_at', 'asc')->get();

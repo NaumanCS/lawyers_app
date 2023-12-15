@@ -80,6 +80,12 @@
             box-shadow: inset 0px 0px 0px 1px transparent;
         }
 
+        #imagePreviewContainer {
+            display: flex !important;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
         .single-room-chat.active {
             background: black;
         }
@@ -94,6 +100,30 @@
             width: 10px;
             margin-left: 2.9rem;
             margin-top: -0.75rem;
+        }
+
+        #chat-container {
+            position: relative;
+            height: 68vh;
+            overflow-y: auto !important;
+        }
+
+        .chat-rooms-container {
+            position: relative;
+            height: 400px;
+            overflow-y: auto !important;
+        }
+
+        @media only screen and (max-width: 780px) {
+            .chat-rooms-container {
+                height: 496px;
+            }
+
+            #chat-container {
+                position: relative;
+                height: 65vh;
+                overflow-y: auto;
+            }
         }
     </style>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -116,7 +146,11 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4 mb-md-0"
                                         style="border-right: 1px solid #36353e; padding-right: 2px;">
-                                        <div class="py-3">
+                                        <span class="backChatButton mx-3"
+                                            style="cursor: pointer; border: 1px solid black; border-radius: 50%; padding: 6px;">
+                                            <i class="fa-solid fa-arrow-left"></i>
+                                        </span>
+                                        <div class="py-3 hide-show-rooms">
                                             <div class="input-group rounded mb-3 d-none">
                                                 <input type="search" class="form-control rounded" placeholder="Search"
                                                     aria-label="Search" aria-describedby="search-addon" />
@@ -124,13 +158,7 @@
                                                     <i class="fas fa-search"></i>
                                                 </span>
                                             </div>
-
-                                            <div data-mdb-perfect-scrollbar="true"
-                                                style="
-                                                    position: relative;
-                                                    height: 400px;
-                                                    overflow-y: auto !important;
-                                                ">
+                                            <div data-mdb-perfect-scrollbar="true" class="chat-rooms-container" style="width: 97%;">
                                                 <ul class="list-unstyled mb-0" id="chatRoomsColumn">
                                                     @foreach ($rooms as $room)
                                                         @if ($room->sender->id !== auth()->user()->id)
@@ -211,45 +239,37 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 parent-container">
-                                        <div class="pt-3 pe-3" id="chat-container" data-mdb-perfect-scrollbar="true"
-                                            style="
-                                                position: relative;
-                                                height: 70vh;
-                                                overflow-y: auto !important;
-                                            ">
+                                        <div class="pt-3 pe-3" id="chat-container" data-mdb-perfect-scrollbar="true">
                                         </div>
-
-                                        {{-- <form action="" id="newMessageForm">
-                                            <div
-                                                class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                                    alt="avatar 3" style="width: 40px; height: 100%;" />
-                                                <div id="imagePreviewContainer"></div>
-                                                <div class="d-flex align-items-center w-100">
-                                                    <input type="text" class="form-control form-control-lg message-box"
-                                                        id="typeChatMessage" placeholder="Type message" />
-                                                    <a class="ms-1 text-muted" href="#!"><i
-                                                            class="fas fa-paperclip"></i></a>
-                                                    <a class="" type="submit"><i class="fas fa-paper-plane"></i></a>
-                                                </div>
-                                            </div>
-                                        </form> --}}
                                         <form action="" id="newMessageForm">
-                                            <div id="imagePreviewContainer"></div>
-                                            <div
-                                                class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"alt="avatar 3"
-                                                    style="width: 40px; height: 100%;" />
-                                                <div class="d-flex align-items-center w-100">
-                                                    <input type="text" class="form-control form-control-lg message-box"
-                                                        id="typeChatMessage" placeholder="Type message" />
-                                                    <label for="fileInput" class="ms-1 text-muted">
-                                                        <i class="fas fa-paperclip"></i>
-                                                    </label>
-                                                    <input type="file" id="fileInput" class="d-none" multiple>
-                                                    <a class="submit-button" type="submit">
-                                                        <i class="fas fa-paper-plane"></i>
-                                                    </a>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="imagePreviewContainer"></div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div
+                                                        class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
+                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"alt="avatar 3"
+                                                            style="width: 40px; height: 100%;" />
+                                                        <div class="d-flex align-items-center w-100">
+                                                            <input type="text"
+                                                                class="form-control form-control-lg message-box"
+                                                                id="typeChatMessage" name="message"
+                                                                placeholder="Type message" />
+                                                            <label for="fileInput" class="text-muted"
+                                                                style="margin-bottom: 0; margin-right: 10px; cursor: pointer;">
+                                                                <i class="fas fa-paperclip"></i>
+                                                            </label>
+                                                            <input type="file" id="fileInput" name="attachment[]"
+                                                                multiple style="display: none">
+                                                            <label for="submit-button" class="mb-0"
+                                                                style="cursor: pointer;">
+                                                                <a> <i class="fas fa-paper-plane"></i></a>
+                                                            </label>
+                                                            <input type="submit" id="submit-button"
+                                                                style="display: none">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
@@ -271,23 +291,37 @@
         var room_id = 0;
         var userScrolledUp = false;
         $('.parent-container').hide();
+        $('.backChatButton').hide();
 
         function scrollChatToBottom() {
             var chatContainer = $('#chat-container');
             chatContainer.scrollTop(chatContainer[0].scrollHeight);
         }
 
+        $(document).on('click', '.backChatButton', function() {
+            $('.hide-show-rooms').show();
+            $('#chat-container').empty();
+            $('#chat-container').hide();
+            $('.backChatButton').hide();
+        });
+
         function getSingleRoomChat(roomId) {
             $.ajax({
                 url: '/display-single-chat/' + roomId,
                 type: 'GET',
                 success: function(response) {
+                    var isSmallScreen = $(window).width() < 780;
+
+                    if (isSmallScreen) {
+                        $('.backChatButton').show();
+                        $('.hide-show-rooms').hide();
+                    } else {
+                        $('.backChatButton').hide();
+                    }
                     $('#chat-container').empty();
                     $('#chat-container').append(response);
                     if (!userScrolledUp) {
                         scrollChatToBottom();
-                    } else {
-                        toastr.success('New Message Received');
                     }
                 },
                 error: function(xhr, status, error) {
@@ -314,10 +348,10 @@
             });
         }
 
-        setInterval(function() {
-            getSingleRoomChat(room_id);
-            getRoomsLatestData();
-        }, 5000);
+        // setInterval(function() {
+        //     getSingleRoomChat(room_id);
+        //     getRoomsLatestData();
+        // }, 5000);
 
         $(document).on('click', '.single-room-chat', function(e) {
             e.preventDefault();
@@ -338,41 +372,6 @@
             userScrolledUp = this.scrollTop + this.clientHeight < this.scrollHeight;
         });
 
-        $('#newMessageForm').on('submit', function(e) {
-            e.preventDefault();
-            let message = $('.message-box').val();
-            let userId = {{ auth()->user()->id }};
-
-            if (message !== "" && message !== null) {
-                $.ajax({
-                    url: '/send/new/message',
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        'user_id': userId,
-                        'room_id': roomId,
-                        'message': message
-                    },
-                    success: function(response) {
-                        $('#typeChatMessage').val('');
-                        $('#chat-container').empty();
-                        $('#chat-container').append(response);
-                        if (!userScrolledUp) {
-                            scrollChatToBottom();
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
         var selectedImages = [];
 
         $('#fileInput').on('change', function() {
@@ -384,32 +383,68 @@
 
                 reader.onload = function(e) {
                     var imgSrc = e.target.result;
-                    var img = '<img src="' + imgSrc +
-                        '" class="img-thumbnail mx-1" style="width: 40px; height: 40px;" data-src="' +
-                        imgSrc + '" />';
+                    var img =
+                        '<div class="image-container" style="flex: 0 0 40%; max-width: 100px; margin-right: 10px; position: relative;">' +
+                        '<img src="' + imgSrc +
+                        '" class="img-thumbnail mx-1" style="width: 100%; height: 100px;" data-src="' +
+                        imgSrc + '" />' +
+                        '<button class="remove-btn" style="position: absolute; top: 0; right: 0; background: none; border: none; cursor: pointer;"><i class="fas fa-times" style="color: red;"></i></button>' +
+                        '</div>';
+
                     $('#imagePreviewContainer').append(img);
+                    selectedImages.push(imgSrc);
                 };
 
                 reader.readAsDataURL(files[i]);
             }
         });
 
-        $('#imagePreviewContainer').on('click', 'img', function() {
-            var imgSrc = $(this).data('src');
-            $(this).remove();
+        $('#imagePreviewContainer').on('click', '.remove-btn', function() {
+            var container = $(this).closest('.image-container');
+            var imgSrc = container.find('img').data('src');
+            container.remove();
+
             selectedImages = selectedImages.filter(function(item) {
                 return item !== imgSrc;
             });
         });
 
-        $('.submit-button').on('click', function() {
-            // Handle form submission or other actions
-            // Add code to send the message, including selectedImages, to the server
-            console.log("Selected Images:", selectedImages);
-            // Clear the image preview container
-            $('#imagePreviewContainer').empty();
-            // Clear the file input field
-            $('#fileInput').val('');
+        $('#newMessageForm').on('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            formData.append('user_id', {{ auth()->user()->id }});
+            formData.append('room_id', roomId);
+            let message = $('.message-box').val();
+
+            if (message !== "" && message !== null) {
+                $.ajax({
+                    url: '/send/new/message',
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(response) {
+                        $('#imagePreviewContainer').empty();
+                        $('#fileInput').val('');
+
+                        $('#typeChatMessage').val('');
+                        $('#chat-container').empty();
+                        $('#chat-container').append(response);
+
+                        if (!userScrolledUp) {
+                            scrollChatToBottom();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
+
     });
 </script>

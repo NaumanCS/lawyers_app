@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>Lawyer Verification</title>
@@ -113,7 +113,7 @@
                         @if ($user->document_status == 'depreciated')
                         <div class="section-header text-center">
                             <h2>Depreciated</h2>
-                            <p>Please be informed that some of your documents are not approved.</p>
+                            <p>It is informed to you that some of your documents are not approved.</p>
                             <span class="text-danger">Reason</span>
                             <p>{{ $user->reason ?? '' }}</p>
                             <div class="mt-3">
@@ -128,7 +128,7 @@
                             <p>We will shortly verify your profile, and you can provide services.</p>
                         </div>
                         @endif
-                      
+
                     </div>
                 </div>
             </div>
