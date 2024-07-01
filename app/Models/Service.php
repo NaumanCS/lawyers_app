@@ -9,19 +9,19 @@ class Service extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'user_id', 'location', 'amount','days', 'start_day', 'end_day', 'start_time', 'end_time', 'add_extra_day', 'extra_day', 'extra_day_start_time', 'extra_day_end_time', 'cover_image'
+        'title', 'user_id', 'location', 'amount','categories_id','days', 'start_day', 'end_day', 'start_time', 'end_time', 'add_extra_day', 'extra_day', 'extra_day_start_time', 'extra_day_end_time', 'cover_image'
     ];
 
-    protected $casts = [
-        'categories_id' => 'array',
-    ];
+    // protected $casts = [
+    //     'categories_id' => 'array',
+    // ];
 
     public function getCoverImageAttribute()
     {
         if ($this->attributes['cover_image'] == null) {
             return asset('front/assets/img/category/Category5.jpg');
         }
-        return asset('uploads/lawyer/service') . '/' . $this->attributes['cover_image'];
+        return asset('public/uploads/lawyer/service') . '/' . $this->attributes['cover_image'];
     }
 
     public function category(){

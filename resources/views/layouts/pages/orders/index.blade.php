@@ -1,6 +1,32 @@
 @extends('layouts.mainlayout')
 @section('content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <style>
+        .rejection-modal-content {
+            background: url('{{ asset('admin/assets/img/al-wakeel-logo.png') }}') no-repeat center center;
+            background-size: contain;
+            color: white;
+        }
+
+        .rejection-modal-content .modal-header,
+        .rejection-modal-content .modal-footer {
+            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            /* Optional: To make the header and footer stand out */
+        }
+
+        .rejection-modal-content .modal-body {
+            background: rgba(0, 0, 0, 0.5);
+            /* Optional: To make the body content stand out */
+        }
+
+        .rejection-modal-content .form-control {
+            background: rgba(255, 255, 255, 0.8);
+            /* Making the textarea background slightly transparent */
+            color: black;
+            /* Changing text color to black for readability */
+        }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         @if (session('message'))
@@ -81,7 +107,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="min-height: 400px;">
                                 <table class="table table-hover table-center mb-0 datatable">
                                     <thead>
                                         <tr>
@@ -114,7 +140,8 @@
                                                 <td>{{ $val->amount - $val->amount * 0.2 ?? '' }}</td>
                                                 <td>
                                                     @if ($val->transaction_id == null)
-                                                        <a data-bs-toggle="modal" data-bs-target="#addTransactionId_{{ $val->id }}"
+                                                        <a data-bs-toggle="modal"
+                                                            data-bs-target="#addTransactionId_{{ $val->id }}"
                                                             data-driver-id="{{ $val->id ?? '' }}"
                                                             class="btn btn-sm bg-success-light me-2">
                                                             <i class="far fa-edit" style="color: black;margin:5px">Add</i>
@@ -129,27 +156,44 @@
 
                                                 <td>
                                                     <!-- Example single danger button -->
-                                                    <div class="btn-group">
+                                                    
+                                                    <div class="btn-group" @if ($val->status == 'completed' || $val->status == 'rejected') style="pointer-events: none; opacity: 0.5;" @endif>
                                                         @if ($val->status == 'completed')
                                                             <button type="button" class="btn btn-success dropdown-toggle"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Completed
                                                             </button>
-                                                        @else
+                                                        @elseif ($val->status == 'approved')
+                                                            <button type="button" class="btn btn-info dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Approved
+                                                            </button>
+                                                        @elseif($val->status == 'rejected')
                                                             <button type="button" class="btn btn-danger dropdown-toggle"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Rejected
+                                                            </button>
+                                                        @else
+                                                            <button type="button" class="btn btn-warning dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Pending
                                                             </button>
                                                         @endif
 
                                                         <ul class="dropdown-menu">
                                                             <li><a class="dropdown-item"
+                                                                href="{{ route('admin.order.status', ['status' => 'pending', 'orderId' => $val->id]) }}">Pending</a>
+                                                        </li>
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('admin.order.status', ['status' => 'approved', 'orderId' => $val->id]) }}">Approved</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item"
                                                                     href="{{ route('admin.order.status', ['status' => 'completed', 'orderId' => $val->id]) }}">Completed</a>
                                                             </li>
 
-                                                            <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.order.status', ['status' => 'rejected', 'orderId' => $val->id]) }}">Rejected</a>
-                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"
+                                                                    data-bs-toggle="modal" data-bs-target="#rejectionModal"
+                                                                    data-order-id="{{ $val->id }}">Rejected</a></li>
 
                                                         </ul>
                                                     </div>
@@ -165,8 +209,8 @@
                                                 </td>
                                             </tr>
 
-                                            <div class="modal fade" id="addTransactionId_{{ $val->id }}" tabindex="-1"
-                                                aria-labelledby="exampleModalthreeLabel" aria-hidden="true"
+                                            <div class="modal fade" id="addTransactionId_{{ $val->id }}"
+                                                tabindex="-1" aria-labelledby="exampleModalthreeLabel" aria-hidden="true"
                                                 data-driver-id="{{ $val->id ?? '' }}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content p-3">
@@ -219,4 +263,43 @@
             </div>
         </div>
     </div>
+    <!-- Rejection Modal -->
+    <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rejection-modal-content">
+                <form id="rejectionForm" action="{{ route('admin.order.reject') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="order_id" id="order_id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectionModalLabel">Rejection Reason</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="rejection_reason">Reason</label>
+                            <textarea class="form-control" id="rejection_reason" name="rejection_reason" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var rejectionModal = document.getElementById('rejectionModal');
+            rejectionModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var orderId = button.getAttribute('data-order-id');
+                var modalOrderInput = rejectionModal.querySelector('#order_id');
+                modalOrderInput.value = orderId;
+            });
+        });
+    </script>
 @endsection

@@ -8,6 +8,7 @@ use App\Notifications\DocumentsApproved;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class VerificationController extends Controller
@@ -32,10 +33,40 @@ class VerificationController extends Controller
             'approval' => 'required|string'
         ]);
 
+      
         $lawyer = User::where('id', $request->lawyer_id)->first();
-        $lawyer->document_status = $request->approval;
-        $lawyer->reason = $request->reason;
-        $lawyer->update();
+       
+        // Notify the customer
+        // $from = getenv("MAIL_FROM_ADDRESS","alwakeel@alwakeel.thessenterprises.com");
+
+
+       
+        if ($lawyer) {
+           
+           
+            DB::beginTransaction();
+
+            try {
+                $lawyer->document_status = $request->approval;
+                $lawyer->reason = $request->reason;
+                $lawyer->update();
+        
+                $lawyer->notify(new DocumentsApproved($lawyer));
+        
+                DB::commit();
+                return redirect()->back()->with('success', 'Document approved.');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Document verification failed.');
+            }
+          
+        } else {
+           
+            return redirect()->back()->with('error', 'Lawyer not found.');
+        }
+       
+
+       
 
         return redirect()->route('admin.lawyer.verification')->with(['message' => 'Documents' . $request->approval . 'successfully']);
     }

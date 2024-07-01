@@ -27,6 +27,10 @@ return new class extends Migration
 
             $table->string('status')->nullable();
             $table->string('payment_status')->nullable();
+            $table->string('detail')->nullable();
+            $table->string('rejection_reason')->nullable();
+
+
 
 
             $table->timestamps();

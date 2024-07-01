@@ -15,7 +15,10 @@ class CreateMeeting extends Model
       'meeting_with',
       'meeting_link',
       'date',
-      'select_time_span'
+      'select_time_span',
+      'lawyer_join',
+      'user_join'
+
     ];
 
     public function spanTime(){
@@ -27,5 +30,9 @@ class CreateMeeting extends Model
 
     public function createdByUser(){
       return $this->hasOne(User::class,'id','created_by');
+    }
+
+    public function deviceToken(){
+      return $this->hasOne(DeviceToken::class,'user_id',auth()->user()->id);
     }
 }

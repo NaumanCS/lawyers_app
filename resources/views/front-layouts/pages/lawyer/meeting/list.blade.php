@@ -43,7 +43,7 @@
                                         <td>{{ $row->created_at }}</td>
                                         <td>{{ $row->date }}</td>
 
-                                        <td>{{ $row->spanTime->time_spans }}</td> 
+                                        <td>{{ $row->spanTime->time_spans ?? '' }}</td> 
                                         <td>
                                             <a class="text-success" href="{{ route('video.call.lawyer',$row->meeting_link) }}">Meet</a>
                                         </td>

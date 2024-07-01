@@ -35,7 +35,7 @@ class CustomerController extends Controller
     // lawyers
     public function lawyer_list()
     {
-        $lawyers = User::where('role', 'lawyer')->get();
+        $lawyers = User::where('role', 'lawyer')->lawyerApproved()->get();
         $meetings = CreateMeeting::where('created_by', auth()->user()->id)->with('spanTime', 'user')->get();
       
         return view('front-layouts.pages.customer.lawyers.index', get_defined_vars());
@@ -68,7 +68,7 @@ class CustomerController extends Controller
         // Validate the input data
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $user->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the max size as per your requirement
         ]);
     

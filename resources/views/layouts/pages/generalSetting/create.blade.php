@@ -56,7 +56,7 @@
                                     <?php $footer_logo = isset($obj->footer_logo) && !empty($obj->footer_logo) ? $obj->footer_logo : ''; ?>
                                     <input name="footer_logo" data-default-file="<?= $footer_logo ?>" type="file"
                                         class="btn btn-primary" data-height="100" />
-                                    <img class="rounded service-img me-1" src="<?= $obj->navLogo ?>" alt="nav logo">
+                                    <img class="rounded service-img me-1" src="<?= $obj->footerLogo ?>" alt="nav logo">
                                 </div>
                                 <div class="mt-4">
                                     <button class="btn btn-primary" type="submit">Add General setting</button>

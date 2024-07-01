@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Chat;
+use App\Models\HelpCenter;
 use App\Models\Service;
 use App\Models\Support;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +17,7 @@ class FrontController extends Controller
 {
     public function index()
     {
+       
         $categories = Category::take(6)->get();
         $services = Service::take(6)->get();
         $cities = User::where('role', 'lawyer')->get();
@@ -58,7 +61,14 @@ class FrontController extends Controller
 
     public function lawyers_services(Request $request, $filter)
     {
-        $query = Service::with('user', 'category');
+        $query = Service::with([
+            'user' => function ($query) {
+                $query->where('document_status', 'approved');
+            },
+            'category'
+        ])->whereHas('user', function ($query) {
+            $query->where('document_status', 'approved');
+        });
     
         if ($filter !== '0') {
             $query->where('categories_id', $filter);
@@ -80,6 +90,7 @@ class FrontController extends Controller
         }
     
         $services = $query->paginate(9);
+        // dd($services);
         $categories = Category::get();
     
         return view('front-layouts.pages.online_lawyers', compact('services', 'categories'));
@@ -114,6 +125,35 @@ class FrontController extends Controller
                 'message' => $request->message,
             ]);
             Session::flash('message', 'Your Message has been forwarded to the Support Successfully. We will contact you soon.');
+            return redirect()->back();
+        }
+    }
+
+    // help center
+    public function help_center()
+    {
+        return view('front-layouts.pages.helpCenter.form');
+    }
+
+    public function help_center_submit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'phone' => 'required',
+            'complaint' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            HelpCenter::create([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'transaction_id' => $request->transaction_id,
+
+                'complaint' => $request->complaint,
+            ]);
+            Session::flash('message', 'Your Complaint has been forwarded to the Support Successfully. We will contact you soon.');
             return redirect()->back();
         }
     }

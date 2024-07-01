@@ -55,7 +55,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:8000'),
+    // 'url' => env('APP_URL', 'http://localhost:8000'),
+    'url' => env('APP_URL', 'https://alwakeel.thessenterprises.com/'),
+
 
     'asset_url' => env('ASSET_URL'),
 

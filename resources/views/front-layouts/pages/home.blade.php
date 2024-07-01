@@ -167,13 +167,7 @@
                         <span>Explore the greates our services. You won’t be disappointed</span>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="viewall aos">
-                        <h4><a href="{{ route('categories', ['filter' => 'all']) }}">View All <i
-                                    class="fas fa-angle-right"></i></a></h4>
-                        <span>Most Popular</span>
-                    </div>
-                </div>
+               
             </div>
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
                 <div class="carousel-indicators" style="display: none !important;">
@@ -228,8 +222,6 @@
                     </div>
                     <div class="viewall-dark"
                         style="display: flex; flex-direction: column; align-items: end; justify-content: center;">
-                        <h4><a href="{{ route('categories', ['filter' => 'all']) }}">View All <i
-                                    class="fas fa-angle-right"></i></a></h4>
                         <span>Featured Cities</span>
                     </div>
                 </div>
@@ -280,7 +272,7 @@
                                 <div class="howwork aos">
                                     <div class="iconround">
                                         <div class="steps">01</div>
-                                        <img src="{{ asset('front') }}/assets/img/icon-1.png" alt="">
+                                        <img class="w-50" src="{{ asset('front') }}/assets/img/24-hours-support.png" alt="">
                                     </div>
                                     <h3>Find What you need</h3>
                                 </div>
@@ -289,7 +281,7 @@
                                 <div class="howwork aos">
                                     <div class="iconround">
                                         <div class="steps">02</div>
-                                        <img src="{{ asset('front') }}/assets/img/icon-2.png" alt="">
+                                        <img class="w-50" src="{{ asset('front') }}/assets/img/skills.png" alt="">
                                     </div>
                                     <h3>Find an Experienced Lawyer</h3>
                                 </div>
@@ -298,7 +290,7 @@
                                 <div class="howwork aos">
                                     <div class="iconround">
                                         <div class="steps">03</div>
-                                        <img src="{{ asset('front') }}/assets/img/icon-3.png" alt="">
+                                        <img class="w-50" src="{{ asset('front') }}/assets/img/videoconference.png" alt="">
                                     </div>
                                     <h3>Meet and Consult</h3>
                                 </div>

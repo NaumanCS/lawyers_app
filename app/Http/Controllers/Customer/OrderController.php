@@ -55,6 +55,7 @@ class OrderController extends Controller
                     'amount' => $orderDetail['amount'],
                     // 'booking_date' => $req->currentDateTime,
                     'booking_date' => $orderDetail['booking_date'],
+                    'detail' => $orderDetail['detail'],
                     'lawyer_location' => $lawyer->city ?? 'no city provided',
                     'customer_location' => $auth->city ?? 'no city provided',
                 ]);
@@ -69,6 +70,7 @@ class OrderController extends Controller
                     'amount' => $orderDetail['amount'],
                     // 'booking_date' => $req->currentDateTime,
                     'booking_date' => $orderDetail['booking_date'],
+                    'detail' => $orderDetail['detail'],
                     'lawyer_location' => $lawyer->city ?? 'no city provided',
                     'customer_location' => $auth->city ?? 'no city provided',
                 ]);

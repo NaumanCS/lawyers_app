@@ -88,10 +88,15 @@
                             @enderror
                         </div>
                         <div class="form-group form-focus">
-                            <label class="focus-label">Conform password</label>
+                            <label class="focus-label">Confirm password</label>
                             <input id="password-confirm" type="password" class="form-control"
                                 name="password_confirmation" required autocomplete="new-password"
-                                placeholder="Conform password">
+                                placeholder="Confirm password">
+                                @error('password_confirmation')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror 
                         </div>
                         <div class="text-end">
                             <a class="nav-link header-login" href="javascript:void(0);" data-bs-toggle="modal"

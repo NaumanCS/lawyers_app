@@ -84,7 +84,7 @@
                             @if (!$services->isEmpty())
                             @foreach ($services as $service)
                                 <div class="col-lg-4 col-md-6">
-                                    <a href="{{ route('lawyers.with.category', $service->user->id) }}">
+                                    <a href="{{ route('lawyers.with.category', $service->user->id ?? '') }}">
                                         <div class="cate-widget">
                                             <img src="{{ asset('front') }}/assets/img/customer/lawyer-01.png"
                                                 alt="">

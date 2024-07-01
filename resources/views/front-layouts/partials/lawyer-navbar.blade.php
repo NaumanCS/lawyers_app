@@ -9,22 +9,20 @@
                 </span>
             </a>
             <a href="{{ route('lawyer.dashboard') }}" class="navbar-brand logo">
-                {{-- <img src="{{asset('front')}}/assets/img/logo.png" class="img-fluid" alt="Logo"> --}}
-                <h2 class="text-white">Dashboard</h2>
+                    <img src="{{asset('admin/assets/img/al-wakeel-logo.png')}}" class="img-fluid" style="max-height: 80px !important" alt="Logo">
             </a>
             <a href="{{ route('lawyer.dashboard') }}" class="navbar-brand logo-small">
-                {{-- <img src="{{asset('front')}}/assets/img/logo-icon.png" class="img-fluid" alt="Logo"> --}}
-                <h2 class="text-white">Dashboard</h2>
+                <img src="{{asset('admin/assets/img/al-wakeel-logo.png')}}" class="img-fluid" style="max-height: 80px !important" alt="Logo">
             </a>
         </div>
 
         <ul class="nav header-navbar-rht">
 
-            <li class="nav-item desc-list">
+            {{-- <li class="nav-item desc-list">
                 <a href="{{ route('lawyer.service.create', 0) }}" class="nav-link header-login">
                     <i class="fas fa-plus-circle me-1"></i> <span>Post a Service</span>
                 </a>
-            </li>
+            </li> --}}
 
             <!-- Notifications -->
             <li class="nav-item dropdown logged-item">
@@ -77,11 +75,11 @@
             <!-- /Notifications -->
 
             <!-- chat -->
-            <li class="nav-item logged-item">
+            {{-- <li class="nav-item logged-item">
                 <a href="{{route('chat')}}" class="nav-link">
                     <i class="fa fa-comments" aria-hidden="true"></i>
                 </a>
-            </li>
+            </li> --}}
             <!-- /chat -->
 
             <!-- User Menu -->

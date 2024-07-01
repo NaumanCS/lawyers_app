@@ -50,44 +50,46 @@ class JitsiVideoCallController extends Controller
         $meetingSchedule = CreateMeeting::where('meeting_link', $meetingLink)->with('spanTime')->first();
         $orderCheck = Order::where('id', $meetingSchedule->order_id)->first();
         $paymentSlip = $orderCheck->payment_slip;
-        // Get the current time
-        $currentTime = now(); // You may need to adjust this based on your timezone
-        $createdTime = $meetingSchedule->created_at->addHours(2);
-        // dd($createdTime);
-        $currentDate = $currentTime->toDateString();
-        // Split the time_spans into start and end times
-        [$startTime, $endTime] = explode(' - ', $meetingSchedule->spanTime->time_spans);
+        if ($meetingSchedule && $meetingSchedule->spanTime) {
+            $currentTime = now();
+            $createdTime = $meetingSchedule->created_at->addHours(2);
+            $currentDate = $currentTime->toDateString();
 
-        $startTime = \Carbon\Carbon::parse($startTime); // Convert the start time to a Carbon instance
-        $endTime = \Carbon\Carbon::parse($endTime);
-        // dd($endTime);
+            [$startTime, $endTime] = explode(' - ', $meetingSchedule->spanTime->time_spans);
+            $startTime = \Carbon\Carbon::parse($startTime);
+            $endTime = \Carbon\Carbon::parse($endTime);
 
-        // Check if the current time is equal to or after the start time
-        if ($orderCheck != null && $orderCheck->payment_slip != null && $orderCheck->payment_slip != 'http://127.0.0.1:8000/admin/assets/img/uploadslip.jpg') {
 
-            if ($currentTime > $createdTime) {
-                if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
-                    if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
-                        $lawyerId = $meetingSchedule->meeting_with;
-                        $customerId = auth()->user()->id;
-                        // return view('jitsiVideoCall.startNew', get_defined_vars());
-                        return view('jitsiVideoCall.zegoCloudMeeting', get_defined_vars());
+
+            if ($orderCheck != null && $orderCheck->payment_slip != null && $orderCheck->payment_slip != 'http://127.0.0.1:8000/admin/assets/img/uploadslip.jpg') {
+
+                if ($currentTime > $createdTime) {
+                    if ($currentDate >= $meetingSchedule->date && $currentTime >= $startTime) {
+                        if ($currentDate <= $meetingSchedule->date && $currentTime <= $endTime) {
+                            $lawyerId = $meetingSchedule->meeting_with;
+                            $customerId = auth()->user()->id;
+                            // return view('jitsiVideoCall.startNew', get_defined_vars());
+                            return view('jitsiVideoCall.zegoCloudMeeting', get_defined_vars());
+                        } else {
+                            Toastr::error('The meeting time has been ended.', 'Create New Meeting');
+                            return redirect()->back();
+                        }
                     } else {
-                        Toastr::error('The meeting time has been ended.', 'Create New Meeting');
+                        // Show a toastr notification that the meeting time has not started
+                        Toastr::error('The meeting time has not started yet.', 'Meeting Not Started');
                         return redirect()->back();
                     }
                 } else {
-                    // Show a toastr notification that the meeting time has not started
-                    Toastr::error('The meeting time has not started yet.', 'Meeting Not Started');
+                    Toastr::error('Meeting will start after 2 hours,after reviewing your payment.');
                     return redirect()->back();
                 }
             } else {
-                Toastr::error('Meeting will start after 2 hours,after reviewing your payment.');
+
+                Toastr::error('Upload Payment slip');
                 return redirect()->back();
             }
         } else {
-
-            Toastr::error('Upload Payment slip');
+            Toastr::error('There is no meeting record or selected time');
             return redirect()->back();
         }
     }
@@ -95,10 +97,11 @@ class JitsiVideoCallController extends Controller
 
     public function video_call_lawyer($id)
     {
+
         $meetingLink = $id;
         $meetingSchedule = CreateMeeting::where('meeting_link', $meetingLink)->with('spanTime')->first();
 
-        if ($meetingSchedule) {
+        if ($meetingSchedule && $meetingSchedule->spanTime) {
             $currentTime = now();
             $currentDate = $currentTime->toDateString();
             // dd($meetingSchedule);
@@ -120,6 +123,7 @@ class JitsiVideoCallController extends Controller
                 return redirect()->back();
             }
         } else {
+            Toastr::error('There is no meeting record.', 'Create New Meeting');
             return redirect()->route('lawyer_meeting_list');
         }
     }
@@ -145,13 +149,23 @@ class JitsiVideoCallController extends Controller
     public function lawyer_meeting_list()
     {
         $data = CreateMeeting::where('meeting_with', Auth::id())->with('createdByUser')->get();
+
         return view('front-layouts.pages.lawyer.meeting.list', get_defined_vars());
     }
 
     // meeting schedule 
     public function meeting_schedule_list()
     {
-        $obj = CreateMeeting::where('created_by', auth()->user()->id)->with('spanTime', 'user')->get();
+        $approvedOrders = Order::where([
+            'customer_id' => auth()->user()->id,
+            'status' => 'approved'
+        ])->pluck('id')->toArray();
+    
+        // Fetch meetings created by the authenticated user and related to approved orders
+        $obj = CreateMeeting::where('created_by', auth()->user()->id)
+            ->whereIn('order_id', $approvedOrders)
+            ->with(['spanTime', 'user'])
+            ->get();
 
         return view('front-layouts.pages.customer.meetingSchedule.list', get_defined_vars());
     }
@@ -190,13 +204,14 @@ class JitsiVideoCallController extends Controller
 
         $newMeeting = $meeting->id;
         $newMeeting = CreateMeeting::find($newMeeting);
+        $getDate  = LawyersTimeSpan::where('id', $newMeeting->select_time_span)->first();
         $lawyer = User::find($newMeeting->meeting_with); // Replace $userId with the actual user ID
-        $lawyer->notify(new CreateMeetingNotification($newMeeting));
+        $lawyer->notify(new CreateMeetingNotification($newMeeting, $getDate));
 
         return redirect()->route('lawyer.list');
     }
 
-    public function book_time_span($timeSpan,$booked)
+    public function book_time_span($timeSpan, $booked)
     {
         $checkTimeSpan = LawyersTimeSpan::find($timeSpan);
 
@@ -206,7 +221,7 @@ class JitsiVideoCallController extends Controller
             ]);
         } else {
             Toastr::error('Lawyer Time Span Not Found');
-             return redirect()->back();
+            return redirect()->back();
         }
     }
 }

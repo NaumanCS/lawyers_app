@@ -129,7 +129,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
     <section style="background-color: #36353e">
-        @if ($rooms->isEmpty())
+        {{-- @if ($rooms->isEmpty())
             <div class="chatUnavailableContainer">
                 <div class="chat-overlay">
                     <p class="message mb-0">Sorry, no chats are available at the moment.</p><br>
@@ -137,7 +137,7 @@
                             href="{{ route('categories', ['filter' => 'all']) }}">Click Here.</a> </p>
                 </div>
             </div>
-        @else
+        @else --}}
             <div class="container py-2">
                 <div class="row">
                     <div class="col-md-12">
@@ -280,7 +280,7 @@
                     </div>
                 </div>
             </div>
-        @endif
+        {{-- @endif --}}
     </section>
     </section>
 @endsection
@@ -352,6 +352,38 @@
         //     getSingleRoomChat(room_id);
         //     getRoomsLatestData();
         // }, 5000);
+
+        function fetchNewMessages() {
+            $.ajax({
+                url: '/fetch-new-messages',
+                type: 'GET',
+                success: function(response) {
+                    if (response.newMessages && response.newMessages.length > 0) {
+                        response.newMessages.forEach(function(message) {
+                            $('#chat-container').append(`
+                                <div class="message">
+                                    <p>${message.content}</p>
+                                </div>
+                            `);
+                        });
+                        if (!userScrolledUp) {
+                            scrollChatToBottom();
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        setInterval(function() {
+            if (room_id) {
+                getSingleRoomChat(room_id);
+            }
+
+            fetchNewMessages();
+        }, 10000); // 10 seconds
 
         $(document).on('click', '.single-room-chat', function(e) {
             e.preventDefault();

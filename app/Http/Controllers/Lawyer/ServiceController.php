@@ -23,13 +23,12 @@ class ServiceController extends Controller
     {
         $service = null; // Initialize $service as null
         if ($id) {
-           
+
             $service = Service::where('id', $id)->first();
-        }else{
+        } else {
             $id = 0;
-           
         }
-       
+
         $categories = Category::get();
         return view('front-layouts.pages.lawyer.service.create', get_defined_vars());
     }
@@ -44,6 +43,7 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
+
         // $request->validate([
         //     'title' => 'required|string',
         //     'location' => 'required|string',
@@ -56,26 +56,34 @@ class ServiceController extends Controller
         //     'add_extra_day' => 'required',
         //     'cover_image' => 'required',
         // ]);
-     
+
         $update_id = $request->id;
         $selectedDays = $request->input('days', []);
         if ($update_id) {
-            $service = Service::where('id', $request->id)->first();
-            $service->title = $request->title;
-            $service->location = $request->location;
-            $service->amount = $request->amount;
-            $service->categories_id = $request->categories_id;
-            $service->days = $selectedDays;
-            $service->start_day = $request->start_day;
-            $service->end_day = $request->end_day;
-            $service->start_time = $request->start_time;
-            $service->end_time = $request->end_time;
-            $service->add_extra_day = $request->add_extra_day;
-            $service->extra_day = $request->extra_day;
-            $service->extra_day_start_time = $request->extra_day_start_time;
-            $service->extra_day_end_time = $request->extra_day_end_time;
-            $service->user_id = Auth::id();
+            $lawyerCategories = Service::where('user_id', auth()->user()->id)->with('category')->get();
+            //  dd($lawyerCategories[0]->categories_id);
 
+            // dd($lawyerCategories);
+            $array=[];
+            foreach ($lawyerCategories as $categories) {
+                $category_id = (int)$categories->categories_id;
+                $array[]=$category_id;
+
+                $categories->title = $request->title;
+                $categories->location = $request->location;
+                $categories->amount = $request->amount;
+                // $categories->categories_id = $category_id;
+
+                $categories->days = $selectedDays;
+                $categories->start_time = $request->start_time;
+                $categories->end_time = $request->end_time;
+                $categories->user_id = Auth::id();
+                $categories->update();
+            }
+// dd($array);
+
+            $service = Service::where('id', $request->id)->first();
+            $service->categories_id = $request->categories_id;
             if ($request->file('cover_image')) {
                 $imageName = rand(0, 9999) . time() . '.' . $request->image->extension();
                 $request->file('cover_image')->move(public_path('uploads/lawyer/service'), $imageName);
@@ -118,10 +126,11 @@ class ServiceController extends Controller
 
     public function make_time_slots($user_id, $service_id, $req_start_time, $req_end_time, $req_extra_day_start_time, $req_extra_day_end_time)
     {
+       
         $time_spans = LawyersTimeSpan::where('user_id', $user_id)->where('service_id', $service_id)->delete();
         $start_time = Carbon::createFromFormat('H:i', $req_start_time);
         $end_time = Carbon::createFromFormat('H:i', $req_end_time);
-        $slot_duration = 15;
+        $slot_duration = 30;
         $timeSlots = [];
         $extraDayTimeSlots = [];
 

@@ -54,7 +54,36 @@ class HomeController extends Controller
 
     public function chat()
     {
-        $rooms = Chat::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->with('sender', 'receiver')->get();
+        $adminId = 1; // Assuming the admin user has an ID of 1
+        $userId = Auth::id();
+
+        
+
+        // Check if a chat room exists between the authenticated user and the admin
+        $chatRoom = Chat::where(function ($query) use ($userId, $adminId) {
+                $query->where('sender_id', $userId)
+                      ->where('receiver_id', $adminId);
+            })->orWhere(function ($query) use ($userId, $adminId) {
+                $query->where('sender_id', $adminId)
+                      ->where('receiver_id', $userId);
+            })->with('sender', 'receiver')->first();
+
+        // If no chat room exists, create one
+        if (!$chatRoom && !auth()->user()->role='admin') {
+            $chatRoom = Chat::create([
+                'sender_id' => $userId,
+                'receiver_id' => $adminId,
+            ]);
+        }
+
+        // Fetch all chat rooms for the authenticated user
+        $rooms = Chat::where('sender_id', $userId)
+            ->orWhere('receiver_id', $userId)
+            ->with('sender', 'receiver')
+            ->get();
+
+        // Display the chat rooms (or further processing)
+        // dd($rooms);
         return view('front-layouts.pages.chat.chat', get_defined_vars());
     }
 

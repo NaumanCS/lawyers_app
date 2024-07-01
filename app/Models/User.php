@@ -23,6 +23,8 @@ class User extends Authenticatable
         'email',
         'phone',
         'role',
+        'user_type',
+        'otp_verified',
         'category_id',
         'password',
         'date_of_birth',
@@ -72,39 +74,51 @@ class User extends Authenticatable
     public function getImageAttribute()
     {
         if ($this->attributes['image'] == null) {
-            return asset('uploads/user.jpg');
+            // return asset('public/uploads/user.jpg');
+            return null;
         }
-        return asset('uploads/user') . '/' . $this->attributes['image'];
+        return asset('public/uploads/user') . '/' . $this->attributes['image'];
+    }
+
+    public function getAdvocateLicenceAttribute()
+    {
+        if ($this->attributes['advocate_licence'] == null) {
+            return null;;
+        }
+        return asset('public/uploads/lawyer/documents') . '/' . $this->attributes['advocate_licence'];
     }
 
     public function getHighCourtLicenceAttribute()
     {
         if ($this->attributes['high_court_licence'] == null) {
-            return asset('admin/assets/img/licence.png');
+            // return asset('admin/assets/img/licence.png');
+            return null;
         }
-        return asset('uploads/lawyer/documents') . '/' . $this->attributes['high_court_licence'];
+        return asset('public/uploads/lawyer/documents') . '/' . $this->attributes['high_court_licence'];
     }
     public function getSupremeCourtLicenceAttribute()
     {
         if ($this->attributes['supreme_court_licence'] == null) {
-            return asset('admin/assets/img/licence.png');
+            // return asset('admin/assets/img/licence.png');
+            return null;
         }
-        return asset('uploads/lawyer/documents') . '/' . $this->attributes['supreme_court_licence'];
+        return asset('public/uploads/lawyer/documents') . '/' . $this->attributes['supreme_court_licence'];
     }
     public function getQualificationCertificateAttribute()
     {
         if ($this->attributes['qualification_certificate'] == null) {
-            return asset('admin/assets/img/qualification.jpg');
+            // return asset('admin/assets/img/qualification.jpg');
+            return null;
         }
-        return asset('uploads/lawyer/documents') . '/' . $this->attributes['qualification_certificate'];
+        return asset('public/uploads/lawyer/documents') . '/' . $this->attributes['qualification_certificate'];
     }
 
     public function getCustomerImageAttribute()
     {
         if ($this->attributes['image'] == null) {
-            return asset('uploads/user.jpg');
+            return null;
         }
-        return asset('uploads/user') . '/' . $this->attributes['image'];
+        return asset('public/uploads/user') . '/' . $this->attributes['image'];
     }
 
     public function isCustomer()
@@ -145,5 +159,20 @@ class User extends Authenticatable
     public function lawyerTotalRating()
     {
         return $this->hasMany(feedBack::class, 'lawyer_id', 'id');
+    }
+
+    public function deviceToken(){
+        return $this->hasOne(DeviceToken::class,'user_id','id');
+      }
+
+    //   scopes
+    public function scopeLawyerApproved($query)
+    {
+        return $query->where('document_status', 'approved');
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email;  // Assuming 'email' is the field containing the user's email address
     }
 }

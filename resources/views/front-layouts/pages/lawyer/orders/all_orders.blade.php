@@ -40,8 +40,8 @@
                                 @foreach ($data as $row)
                                     <tr>
                                         <td>{{ $row->id }}</td>
-                                        <td>{{ $row->customer->name ?? 'N/A' }}</td>
-                                        <td>{{ $row->category->title ?? 'N/A' }}</td>
+                                        <td>{{ $row->customer->name ?? 'not selected' }}</td>
+                                        <td>{{ $row->category->title ?? 'not selected' }}</td>
                                         <td>{{ $row->amount - ($row->amount * 0.20) }}</td>
 
                                         <td>{{ $row->created_at }}</td>

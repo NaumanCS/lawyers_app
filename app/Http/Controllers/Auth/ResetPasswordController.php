@@ -27,4 +27,11 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+
+    public function password_reset()
+    {
+    
+        return view('front-layouts.pages.auth.passwords.reset', get_defined_vars());
+    }
 }

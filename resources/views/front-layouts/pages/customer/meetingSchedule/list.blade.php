@@ -28,20 +28,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($obj as $key => $val)
+                                        @if($obj->isEmpty())
                                             <tr>
-                                                <td>{{ $val->user->name }}</td>
-                                                <td>{{ $val->meeting_link }}</td>
-                                                <td>{{ $val->date }}</td>
-                                                <td>{{ $val->spanTime->time_spans }}</td> 
-                                                <td class="text-end">
-                                                    <a href="{{ route('video.call',$val->meeting_link ) }}"
-                                                        class="btn btn-sm bg-success-light me-2"> <i
-                                                            class="fas fa-video me-1"></i> Join</a>
-                                                </td>
+                                                <td colspan="5" class="text-center">Meetings will be available after order approval.</td>
                                             </tr>
-                                        @endforeach
+                                        @else
+                                            @foreach ($obj as $key => $val)
+                                                <tr>
+                                                    <td>{{ $val->user->name ?? ''}}</td>
+                                                    <td>{{ $val->meeting_link ?? ''}}</td>
+                                                    <td>{{ $val->date ?? ''}}</td>
+                                                    <td>{{ $val->spanTime->time_spans ?? '' }}</td> 
+                                                    <td class="text-end">
+                                                        <a href="{{ route('video.call', $val->meeting_link) }}" class="btn btn-sm bg-success-light me-2">
+                                                            <i class="fas fa-video me-1"></i> Join
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>

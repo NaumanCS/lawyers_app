@@ -26,7 +26,7 @@ class CustomerMiddleware
 
         $user = Auth::user();
 
-        if ($user->role == 'user') {
+        if ($user->role == 'user' || $user->role == 'lawyer') {
             return $next($request);
         } else if ($user->role == "lawyer" || $user->role == "admin") {
             return redirect()->back()->with('error', 'You do not have access to this page');

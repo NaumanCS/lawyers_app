@@ -17,7 +17,7 @@ class CheckOutController extends Controller
         $auth = auth()->user();
         $lawyerDetail = User::where('id', $id)->with('service', 'time_spans')->first();
         $checkOrder = Order::where('customer_id', $auth->id)->where('lawyer_id', $id)->first();
-        if ($checkOrder !== null && $checkOrder->status != 'completed') {
+        if ($checkOrder !== null && $checkOrder->booking_date > date('Y-m-d') ) {
             return back()->with('alert', 'You already Booked this service');
         }
 
@@ -32,6 +32,7 @@ class CheckOutController extends Controller
             'amount' => $request->amount,
             'select_time_span' => $request->select_time_span,
             'booking_date' => $request->date,
+            'detail' => $request->detail,
             // ... (other fields you need)
         ];
         session()->put('orderDetail', $orderDetail);

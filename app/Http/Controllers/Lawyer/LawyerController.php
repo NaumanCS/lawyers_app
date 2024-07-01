@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountDetail;
+use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,16 +20,13 @@ class LawyerController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // if ($user->is_document_submit == 1) {
-        if ($user->document_status == 'approved') {
-            $service = Service::where('user_id', Auth::id())->count();
-            $booking = Service::where('user_id', Auth::id())->count();
-            $category = Service::where('user_id', Auth::id())->count();
+        $documentStatus = $user->document_status;
 
-            return view('front-layouts.pages.lawyer.dashboard', get_defined_vars());
-        } else {
-            return redirect()->route('lawyer.document.verification');
-        }
+        $order = Order::where('lawyer_id', Auth::id())->count();
+        $service = Service::where('user_id', Auth::id())->count();
+        $category = Service::where('user_id', Auth::id())->count();
+
+        return view('front-layouts.pages.lawyer.dashboard', get_defined_vars());
     }
     public function document_submission()
     {
@@ -37,9 +35,8 @@ class LawyerController extends Controller
 
             return redirect()->route('lawyer.dashboard');
         } else {
-            return view('front-layouts.pages.lawyer.document-verification',get_defined_vars());
+            return view('front-layouts.pages.lawyer.document-verification', get_defined_vars());
         }
-       
     }
 
     public function submit_documents(Request $request)
@@ -72,12 +69,12 @@ class LawyerController extends Controller
     public function document_submission_update()
     {
         $user = Auth::user();
-        return view('front-layouts.pages.lawyer.document-verification-update',get_defined_vars());
+        return view('front-layouts.pages.lawyer.document-verification-update', get_defined_vars());
     }
 
     public function documents_update(Request $request)
     {
-        
+
         $id = Auth::user()->id;
         $user = User::where('id', $id)->first();
 
@@ -96,10 +93,12 @@ class LawyerController extends Controller
             $request->file('supreme_court_licence')->move(public_path('uploads/lawyer/documents'), $supreme_court_licence);
             $user->supreme_court_licence = $supreme_court_licence;
         }
+        $user->document_status = 'pending';
+        $user->reason = '';
         $user->update();
 
         Flash::success('Your Data is updated successfully');
-        return redirect()->route('lawyer.document.verification')->with('message', 'Your Data is updated successfully');
+        return redirect()->route('lawyer.dashboard')->with('message', 'Your Data is updated successfully');
     }
 
     public function profile_setting()
@@ -117,7 +116,7 @@ class LawyerController extends Controller
             'date_of_birth' => "required|date",
             'gender' => "required",
             'address' => "required|string",
-            'country' => "required|string",
+
             'city' => "required|string",
             'state' => "required|string",
             'postal_code' => "required|regex:/^[0-9]+$/",
@@ -132,7 +131,7 @@ class LawyerController extends Controller
         $user->date_of_birth = $request->input('date_of_birth');
         $user->gender = $request->input('gender');
         $user->address = $request->input('address');
-        $user->country = $request->input('country');
+
         $user->city = $request->input('city');
         $user->state = $request->input('state');
         $user->postal_code = $request->input('postal_code');
@@ -148,25 +147,22 @@ class LawyerController extends Controller
         return redirect()->back()->with('message', 'Your Data is updated successfully');
     }
 
-    public function lawyer_account_update(Request $request){
-        
-        $lawyerAccount=AccountDetail::where('user_id',$request->lawyer_id)->first();
-        if($lawyerAccount){
-            $lawyerAccount->update($request->except( '_token','bank_account','jazzcash_account'));
-            if($request->bank_account != null){
-                $lawyerAccount->bank_account='1';
+    public function lawyer_account_update(Request $request)
+    {
 
+        $lawyerAccount = AccountDetail::where('user_id', $request->lawyer_id)->first();
+        if ($lawyerAccount) {
+            $lawyerAccount->update($request->except('_token', 'bank_account', 'jazzcash_account'));
+            if ($request->bank_account != null) {
+                $lawyerAccount->bank_account = '1';
             }
-            if($request->jazzcash_account != null){
-                $lawyerAccount->jazzcash_account='1';
-
+            if ($request->jazzcash_account != null) {
+                $lawyerAccount->jazzcash_account = '1';
             }
-          
-
-        }else{
-            $lawyerAccount = AccountDetail::create($request->except( '_token','user_id','user_type'));
-            $lawyerAccount->user_id=$request->lawyer_id;
-            $lawyerAccount->user_type='lawyer';
+        } else {
+            $lawyerAccount = AccountDetail::create($request->except('_token', 'user_id', 'user_type'));
+            $lawyerAccount->user_id = $request->lawyer_id;
+            $lawyerAccount->user_type = 'lawyer';
             $lawyerAccount->save();
         }
 

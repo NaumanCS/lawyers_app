@@ -1,4 +1,4 @@
-<div class="col-xl-3 col-md-4">
+<div class="col-xl-3 col-md-4 p-3 rounded-start" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;">
     <div class="mb-4">
         <div class="d-sm-flex flex-row flex-wrap text-center text-sm-start align-items-center">
             <img alt="profile image" src="<?= auth()->user()->customer_image ?>" class="avatar-lg rounded-circle">
@@ -26,12 +26,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('order.index') }}" class="nav-link">
+                <a href="{{ route('order.index') }}" class="nav-link {{ (request()->is('order*')) ? 'active' : '' }}">
+                  
                     <i class="fas fa-user"></i> <span>Orders</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('meeting.schedule.list') }}" class="nav-link">
+                <a href="{{ route('meeting.schedule.list') }}" class="nav-link {{ (request()->is('meeting/schedule/list*')) ? 'active' : '' }}">
                     <i class="fas fa-user"></i> <span>Meeting Schedule</span>
                 </a>
             </li>

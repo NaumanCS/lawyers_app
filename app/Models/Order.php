@@ -21,7 +21,9 @@ class Order extends Model
         'payment_slip',
         'transaction_id',
         'status',
-        'payment_status'
+        'payment_status',
+        'detail',
+        'rejection_reason'
 
     ];
 
@@ -29,7 +31,7 @@ class Order extends Model
         if($this->attributes['payment_slip'] == null){
             return asset('admin/assets/img/uploadslip.jpg');
         }
-        return asset('uploads/user') . '/' . $this->attributes['payment_slip'];
+        return asset('public/uploads/user') . '/' . $this->attributes['payment_slip'];
     }
 
     public function customer(){
@@ -42,6 +44,11 @@ class Order extends Model
 
     public function category(){
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function scopeSubtractTwentyPercent($query)
+    {
+        return $query->selectRaw('CAST(SUM(amount - (amount * 0.20)) AS UNSIGNED) as earning');
     }
 
    

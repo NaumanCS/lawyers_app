@@ -5,7 +5,7 @@
             Admin Dashboard
         </a>
     </div>
-    <div class="sidebar-inner slimscroll">
+    <div class="sidebar-inner slimscroll pb-5" style="overflow-y: auto;">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 <li class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}">
@@ -26,10 +26,7 @@
                 <li class="{{ request()->is('admin/order*') ? 'active' : '' }}">
                     <a href="{{ route('admin.order.index') }}"><i class="fas fa-columns"></i> <span>Order</span></a>
                 </li>
-                <li class="{{ request()->is('admin/general-setting*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.general.setting.index') }}"><i class="fas fa-columns"></i> <span>General
-                            Setting</span></a>
-                </li>
+               
                 <li class="{{ request()->is('admin/transaction*') ? 'active' : '' }}">
                     <a href="{{ route('admin.transaction.index') }}"><i class="fas fa-columns"></i>
                         <span>Completed Transaction</span></a>
@@ -41,6 +38,20 @@
                 <li class="{{ request()->is('admin/user/accounts*') ? 'active' : '' }}">
                     <a href="{{ route('admin.user.accounts.index') }}"><i class="fas fa-columns"></i>
                         <span>User Accounts</span></a>
+                </li>
+                <li class="{{ request()->is('admin/locations*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.locations.index') }}"><i class="fas fa-columns"></i>
+                        <span>Locations</span></a>
+                </li>
+                <li class="{{ request()->is('admin/general-setting*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.general.setting.index') }}"><i class="fas fa-columns"></i> <span>General
+                            Setting</span></a>
+                </li>
+                <li class="{{ request()->is('admin/setting*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.setting.index') }}"><i class="fas fa-columns"></i> <span>Setting</span></a>
+                </li>
+                <li class="{{ request()->is('admin/help/center*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.help.center.index') }}"><i class="fas fa-columns"></i> <span>Help Center</span></a>
                 </li>
                 {{-- <li>
                     <a href="subcategories.html"><i class="fab fa-buffer"></i> <span>Sub Categories</span></a>

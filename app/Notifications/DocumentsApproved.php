@@ -10,13 +10,13 @@ use Illuminate\Notifications\Notification;
 class DocumentsApproved extends Notification
 {
     use Queueable;
-    public $user;
+    public $lawyer;
     /**
      * Create a new notification instance.
      */
-    public function __construct($user)
+    public function __construct($lawyer)
     {
-        $this->user = $user;
+        $this->lawyer = $lawyer;
     }
 
     /**
@@ -26,19 +26,27 @@ class DocumentsApproved extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database','mail'];
     }
 
-//    /**
-//     * Get the mail representation of the notification.
-//     */
-//    public function toMail(object $notifiable): MailMessage
-//    {
-//        return (new MailMessage)
-//                    ->line('The introduction to the notification.')
-//                    ->action('Notification Action', url('/'))
-//                    ->line('Thank you for using our application!');
-//    }
+    public function toMail($notifiable)
+    {
+    
+        $fromAddress = config('mail.from.address');
+        $fromName = config('mail.from.name');
+        $url = config('app.url');
+    
+        return (new MailMessage)
+        ->from($fromAddress, $fromName)
+        ->subject('Document Approved')
+        ->view('front-layouts.pages.emails.notification-mail', [
+            'fromName' => $fromName,
+            'userName' => $this->lawyer,
+            'url' => $url,
+            'messageOne' => 'Your document are verified:',
+            'messageTwo' => 'Your profile is ready to show to customers'
+        ]);
+    }
 
     /**
      * Get the array representation of the notification.
@@ -48,9 +56,11 @@ class DocumentsApproved extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'user_id' => $this->user['id'],
-            'name' => $this->user['name'],
-            'email' => $this->user['email']
+            'message'   => 'Document approved',
+            'type'      => 'approved',
+            'user_id' => $this->lawyer['id'],
+            'name' => $this->lawyer['name'],
+            'email' => $this->lawyer['email']
         ];
     }
 }

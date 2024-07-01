@@ -4,6 +4,7 @@
 <head>
     @include('front-layouts.partials.head')
     @include('front-layouts.assets.css')
+    @livewireStyles
 </head>
 
 <body>
@@ -15,6 +16,7 @@
     </div>
 
     @include('front-layouts.assets.script')
+    @livewireScripts
 </body>
 
 </html>

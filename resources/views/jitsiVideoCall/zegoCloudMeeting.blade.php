@@ -239,8 +239,8 @@
             const roomID = "{{ $meetingLink }}";
             const userID = Math.floor(Math.random() * 10000) + "";
             const userName = "userName" + userID;
-            const appID = 676303317;
-            const serverSecret = "99713f21172222172c5180a7e4b4a2f7";
+            const appID = 197821785;
+            const serverSecret = "b5a6bc396ffc48d593c84b07af0d11e3";
             const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
 
 

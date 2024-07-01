@@ -18,16 +18,16 @@ class GeneralSetting extends Model
     public function getNavLogoAttribute()
     {
         if ($this->attributes['nav_logo'] == null) {
-            return asset('uploads/user.jpg');
+            return asset('public/uploads/user.jpg');
         }
-        return asset('uploads/user') . '/' . $this->attributes['nav_logo'];
+        return asset('public/uploads/user') . '/' . $this->attributes['nav_logo'];
     }
 
     public function getFooterLogoAttribute()
     {
         if ($this->attributes['footer_logo'] == null) {
-            return asset('uploads/user.jpg');
+            return asset('public/uploads/user.jpg');
         }
-        return asset('uploads/user') . '/' . $this->attributes['footer_logo'];
+        return asset('public/uploads/user') . '/' . $this->attributes['footer_logo'];
     }
 }

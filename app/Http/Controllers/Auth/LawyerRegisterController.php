@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AccountDetail;
 use App\Models\Category;
 use App\Models\LawyersTimeSpan;
+use App\Models\Location;
 use App\Models\Service;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -47,7 +48,7 @@ class LawyerRegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', "regex:/^[a-zA-Z0-9\s\-']+$/"],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => 'required|min:11',
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -57,6 +58,7 @@ class LawyerRegisterController extends Controller
     public function index()
     {
         $categories = Category::get();
+        $cities = Location::get();
         return view('front-layouts.pages.auth.lawyer_register', get_defined_vars());
     }
 
@@ -68,16 +70,15 @@ class LawyerRegisterController extends Controller
      */
     public function create(Request $request)
     {
-      
         $request->validate([
-            'name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'name' => ['required', 'string', 'max:255', "regex:/^[a-zA-Z0-9\s\-']+$/"],
+            'phone' => ['required', 'unique:users,phone', 'regex:/^03[0-9]{9}$/'],
+            'email' => 'nullable|unique:users,email',
             'city' => 'required',
-            'country' => 'required',
             'password' => 'required|string|min:8|confirmed',
 
         ]);
+     
 
         $user =  User::create([
             'name' => $request['name'],
@@ -159,7 +160,7 @@ class LawyerRegisterController extends Controller
 
         if ($user) {
             Auth::login($user);
-            return redirect()->route('lawyer.dashboard');
+            return redirect()->route('lawyer.dashboard')->with('message', 'Registration request submitted successfully.It will take 2 days to review');
         } else {
             return redirect()->back()->with('error', 'You do not have access to this page');
         }
@@ -239,11 +240,11 @@ class LawyerRegisterController extends Controller
 
     public function make_time_slots($user_id, $service_id, $req_start_time, $req_end_time, $req_extra_day_start_time, $req_extra_day_end_time)
     {
-        // dd('1');
+       
         $time_spans = LawyersTimeSpan::where('user_id', $user_id)->where('service_id', $service_id)->delete();
         $start_time = Carbon::createFromFormat('H:i', $req_start_time);
         $end_time = Carbon::createFromFormat('H:i', $req_end_time);
-        $slot_duration = 20;
+        $slot_duration = 30;
         $timeSlots = [];
         $extraDayTimeSlots = [];
 

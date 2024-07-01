@@ -19,9 +19,12 @@ class Customer
     {
         $user_id = auth()->user()->id;
         $user = User::where('id', $user_id)->first();
-        if (Auth::user()->role == 'user') {
+  
+        if (Auth::user()->role == 'user' || Auth::user()->role == 'lawyer') {
+          
             return $next($request);
-        } else if ((Auth::user()->role !== 'user')) {
+        } else if ((Auth::user()->role !== 'user' || Auth::user()->role !== 'lawyer')) {
+         
             return redirect()->back()->with('error', 'You do not have access of this page');
         } else {
             return redirect('/login');

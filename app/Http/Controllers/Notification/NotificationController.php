@@ -20,11 +20,14 @@ class NotificationController extends Controller
 
 
         $notificationData = $notification->data;
-
-        if ($notificationData['type'] == 'meeting') {
-            return redirect()->route('lawyer_meeting_list');
-        } else {
-            return redirect()->route('lawyer.all.orders');
+        if ($auth->role == "lawyer") {
+            if ($notificationData['type'] == 'meeting') {
+                return redirect()->route('lawyer_meeting_list');
+            } else {
+                return redirect()->route('lawyer.all.orders');
+            }
+        }else{
+            return redirect()->route('order.index');
         }
     }
 }

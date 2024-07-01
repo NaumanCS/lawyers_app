@@ -11,8 +11,13 @@
     <a class="mobile_btn" id="mobile_btn" href="javascript:void(0);">
         <i class="fas fa-align-left"></i>
     </a>
-
+   
     <ul class="nav user-menu">
+        <li class="nav-item logged-item">
+            <a href="{{route('chat')}}" class="nav-link">
+                <i class="fa fa-comments" aria-hidden="true"></i>
+            </a>
+        </li>
         <!-- Notifications -->
         <li class="nav-item dropdown noti-dropdown">
             <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">

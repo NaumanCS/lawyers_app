@@ -11,6 +11,8 @@ class BookingNotification extends Notification
 {
     use Queueable;
     protected $orderId;
+    protected $orderDetail;
+
     /**
      * Create a new notification instance.
      */
@@ -26,6 +28,7 @@ class BookingNotification extends Notification
             'message' => 'You have a new booking for your legal services.',
             'order_id' => $this->orderId->id,
             'type' =>'booking',
+            'detail' =>$this->orderId->detail,
         ];
     }
 

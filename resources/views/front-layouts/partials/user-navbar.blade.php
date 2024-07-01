@@ -8,8 +8,8 @@
                     <span></span>
                 </span>
             </a>
-            <a href="{{ route('customer.dashboard') }}" class="navbar-brand logo">
-                Logo Here
+            <a href="{{ route('customer.dashboard') }}" class="navbar-brand logo" style="max-height: 80px !important">
+                <img src="{{ asset('admin/assets/img/al-wakeel-logo.png')}}" class="img-fluid" alt="Logo" style="max-height: 80px !important">
             </a>
             <a href="{{ route('customer.dashboard') }}" class="navbar-brand logo-small">
                 <img src="{{ asset('front') }}/assets/img/logo-icon.png" class="img-fluid" alt="Logo">
@@ -17,13 +17,6 @@
         </div>
 
         <ul class="nav header-navbar-rht">
-            <li class="nav-item desc-list wallet-menu">
-                <a href="user-wallet.html" class="nav-link header-login">
-                    <img src="{{ asset('front') }}/assets/img/wallet.png" alt=""
-                        class="me-2 wallet-img"><span>Wallet:</span> $1875
-                </a>
-            </li>
-
             <!-- Notifications -->
             <li class="nav-item dropdown logged-item">
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,7 +33,7 @@
                             @if (auth()->user()->notifications)
                                 @foreach (auth()->user()->unreadnotifications as $notification)
                                     <li class="notification-message">
-                                        <a href="notifications.html">
+                                        <a href="{{ route('notifications.markAsRead', $notification->id) }}">
                                             <div class="media d-flex">
                                                 <span class="avatar avatar-sm flex-shrink-0">
                                                     <img class="avatar-img rounded-circle" alt="User Image"
@@ -68,7 +61,7 @@
                         </ul>
                     </div>
                     <div class="topnav-dropdown-footer">
-                        <a href="notifications.html">View all Notifications</a>
+                        <a href="#">View all Notifications</a>
                     </div>
                 </div>
             </li>

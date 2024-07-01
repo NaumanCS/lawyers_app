@@ -38,7 +38,7 @@
                                                     <img class="rounded service-img me-1" src="{{$val->cover_image}}"
                                                         alt="service Image">
                                                 </td>
-                                                <td>{{ $val->title }}</td>
+                                                <td>{{ $val->category?->title ?? 'No Category' }}</td>
 
 
                                                 <td class="text-end">

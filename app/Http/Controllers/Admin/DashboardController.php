@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AccountDetail;
 use App\Models\Category;
+use App\Models\CreateMeeting;
 use App\Models\feedBack;
 use App\Models\GeneralSetting;
+use App\Models\LawyersTimeSpan;
 use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
+use App\Notifications\OrderApproved;
+use App\Notifications\OrderRejectedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Yoeunes\Toastr\Facades\Toastr;
 
 class DashboardController extends Controller
@@ -61,12 +66,13 @@ class DashboardController extends Controller
     public function category_store(Request $req, $id)
     {
         $imageUpdateId = $id;
+
         if (isset($id) && !empty($id)) {
             $obj = Category::whereId($id)->update([
                 'title' => $req->title,
             ]);
 
-            return redirect(route('category.index'));
+           
         } else {
             //Create
             $obj = Category::create([
@@ -74,6 +80,7 @@ class DashboardController extends Controller
 
             ]);
             $imageUpdateId = $obj->id;
+           
         }
         if ($req->file()) {
             $imageName = time() . '.' . $req->image->extension();
@@ -265,9 +272,16 @@ class DashboardController extends Controller
     public function admin_order_status($orderId=null ,$status=null)
     {
             $orderStatus = Order::find($orderId);
+           
+            $user=User::where('id',$orderStatus->lawyer_id)->first();
+           
             $orderStatus->status = $status;
             $orderStatus->save();
-    
+            $order=$orderStatus;
+
+            if($status == 'approved'){
+            $order->lawyer->notify(new OrderApproved($order, $user));
+            }
             return redirect()->route('admin.order.index')->with('message', 'Order status changed successfully');
 
     }
@@ -285,6 +299,61 @@ class DashboardController extends Controller
             return redirect(route('admin.order.index'));  
         }
             
+    }
+
+    public function reject_order (Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'rejection_reason' => 'required|string|max:255',
+        ]);
+
+        $order = Order::find($request->order_id);
+        $order->status = 'rejected';
+        $order->rejection_reason = $request->rejection_reason;
+        $order->save();
+
+        $user=User::where('id',$order->customer_id)->first();
+
+        // Notify the customer
+        // $from = getenv("MAIL_FROM_ADDRESS","alwakeel@alwakeel.thessenterprises.com");
+
+
+       
+        if ($order && $user) {
+            $order->customer->notify(new OrderRejectedNotification($order, $user));
+           
+            DB::beginTransaction();
+
+            try {
+                // Find the meeting associated with the order
+                $meeting = CreateMeeting::where('order_id', $order->id)->first();
+        
+                if ($meeting) {
+                    // Find the time span associated with the meeting
+                    $timeSpan = LawyersTimeSpan::where('id', $meeting->select_time_span)->first();
+        
+                    if ($timeSpan) {
+                        // Nullify the booked column
+                        $timeSpan->update(['booked' => null]);
+                    }
+        
+                    // Delete the meeting
+                    $meeting->delete();
+                }
+        
+                DB::commit();
+                return redirect()->back()->with('success', 'Order rejected and customer notified.');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Order or user not found.');
+            }
+          
+        } else {
+            // Handle if $order or $user is null
+            return redirect()->back()->with('error', 'Order or user not found.');
+        }
+       
     }
 
 
@@ -315,7 +384,7 @@ class DashboardController extends Controller
                 'description' => $req->description,
             ]);
 
-            return redirect(route('admin.general.setting.index'));
+           
         } else {
             //Create
             $obj = GeneralSetting::create([
@@ -324,14 +393,15 @@ class DashboardController extends Controller
             ]);
             $imageUpdateId = $obj->id;
         }
-        if ($req->file()) {
+        if ($req->file('nav_logo')) {
             $navLogo = time() .   rand(9, 999)  . $req->nav_logo->extension();
             $req->nav_logo->move(public_path('uploads/user'), $navLogo);
             GeneralSetting::whereId($imageUpdateId)->update([
                 'nav_logo' => $navLogo
             ]);
         }
-        if ($req->file()) {
+
+        if ($req->file('footer_logo')) {
             $footerLogo = time() .   rand(9, 999)  . $req->footer_logo->extension();
             $req->footer_logo->move(public_path('uploads/user'), $footerLogo);
             GeneralSetting::whereId($imageUpdateId)->update([

@@ -26,11 +26,10 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.jqueryui.min.js"
-    integrity="sha512-9u6nki9uD72SzBtp/+7VmFplkUljohfLv2ogiMc1N4EwPAs7jG/3SBM6abgTJAxZdCjF5F9sg5Iis/uriTm1mA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.dataTables.min.js"
-    integrity="sha512-fQmyZE5e3plaa6ADOXBM17WshoZzDIvo7sR4GC1VsmSKqm13Ed8cO2kPwFPAOoeF0RcdhuQQlPq46X/HnPmllg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 <script>
@@ -56,7 +55,7 @@
     $(document).ready(function() {
         $('.dropify').dropify({
             messages: {
-                default: 'Upload Document',
+                default: 'Upload',
                 replace: 'Drag and drop or click to replace',
                 remove: 'Remove',
                 error: 'Error while uploading file',
@@ -66,7 +65,25 @@
                 fileExtension: 'The selected file format is not allowed.',
             },
         });
+
+        $('.dropify-message .default').css('font-size', '10px');
     });
+</script>
+
+<script>
+    @if (session('message'))
+        toastr.success('{{ session('message') }}');
+    @endif
+</script>
+<script>
+    @if (session('alert'))
+        toastr.alert('{{ session('alert') }}');
+    @endif
+</script>
+<script>
+    @if (session('error'))
+        toastr.error('{{ session('error') }}');
+    @endif
 </script>
 
 @yield('injected-scripts')

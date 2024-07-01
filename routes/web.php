@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\UsersLoginController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HelpCenterController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\VerificationController;
 use App\Http\Controllers\AgoraVideoController;
@@ -25,6 +28,7 @@ use App\Http\Controllers\Auth\CustomerRegisterController;
 
 // ==============> Lawyers Controller Starts
 use App\Http\Controllers\Auth\LawyerRegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\FeedBackController;
 use App\Http\Controllers\JitsiVideoCallController;
 use App\Http\Controllers\Lawyer\LawyerController;
@@ -34,10 +38,13 @@ use App\Http\Controllers\Lawyer\BookingController;
 use App\Http\Controllers\Lawyer\LawyerPaymentController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\Notification\NotificationController;
+use App\Http\Controllers\OneSignal\OneSignalController;
 // ==============> Lawyers Controller Ends
 
 use App\Http\Controllers\PusherController;
 use App\Http\Controllers\StripePaymentController;
+use App\Livewire\AdminChat;
+use App\Livewire\Chat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -52,17 +59,29 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
  */
-
-Route::get('/', [FrontController::class, 'index'])->name('front');
-Route::get('/blocked', [FrontController::class, 'user_blocked'])->name('blocked.users');
-Route::post('/lawyer/signup', [LawyerRegisterController::class, 'create'])->name('lawyer.register');
-Route::post('customer/signup', [CustomerRegisterController::class, 'create'])->name('customer.register');
-// Route::post('/admin/login', [DashboardController::class, 'admin_login'])->name('admin.login');
 Route::get('/login/page', [UsersLoginController::class, 'login_page'])->name('login.page');
-
 Route::post('user/login', [UsersLoginController::class, 'login'])->name('users.login');
 Route::get('/lawyer/signup', [LawyerRegisterController::class, 'index'])->name('lawyer.register.page');
 Route::get('/customer/signup', [CustomerRegisterController::class, 'index'])->name('customer.register.page');
+Route::post('/lawyer/signup', [LawyerRegisterController::class, 'create'])->name('lawyer.register');
+Route::post('customer/signup', [CustomerRegisterController::class, 'create'])->name('customer.register');
+
+Route::get('/fotgot/password', [UsersLoginController::class, 'forgot_password'])->name('forgot.password');
+Route::get('/otp', [UsersLoginController::class, 'otp'])->name('otp');
+Route::get('/confirm/password', [UsersLoginController::class, 'confirm_password'])->name('confirm.password');
+
+Route::post('send/otp', [UsersLoginController::class, 'send_otp'])->name('send.otp');
+Route::post('resend/otp', [UsersLoginController::class, 'resend_otp'])->name('resend.otp');
+Route::post('verify/otp', [UsersLoginController::class, 'verify_otp'])->name('verify.otp');
+
+Route::post('reset/password', [UsersLoginController::class, 'reset_password'])->name('reset.password');
+
+Route::get('/', [FrontController::class, 'index'])->name('front');
+Route::get('/blocked', [FrontController::class, 'user_blocked'])->name('blocked.users');
+
+// Route::post('/admin/login', [DashboardController::class, 'admin_login'])->name('admin.login');
+
+
 
 
 Route::get('/categories/{filter}', [FrontController::class, 'categories'])->name('categories');
@@ -71,6 +90,10 @@ Route::get('/lawyers/services/{filter}', [FrontController::class, 'lawyers_servi
 
 Route::get('/contact-us', [FrontController::class, 'contact_us'])->name('contact.us');
 Route::post('/contact-us/submit', [FrontController::class, 'support_msg'])->name('contact.us.submit');
+
+// help center
+Route::get('/help/center', [FrontController::class, 'help_center'])->name('help.center');
+Route::post('/help/center/submit', [FrontController::class, 'help_center_submit'])->name('help.center.submit');
 // Route::get('/chat', [PusherController::class, 'index'])->name('chat');
 // Route::post('/broadcast', [PusherController::class, 'broadcast'])->name('broadcast');
 // Route::post('/receive', [PusherController::class, 'receive'])->name('receive');
@@ -83,8 +106,8 @@ Route::get('image/update', function () {
 Route::get('/search', [FrontController::class, 'search'])->name('search');
 
 Auth::routes();
-Route::get('/create/chat/room/{lawyerId}', [HomeController::class, 'create_chat_room'])->name('create.chat.room');
 Route::get('chat', [HomeController::class, 'chat'])->name('chat');
+Route::get('/create/chat/room/{lawyerId}', [HomeController::class, 'create_chat_room'])->name('create.chat.room');
 Route::get('display-rooms', [HomeController::class, 'get_rooms'])->name('display.chat.rooms');
 Route::get('display-single-chat/{roomId}', [HomeController::class, 'single_chat'])->name('display.single.chat');
 Route::post('/send/new/message', [HomeController::class, 'send_message']);
@@ -113,6 +136,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('admin/order/delete/{id}', [DashboardController::class, 'order_delete'])->name('admin.order.delete');
     Route::get('admin/order/status/{orderId?}/{status?}', [DashboardController::class, 'admin_order_status'])->name('admin.order.status');
     Route::post('admin/order/add/transaction-id/{id?}', [DashboardController::class, 'add_transaction_id'])->name('admin.add.transaction.id');
+    Route::post('/admin/order/reject', [DashboardController::class, 'reject_order'])->name('admin.order.reject');
+
 
     Route::get('admin/general-setting/index', [DashboardController::class, 'general_setting_index'])->name('admin.general.setting.index');
     Route::get('admin/general-setting/form/{id}', [DashboardController::class, 'general_setting_form'])->name('admin.general.setting.form');
@@ -144,6 +169,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/pay/now', [TransactionController::class, 'pay_now'])->name('pay.now');
     Route::post('admin/send/payment', [TransactionController::class, 'send_paymnet'])->name('send.payment');
 
+    Route::get('admin/locations/index', [LocationController::class, 'index'])->name('admin.locations.index');
+    Route::get('admin/locations/form/{id}', [LocationController::class, 'create'])->name('admin.locations.form');
+    Route::post('admin/locations/store/{id}', [LocationController::class, 'store'])->name('admin.locations.store');
+    Route::get('admin/locations/detail/{id}', [LocationController::class, 'show'])->name('admin.locations.details');
+    Route::delete('admin/locations/delete/{id}', [LocationController::class, 'destroy'])->name('admin.locations.delete');
+
+    Route::get('admin/setting/index', [SettingController::class, 'index'])->name('admin.setting.index');
+    Route::get('admin/setting/form/{id}', [SettingController::class, 'create'])->name('admin.setting.form');
+    Route::post('admin/setting/store/{id}', [SettingController::class, 'store'])->name('admin.setting.store');
+    Route::get('admin/setting/detail/{id}', [SettingController::class, 'show'])->name('admin.setting.details');
+    Route::delete('admin/setting/delete/{id}', [SettingController::class, 'destroy'])->name('admin.setting.delete');
+
+    Route::get('admin/help/center/index', [HelpCenterController::class, 'index'])->name('admin.help.center.index');
+    Route::get('admin/help/center/form/{id}', [HelpCenterController::class, 'create'])->name('admin.help.center.form');
+    Route::post('admin/help/center/store/{id}', [HelpCenterController::class, 'store'])->name('admin.help.center.store');
+    Route::get('admin/help/center/detail/{id}', [HelpCenterController::class, 'show'])->name('admin.help.center.details');
+    Route::delete('admin/help/center/delete/{id}', [HelpCenterController::class, 'destroy'])->name('admin.help.center.delete');
+
 });
 
 // ADMIN PART
@@ -172,7 +215,7 @@ Route::middleware(['auth', 'lawyer', 'blockedUser'])->group(function () {
     // Orders Crud
     Route::get('lawyer/orders/all', [BookingController::class, 'index'])->name('lawyer.all.orders');
     Route::post('/lawyer/order/status', [OrderController::class, 'lawyer_order_status'])->name('lawyer.order.status');
-    Route::get('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+   
     // Earnings Crud
     Route::get('/lawyer/wallet', [LawyerPaymentController::class, 'lawyer_wallet'])->name('lawyer.wallet');
 
@@ -247,6 +290,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/store-meeting',  [AgoraVideoController::class, 'storeMeeting'])->name('store.meeting');
 
     Route::post('/agora-chat-new', [AgoraVideoController::class, 'indexNew'])->name('agora.index.new');
+
+
+    // Notification
+    Route::get('/notifications/{notification}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 });
  // Jitsi Vieeo call
  Route::get('jitsi/video/call/{lawyerId?}', [JitsiVideoCallController::class, 'jitsi_video_call'])->name('jitsi.video.call');
@@ -267,3 +314,9 @@ Route::group(['middleware' => ['auth']], function () {
 //         Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
 //     });
 // });
+
+Route::get('/send-otp', [OneSignalController::class, 'sendOTP'])->name('send-otp');
+
+
+// Route::get('/livewire/chat', Chat::class)->middleware('auth');
+// Route::get('/livewire/admin/chat', AdminChat::class)->middleware('auth');

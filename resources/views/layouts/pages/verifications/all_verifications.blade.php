@@ -8,11 +8,6 @@
                     <div class="col">
                         <h3 class="page-title">Verifications</h3>
                     </div>
-                    <div class="col-auto text-end">
-                        <a href="{{ route('category.form', $update_id = 0) }}" class="btn btn-primary add-button ms-3">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
             <!-- /Page Header -->

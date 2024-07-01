@@ -3,13 +3,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-
     <div class="breadcrumb-bar">
         <div class="container">
             <div class="row">
                 <div class="col">
                     <div class="breadcrumb-title">
-                        <h2>Registration</h2>
+                        <h2 style="font-weight: 600!important">Registration</h2>
                     </div>
                 </div>
                 <div class="col-auto float-end ms-auto breadcrumb-menu">
@@ -35,7 +34,7 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                    <form method="POST" action="{{ route('lawyer.register') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('lawyer.register') }}" enctype="multipart/form-data" id="formId">
                         @csrf
                         <div id="step1">
 
@@ -65,8 +64,8 @@
                                 <div class="col-lg-12 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">Email</label>
                                     <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" value="{{ old('email') }}" required autocomplete="email"
-                                        placeholder="abc@exapmle.com">
+                                        name="email" value="{{ old('email') }}" autocomplete="email"
+                                        placeholder="abc@exapmle.com" email>
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -75,16 +74,20 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">City</label>
-                                    <input type="text" class="form-control @error('city') is-invalid @enderror"
-                                        name="city" value="{{ old('city') }}" required autocomplete="city"
-                                        placeholder="City">
+                                    <select class="form-control @error('city') is-invalid @enderror" name="city" required>
+                                        <option value="" disabled selected>Select City</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->city }}">{{ $city->city }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('city')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
+                                
+                                {{-- <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">Country</label>
                                     <input type="text" class="form-control @error('country') is-invalid @enderror"
                                         name="country" value="{{ old('country') }}" required autocomplete="country"
@@ -94,7 +97,7 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 form-group form-focus">
                                     <label class="focus-label">Create Password</label>
@@ -117,7 +120,7 @@
                                         <label class="black_label">Category<span class="text-danger ">*(Select any two
                                                 categories)</span></label>
                                         <select id="multiSelect" class="form-control form-select" name="categories[]"
-                                            multiple="multiple">
+                                            multiple="multiple" required>
 
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id ?? '' }}">{{ $category->title ?? '' }}
@@ -149,7 +152,7 @@
 
                             <div class="row">
                                 <h6 class="bg-black text-white rounded p-2">Lawyer Experience</h6>
-                                <div class="col-lg-12">
+                                {{-- <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="black_label">Degree / Advocacy Level<span
                                                 class="text-danger ">*</span></label>
@@ -168,15 +171,16 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                <div class="col-lg-3 " id="advocate">
+                                <div class="col-lg-3" id="advocate">
                                     <div class="form-group">
                                         <input type="checkbox" class="license-checkbox" name="advocate" value="1"
-                                            {{ is_array(old('advocate')) && in_array('1', old('advocate')) ? 'checked' : '' }}>
+                                            {{ is_array(old('advocate')) && in_array('1', old('advocate')) ? 'checked' : '' }} checked>
                                         <label class="mx-2">Advocate</label>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-4" id="baristerHighCourt">
                                     <div class="form-group">
                                         <input type="checkbox" class="license-checkbox" name="high_court" value="1"
@@ -184,7 +188,8 @@
                                         <label class="" for="monday">Advocate High Court</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 " id="baristerSupremeCourt">
+
+                                <div class="col-lg-5" id="baristerSupremeCourt">
                                     <div class="form-group">
                                         <input type="checkbox" class="license-checkbox" name="supreme_court"
                                             value="1"
@@ -193,14 +198,14 @@
                                     </div>
                                 </div>
 
+
                                 <div class="col-lg-4">
-                                    <div id="advocateLicenseDiv" style="display: none;">
+                                    <div id="advocateLicenseDiv">
                                         <div class="form-group">
                                             <label class="black_label">Upload Advocate Licence<span
                                                     class="text-danger">*</span></label>
 
-                                            <input type="file" name="advocate_licence" class="dropify"
-                                                value="{{ old('advocate_licence') }}" data-default-file="">
+                                                    <input type="file" name="advocate_licence" class="dropify" data-default-file="" required>
                                             @error('advocate_licence')
                                                 <span class="text-danger" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -246,8 +251,9 @@
                                         <label class="black_label">Experience In Years<span
                                                 class="text-danger ">*</span></label>
                                         <select class="form-control form-select" name="experience_in_years"
-                                            id="experience_in_years">
-                                            <option selected disabled>Select Years</option>
+                                            id="experience_in_years" required>
+                                          
+                                            <option value="">Select Years</option>
                                             <option value="1"
                                                 {{ old('experience_in_years') == '1' ? 'selected' : '' }}>
                                                 1
@@ -423,8 +429,8 @@
                                     <div class="form-group">
                                         <label class="black_label">Qualification<span
                                                 class="text-danger ">*</span></label>
-                                        <select class="form-control form-select" name="qualification" id="qualification">
-                                            <option selected disabled>Select Qualification</option>
+                                        <select class="form-control form-select" name="qualification" id="qualification" required>
+                                            <option value="">Select Qualification</option>
                                             <option value="LLB" {{ old('qualification') == 'LLB' ? 'selected' : '' }}>
                                                 LLB
                                             </option>
@@ -467,31 +473,31 @@
                                         <label class="black_label">Days of the week<span
                                                 class="text-danger">*</span></label>
                                         <div class="checkboxes">
-                                            <input type="checkbox" name="days[]" value="monday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="monday"
                                                 {{ is_array(old('days')) && in_array('monday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="monday">Mon</label>
 
-                                            <input type="checkbox" name="days[]" value="tuesday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="tuesday"
                                                 {{ is_array(old('days')) && in_array('tuesday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="tuesday">Tues</label>
 
-                                            <input type="checkbox" name="days[]" value="wednesday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="wednesday"
                                                 {{ is_array(old('days')) && in_array('wednesday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="wednesday">Wed</label>
 
-                                            <input type="checkbox" name="days[]" value="thursday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="thursday"
                                                 {{ is_array(old('days')) && in_array('thursday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="thursday">Thurs</label>
 
-                                            <input type="checkbox" name="days[]" value="friday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="friday"
                                                 {{ is_array(old('days')) && in_array('friday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="friday">Fri</label>
 
-                                            <input type="checkbox" name="days[]" value="saturday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="saturday"
                                                 {{ is_array(old('days')) && in_array('saturday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="saturday">Sat</label>
 
-                                            <input type="checkbox" name="days[]" value="sunday"
+                                            <input class="day-checkbox" type="checkbox" name="days[]" value="sunday"
                                                 {{ is_array(old('days')) && in_array('sunday', old('days')) ? 'checked' : '' }}>
                                             <label class="mx-2" for="sunday">Sun</label>
 
@@ -507,9 +513,14 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="black_label">Start Time<span class="text-danger ">*</span></label>
-                                        <input class="form-control black_input" type="time" name="start_time"
-                                            value="{{ old('start_time') }}" required>
+                                        <label class="black_label">Start Time<span class="text-danger">*</span></label>
+                                        <select class="form-control black_input" name="start_time" required>
+                                            @for ($i = 0; $i < 24; $i++)
+                                                <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00" {{ old('start_time') == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                                    {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00
+                                                </option>
+                                            @endfor
+                                        </select>
                                         @error('start_time')
                                             <span class="text-danger" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -517,11 +528,17 @@
                                         @enderror
                                     </div>
                                 </div>
+                                
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="black_label">End Time<span class="text-danger ">*</span></label>
-                                        <input class="form-control black_input" type="time" name="end_time" required
-                                            value="{{ old('end_time') }}">
+                                        <label class="black_label">End Time<span class="text-danger">*</span></label>
+                                        <select class="form-control black_input" name="end_time" required>
+                                            @for ($i = 0; $i < 24; $i++)
+                                                <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00" {{ old('end_time') == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                                    {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00
+                                                </option>
+                                            @endfor
+                                        </select>
                                         @error('end_time')
                                             <span class="text-danger" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -529,9 +546,11 @@
                                         @enderror
                                     </div>
                                 </div>
+                                
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="black_label">Amount<span class="text-danger ">* (amount for 20min consultancy.)</span></label>
+                                        <label class="black_label">Amount<span class="text-danger ">* (amount for 30min
+                                                consultancy.)</span></label>
                                         <input class="form-control " type="text" name="amount" required
                                             value="{{ old('amount') }}">
                                         @error('amount')
@@ -630,7 +649,7 @@
                             </div>
                             <div class="text-end">
                                 <button type="button" class="btn btn-primary" onclick="showStep(1)">Previous</button>
-                                <button type="submit" class="btn btn-primary">Signup</button>
+                                <button type="submit"  class="btn btn-primary" onclick="return validateForm()">Signup</button>
                             </div>
 
                         </div>
@@ -642,6 +661,7 @@
     </div>
 
 
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -737,6 +757,112 @@
             });
         });
     </script>
+
+<script>
+    function validateCheckboxes() {
+        const checkboxes = document.querySelectorAll('.license-checkbox');
+        let isChecked = false;
+
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                isChecked = true;
+            }
+        });
+
+        if (!isChecked) {
+            alert("Please select Lawyer Experience.");
+            return false; // Prevent form submission
+        }
+
+        // If at least one checkbox is checked, allow the form to be submitted
+        return true;
+    }
+</script>
+<script>
+    function showStep(step) {
+        var isValid = validateStep(step - 1); // Validate the previous step before proceeding
+
+        if (isValid) {
+            // Hide all steps
+            $('[id^=step]').hide();
+
+            // Show the specified step
+            $('#step' + step).show();
+        }
+    }
+
+    function validateStep(step) {
+        var isValid = true;
+
+        $('#step' + step + ' [required]').each(function() {
+            if ($(this).is('select[multiple]')) {
+                
+                var selectedItems = $(this).val();
+                var $select2Container = $(this).next('.select2').find('.select2-selection');
+                if (!selectedItems || selectedItems.length < 1) {
+                    isValid = false;
+                    $select2Container.css('border-color', 'red').css('border-width', '1px').css('border-style', 'solid').css('border-color', 'red', 'important');
+                } else {
+                    $select2Container.css('border', '');
+                }
+            } else {
+                // Check if the field is empty
+                if ($(this).val().trim() === '') {
+                    isValid = false;
+                    $(this).addClass('is-invalid'); // Add a red border to indicate error
+                } else {
+                    $(this).removeClass('is-invalid'); // Remove red border if field is filled
+                }
+            }
+        });
+
+        return isValid;
+    }
+
+
+    function validateCheckboxes() {
+        // Validation logic for checkboxes in step 2
+    }
+</script>
+<script>
+    // Function to validate the form
+    function validateForm() {
+        var daysCheckboxes = document.querySelectorAll('.day-checkbox');
+        var accountCheckboxes = document.querySelectorAll('.account-checkbox');
+        var dayChecked = false;
+        var accountChecked = false;
+
+        // Check if at least one day checkbox is checked
+        daysCheckboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                dayChecked = true;
+            }
+        });
+
+        // Check if at least one account checkbox is checked
+        accountCheckboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                accountChecked = true;
+            }
+        });
+
+        // If either day or account checkbox is not checked, show alert and prevent form submission
+        if (!dayChecked) {
+            alert('Please select at least one day of the week.');
+            return false;
+        }
+
+        if (!accountChecked) {
+            alert('Please select at least one account type (Bank Account or JazzCash Account).');
+            return false;
+        }
+
+        // If both day and account checkboxes are checked, submit the form
+        return true
+    }
+</script>
+
+
 @endsection
 @section('injected-script')
     {{-- <script>

@@ -65,6 +65,16 @@ class CustomerRegisterController extends Controller
      }
     public function create(Request $request)
     {
+        
+
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'phone' => 'required|unique:users|digits:11', // Ensure unique phone number
+            'city' => 'required|string',
+            'password' => 'required|min:6|confirmed',
+        ], [
+            'password.confirmed' => 'The confirmation password does not match.',
+        ]);
 
         $user =  User::create([
             'name' => $request['name'],

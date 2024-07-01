@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Notifications\PaymentNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -116,7 +117,7 @@ class TransactionController extends Controller
                 'payment_status' => 'completed',
             ]);
 
-            $currentDate= Carbon::now()->toDateString();;
+            $currentDate= Carbon::now()->toDateString();
             // dd($currentDate);
             $transactions = Transaction::create([
                 'order_id' => $order->id,
@@ -125,9 +126,20 @@ class TransactionController extends Controller
                 'date' => $currentDate,
                 'status' =>'completed',
             ]);
+
+            $transactionId=$transactions->id;
+            $transactionId = Transaction::find($transactionId);
+            $orderId = $transactionId->order_id;
+        $lawyer = User::find($order->lawyer_id);
+                    if ($lawyer) {
+                        $lawyer->notify(new PaymentNotification($order,$orderId));
+                    } else {
+                        return back()->with('message', 'Lawyer Id not found');
+                    }
         }
+
       
-        Toastr::error('Payment Send Successfully.');
+        Toastr::success('Payment Send Successfully.');
         return redirect()->back();
     }
 }

@@ -3,7 +3,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-
     <div class="breadcrumb-bar">
         <div class="container">
             <div class="row">
@@ -35,13 +34,22 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('users.login') }}">
                         @csrf
                         <div class="form-group form-focus">
-                            <label class="focus-label">Phone</label>
-                            <input type="number" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                                value="{{ old('phone') }}" autocomplete="phone" required placeholder="phone">
-                            @error('phone')
+                            <label class="focus-label">Email</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                                value="{{ old('email') }}" autocomplete="email" required placeholder="email">
+                            @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -57,23 +65,36 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                    {{ old('remember') ? 'checked' : '' }}>
-
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
+                        <div class="form-group form-focus">
+                            <label class="focus-label">User Type</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="user_type" id="user_type_user" value="user" {{ old('user_type') == 'user' ? 'checked' : '' }} required>
+                                    <label class="form-check-label" for="user_type_user">User</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="user_type" id="user_type_lawyer" value="lawyer" {{ old('user_type') == 'lawyer' ? 'checked' : '' }} required>
+                                    <label class="form-check-label" for="user_type_lawyer">Lawyer</label>
+                                </div>
                             </div>
+                            @error('user_type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
+                        
+                        
                         <div class="d-grid">
                             <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Login</button>
-                            @if (Route::has('password.request'))
+                            {{-- @if (Route::has('password.request'))
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
-                            @endif
+                            @endif --}}
+                            <a class="btn btn-link" href="{{ route('forgot.password') }}">
+                                {{ __('Forgot Your Password?') }}
+                            </a>
                         </div>
                         <div class="text-center dont-have">Don’t have an account? <a
                                 href="{{ route('lawyer.register.page') }}">Register As Lawyer</a> OR <a
@@ -82,7 +103,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

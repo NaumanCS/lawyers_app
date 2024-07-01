@@ -16,11 +16,16 @@ class Category extends Model
 
     public function getImageAttribute()
     {
-        return asset('uploads/user') . '/' . $this->attributes['image'];
+        return asset('public/uploads/user') . '/' . $this->attributes['image'];
     }
 
     public function services()
     {
         return $this->belongsToMany(Service::class, 'services', 'id', 'categories_id');
+    }
+
+    public function lawyers()
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }

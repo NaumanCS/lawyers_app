@@ -40,6 +40,12 @@
                     </div>
                 @endforeach --}}
                 <div class="col-3">
+                    <label>Advocate Licence</label><br>
+                    <a href="{{ $lawyer->advocate_licence }}" data-lightbox="image-gallery">
+                        <img class="img-fluid" src="{{ $lawyer->advocate_licence }}" alt="Profile Pic">
+                    </a>
+                </div>
+                <div class="col-3">
                     <label>High Court Licence</label><br>
                     <a href="{{ $lawyer->high_court_licence }}" data-lightbox="image-gallery">
                         <img class="img-fluid" src="{{ $lawyer->high_court_licence }}" alt="Profile Pic">

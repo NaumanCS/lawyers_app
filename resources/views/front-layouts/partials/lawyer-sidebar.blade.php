@@ -1,4 +1,4 @@
-<div class="col-xl-3 col-md-4 theiaStickySidebar">
+<div class="col-xl-3 col-md-4 theiaStickySidebar p-3 rounded-start"  style="box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;">
     <div class="mb-4">
         <div class="d-sm-flex flex-row text-center text-sm-start align-items-center">
             <img alt="profile image" src="{{ $user->image }}" class="avatar-lg rounded-circle">

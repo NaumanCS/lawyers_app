@@ -50,7 +50,7 @@
                             <div class="user-info">
                                 <div class="service-action">
                                     <div class="row">
-                                    
+
 
                                         <?php
                                         $update_id = 0;
@@ -81,42 +81,50 @@
                                         {{-- <button  class="btn btn-primary text-white my-2"> <a class="text-white" href="{{ route('jitsi.video.call',$lawyer->id) }}" > Video Call </a>
                                         </button> --}}
                                         @if ($meetings->isEmpty())
-                                        
-                                            <button class="btn btn-primary text-white my-2"> <a class="text-white"
-                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}">
-                                                    Video
-                                                    Call </a>
-                                            </button>
-                                            <button class="btn btn-primary text-white "> <a class="text-white"
-                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}">
-                                                    Call
+                                            <button class="btn btn-primary text-white my-2">
+                                                <a class="text-white"
+                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}"> Video Call
                                                 </a>
                                             </button>
+                                            <button class="btn btn-primary text-white">
+                                                <a class="text-white"
+                                                    href="{{ route('meeting.schedule.create', $lawyer->id) }}"> Call </a>
+                                            </button>
                                         @else
+                                            @php $meetingFound = false; @endphp
                                             @foreach ($meetings as $meeting)
                                                 @if ($meeting->meeting_with == $lawyer->id)
-                                                    <button class="btn btn-primary text-white my-2"> <a class="text-white"
+                                                    <button class="btn btn-primary text-white my-2">
+                                                        <a class="text-white"
                                                             href="{{ route('video.call', $meeting->meeting_link) }}"> Video
                                                             Call </a>
                                                     </button>
-                                                    <button class="btn btn-primary text-white "> <a class="text-white"
+                                                    <button class="btn btn-primary text-white">
+                                                        <a class="text-white"
                                                             href="{{ route('video.call', $meeting->meeting_link) }}"> Call
                                                         </a>
                                                     </button>
-                                                @else
-                                                    <button class="btn btn-primary text-white my-2"> <a class="text-white"
-                                                            href="{{ route('meeting.schedule.create', $lawyer->id) }}">
-                                                            Video
-                                                            Call </a>
-                                                    </button>
-                                                    <button class="btn btn-primary text-white "> <a class="text-white"
-                                                            href="{{ route('meeting.schedule.create', $lawyer->id) }}">
-                                                            Call
-                                                        </a>
-                                                    </button>
+                                                    @php
+                                                        $meetingFound = true;
+                                                        break;
+                                                    @endphp
                                                 @endif
                                             @endforeach
+
+                                            @if (!$meetingFound)
+                                                <button class="btn btn-primary text-white my-2">
+                                                    <a class="text-white"
+                                                        href="{{ route('meeting.schedule.create', $lawyer->id) }}"> Video
+                                                        Call </a>
+                                                </button>
+                                                <button class="btn btn-primary text-white">
+                                                    <a class="text-white"
+                                                        href="{{ route('meeting.schedule.create', $lawyer->id) }}"> Call
+                                                    </a>
+                                                </button>
+                                            @endif
                                         @endif
+
 
                                     </div>
                                 </div>

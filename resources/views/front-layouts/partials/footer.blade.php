@@ -10,16 +10,16 @@
                         <h2 class="footer-title">Quick Links  </h2>
                         <ul>
                             <li>
-                                <a href="about-us.html">About Us</a>
+                                <a href="#">About Us</a>
                             </li>
                             <li>
-                                <a href="contact-us.html">Contact Us</a>
+                                <a href="{{ route('contact.us') }}">Contact Us</a>
                             </li>
                             <li>
-                                <a href="faq.html">Faq</a>
+                                <a href="#">Faq</a>
                             </li>
                             <li>
-                                <a href="#">Help</a>
+                                <a href="{{ route('help.center') }}">Help</a>
                             </li>
                         </ul>
                     </div>
@@ -31,15 +31,10 @@
                         <h2 class="footer-title">Categories</h2>
                         <ul>
                             <li>
-                                <a href="search.html">See all Categories</a>
+                                <a href="{{ route('categories', ['filter' => 'all']) }}">See all Categories</a>
                             </li>
                         </ul>
-                        <h2 class="footer-title mt-5">Locations</h2>
-                        <ul>
-                            <li>
-                                <a href="search.html">See all Locations</a>
-                            </li>
-                        </ul>
+                        
                     </div>
                     <!-- /Footer Widget -->
                 </div>
@@ -63,22 +58,7 @@
                     <!-- Footer Widget -->
                     <div class="footer-widget">
                         <h2 class="footer-title">Follow Us</h2>
-                        <div class="social-icon">
-                            <ul>
-                                <li>
-                                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> </a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#" target="_blank"><i class="fab fa-google"></i></a>
-                                </li>
-                            </ul>
-                        </div>
+                       
                         <div class="subscribe-form">
                             <input type="email" class="form-control" placeholder="Enter your email">
                             <button type="submit" class="btn footer-btn">
@@ -109,10 +89,10 @@
                         <div class="copyright-menu">
                             <ul class="policy-menu">
                                 <li>
-                                    <a href="term-condition.html">Terms and Conditions</a>
+                                    <a href="#">Terms and Conditions</a>
                                 </li>
                                 <li>
-                                    <a href="privacy-policy.html">Privacy</a>
+                                    <a href="#">Privacy</a>
                                 </li>
                             </ul>
                         </div>

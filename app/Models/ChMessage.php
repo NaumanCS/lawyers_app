@@ -17,4 +17,22 @@ class ChMessage extends Model
     {
         return $this->hasOne(User::class, 'id', 'sender_id');
     }
+
+    public function getAttachmentUrlsAttribute()
+    {
+        $attachments = $this->getAttribute('attachment');
+
+        if ($attachments == null) {
+            return null;
+        }
+
+        $attachments = is_string($attachments) ? json_decode($attachments, true) : $attachments;
+        $urls = [];
+
+        foreach ($attachments as $attachment) {
+            $urls[] = asset('public/uploads/chat') . '/' . $attachment;
+        }
+
+        return $urls;
+    }
 }

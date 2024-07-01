@@ -113,9 +113,14 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="black_label">Start Time<span class="text-danger ">*</span></label>
-                                    <input class="form-control black_input" type="time" name="start_time"
-                                        value="{{ $service->start_time ?? '' }}" required>
+                                    <label class="black_label">Start Time<span class="text-danger">*</span></label>
+                                    <select class="form-control black_input" name="start_time" required>
+                                        @for ($i = 0; $i < 24; $i++)
+                                            <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00" {{ old('start_time') == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                                {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00
+                                            </option>
+                                        @endfor
+                                    </select>
                                     @error('start_time')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -123,11 +128,17 @@
                                     @enderror
                                 </div>
                             </div>
+                            
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="black_label">End Time<span class="text-danger ">*</span></label>
-                                    <input class="form-control black_input" type="time" name="end_time" required
-                                        value="{{ $service->end_time ?? '' }}">
+                                    <label class="black_label">End Time<span class="text-danger">*</span></label>
+                                    <select class="form-control black_input" name="end_time" required>
+                                        @for ($i = 0; $i < 24; $i++)
+                                            <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00" {{ old('end_time') == str_pad($i, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                                {{ str_pad($i, 2, '0', STR_PAD_LEFT) }}:00
+                                            </option>
+                                        @endfor
+                                    </select>
                                     @error('end_time')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
